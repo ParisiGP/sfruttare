@@ -9,5 +9,26 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+}
+
+model Categoria {
+  id        String   @id @default(cuid())
+  nome      String
+  createdAt DateTime @default(now())
+
+  produtos Produto[]
+}
+
+model Produto {
+  id          String     @id @default(cuid())
+  nome        String
+  descricao   String
+  preco       Float
+
+  categoriaId String
+
+  categoria Categoria @relation(fields: [categoriaId], references: [id])
+
+  createdAt   DateTime @default(now())
 }
