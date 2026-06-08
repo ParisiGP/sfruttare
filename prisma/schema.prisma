@@ -23,16 +23,19 @@ model Categoria {
 model Produto {
   id          String    @id @default(cuid())
   nome        String
+  slug String @unique
   tamanho     String?
   descricao   String?
   marca       String?
   preco       Decimal @db.Decimal(10,2)
   tipo        ProdutoTipo @default(BRECHO)
   status      ProdutoStatus @default(DISPONIVEL)
+  estoque Int @default(1)
   categoriaId String
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
   imagens     ProdutoImagem[]
   pedidoItens PedidoItem[]
+  updatedAt DateTime @updatedAt
   createdAt   DateTime @default(now())
 }
 
@@ -51,6 +54,7 @@ model ProdutoImagem {
   id          String    @id @default(cuid())
   url         String
   produtoId   String
+  ordem Int @default(0)
   produto     Produto   @relation(fields: [produtoId], references: [id])
   createdAt   DateTime @default(now())
 }
