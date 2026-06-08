@@ -1,0 +1,53 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  max-width: 600px;
+
+  margin-top: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field input,
+.field textarea,
+.field select {
+  padding: 10px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+}
+
+.field textarea {
+  min-height: 120px;
+
+  resize: vertical;
+}
+
+.submitButton {
+  width: fit-content;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}

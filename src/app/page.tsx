@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -8,9 +8,10 @@ export default function Home() {
         <h1>
           Bem-vindo ao Sfruttare!
         </h1>
-        link para pagina de Admin        <a href="/admin/categorias">
-          Ir para Admin
-        </a>
+
+        <Link href="/admin/produtos">
+          Ir para Produtos
+        </Link>
       </main>
     </div>
   );
