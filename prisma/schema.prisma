@@ -21,14 +21,129 @@ model Categoria {
 }
 
 model Produto {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   nome        String
-  descricao   String
-  preco       Float
-
+  tamanho     String?
+  descricao   String?
+  marca       String?
+  preco       Decimal @db.Decimal(10,2)
+  tipo        ProdutoTipo @default(BRECHO)
+  status      ProdutoStatus @default(DISPONIVEL)
   categoriaId String
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  imagens     ProdutoImagem[]
+  pedidoItens PedidoItem[]
+  createdAt   DateTime @default(now())
+}
 
-  categoria Categoria @relation(fields: [categoriaId], references: [id])
+enum ProdutoTipo {
+  BRECHO
+  NA_ETIQUETA
+}
+
+enum ProdutoStatus {
+  DISPONIVEL
+  RESERVADO
+  VENDIDO
+}
+
+model ProdutoImagem {
+  id          String    @id @default(cuid())
+  url         String
+  produtoId   String
+  produto     Produto   @relation(fields: [produtoId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Usuario {
+  id        String   @id @default(cuid())
+
+  nome      String
+  email     String   @unique
+  senha     String
+
+  role      UserRole @default(CLIENTE)
+
+  enderecos Endereco[]
+  pedidos   Pedido[]
+
+  createdAt DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  CLIENTE
+}
+
+model Endereco {
+  id          String   @id @default(cuid())
+
+  cep         String
+
+  logradouro  String
+  numero      String
+
+  complemento String?
+
+  bairro      String
+  cidade      String
+  estado      String
+
+  usuarioId   String
+
+  usuario     Usuario @relation(fields: [usuarioId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model Pedido {
+  id         String   @id @default(cuid())
+
+  usuarioId  String
+
+  usuario    Usuario @relation(fields: [usuarioId], references: [id])
+
+  status     PedidoStatus @default(PIX_PENDENTE)
+
+  total      Decimal @db.Decimal(10,2)
+
+  itens      PedidoItem[]
+
+  createdAt  DateTime @default(now())
+}
+
+enum PedidoStatus {
+  PIX_PENDENTE
+  PAGO
+  ENVIADO
+  ENTREGUE
+  CANCELADO
+}
+
+model PedidoItem {
+  id             String   @id @default(cuid())
+
+  pedidoId       String
+  produtoId      String
+
+  pedido         Pedido  @relation(fields: [pedidoId], references: [id])
+  produto        Produto @relation(fields: [produtoId], references: [id])
+
+  precoUnitario  Decimal @db.Decimal(10,2)
+
+  createdAt      DateTime @default(now())
+}
+
+model InspiracaoSemana {
+  id          String   @id @default(cuid())
+
+  titulo      String
+
+  descricao   String?
+
+  imagemUrl   String
+
+  ativo       Boolean @default(false)
 
   createdAt   DateTime @default(now())
 }
