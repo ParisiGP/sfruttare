@@ -1,4 +1,5 @@
 import styles from "./ProdutoForm.module.css";
+import { criarProduto } from "@/modules/produto/actions";
 
 type Categoria = {
     id: string;
@@ -11,16 +12,17 @@ type ProdutoFormProps = {
 
 export function ProdutoForm({ categorias }: ProdutoFormProps) {
     return (
-        <form className={styles.form}>
+        <form className={styles.form} action={criarProduto}>
             <div className={styles.field}>
                 <label htmlFor="nome">
-                    Nome
+                    Nome *
                 </label>
 
                 <input
                     id="nome"
                     name="nome"
                     type="text"
+                    required
                 />
             </div>
 
@@ -48,8 +50,20 @@ export function ProdutoForm({ categorias }: ProdutoFormProps) {
             </div>
 
             <div className={styles.field}>
+                <label htmlFor="tamanho">
+                    Tamanho
+                </label>
+
+                <input
+                    id="tamanho"
+                    name="tamanho"
+                    type="text"
+                />
+            </div>
+
+            <div className={styles.field}>
                 <label htmlFor="preco">
-                    Preço
+                    Preço*
                 </label>
 
                 <input
@@ -57,35 +71,34 @@ export function ProdutoForm({ categorias }: ProdutoFormProps) {
                     name="preco"
                     type="number"
                     step="0.01"
+                    required
                 />
             </div>
 
             <div className={styles.field}>
                 <label htmlFor="estoque">
-                    Estoque
+                    Estoque*
                 </label>
 
                 <input
                     id="estoque"
                     name="estoque"
                     type="number"
-                    min="1"
+                    min="0"
+                    required
                 />
             </div>
 
             <div className={styles.field}>
                 <label htmlFor="categoria">
-                    Categoria
+                    Categoria*
                 </label>
 
                 <select
                     id="categoria"
                     name="categoriaId"
+                    required
                 >
-                    <option value="">
-                        Selecione
-                    </option>
-
                     {categorias.map(
                         (categoria) => (
                             <option
@@ -101,10 +114,10 @@ export function ProdutoForm({ categorias }: ProdutoFormProps) {
 
             <div className={styles.field}>
                 <label>
-                    Tipo
+                    Tipo*
                 </label>
 
-                <select name="tipo">
+                <select name="tipo" required>
                     <option value="BRECHO">
                         Brechó
                     </option>

@@ -12,7 +12,6 @@
 .field {
   display: flex;
   flex-direction: column;
-
   gap: 6px;
 }
 
@@ -24,7 +23,7 @@
 .field textarea,
 .field select {
   padding: 10px;
-
+  min-width: 400px;
   border: 1px solid #d1d5db;
 
   border-radius: 8px;

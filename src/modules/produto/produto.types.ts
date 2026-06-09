@@ -1,0 +1,1 @@
+export type ProdutoTipo = "BRECHO" | "NA_ETIQUETA";
