@@ -11,12 +11,26 @@ export const cloudinaryFolder =
   process.env.CLOUDINARY_UPLOAD_FOLDER ??
   "sfruttare/produtos";
 
+function assertCloudinaryConfig() {
+  if (
+    !process.env.CLOUDINARY_CLOUD_NAME ||
+    !process.env.CLOUDINARY_API_KEY ||
+    !process.env.CLOUDINARY_API_SECRET
+  ) {
+    throw new Error(
+      "Credenciais do Cloudinary nao configuradas."
+    );
+  }
+}
+
 export async function uploadProdutoImage(
   file: File
 ) {
   if (!file.size) {
     return null;
   }
+
+  assertCloudinaryConfig();
 
   const bytes =
     await file.arrayBuffer();

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   useActionState,
   useEffect,
@@ -40,11 +41,17 @@ const initialState: ProdutoActionState = {
   message: "",
 };
 
+const maxImageSizeInBytes =
+  10 * 1024 * 1024;
+
 export function ProdutoForm({
   categorias,
   produto,
   onSaved,
 }: ProdutoFormProps) {
+  const router =
+    useRouter();
+
   const action =
     produto ? editarProduto : criarProduto;
 
@@ -68,11 +75,23 @@ export function ProdutoForm({
   const [filePreviews, setFilePreviews] =
     useState<string[]>([]);
 
+  const [clientError, setClientError] =
+    useState("");
+
   useEffect(() => {
-    if (state.ok && state.message && onSaved) {
-      onSaved();
+    if (state.ok && state.message) {
+      router.refresh();
+      onSaved?.();
     }
-  }, [state, onSaved]);
+  }, [state, onSaved, router]);
+
+  useEffect(() => {
+    return () => {
+      filePreviews.forEach((url) =>
+        URL.revokeObjectURL(url)
+      );
+    };
+  }, [filePreviews]);
 
   function addImageRow() {
     setImageRows((rows) => [
@@ -117,6 +136,30 @@ export function ProdutoForm({
     const files =
       Array.from(event.target.files ?? []);
 
+    const invalidFile =
+      files.find(
+        (file) =>
+          !file.type.startsWith("image/") ||
+          file.size > maxImageSizeInBytes
+      );
+
+    if (invalidFile) {
+      event.target.value = "";
+      setClientError(
+        "Envie apenas imagens com ate 10 MB."
+      );
+      setFilePreviews((current) => {
+        current.forEach((url) =>
+          URL.revokeObjectURL(url)
+        );
+
+        return [];
+      });
+      return;
+    }
+
+    setClientError("");
+
     setFilePreviews((current) => {
       current.forEach((url) =>
         URL.revokeObjectURL(url)
@@ -132,7 +175,6 @@ export function ProdutoForm({
     <form
       className={styles.form}
       action={formAction}
-      encType="multipart/form-data"
     >
       <div className={styles.heading}>
         <div>
@@ -165,6 +207,12 @@ export function ProdutoForm({
           }
         >
           {state.message}
+        </p>
+      )}
+
+      {clientError && (
+        <p className={styles.error}>
+          {clientError}
         </p>
       )}
 

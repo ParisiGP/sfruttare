@@ -122,24 +122,32 @@ export class ProdutoRepository {
     const { imagens = [], ...produto } = data;
 
     return prisma.$transaction(async (tx) => {
+      await tx.produto.update({
+        where: {
+          id,
+        },
+        data: produto,
+      });
+
       await tx.produtoImagem.deleteMany({
         where: {
           produtoId: id,
         },
       });
 
-      return tx.produto.update({
+      if (imagens.length > 0) {
+        await tx.produtoImagem.createMany({
+          data: imagens.map((imagem) => ({
+            produtoId: id,
+            url: imagem.url,
+            ordem: imagem.ordem,
+          })),
+        });
+      }
+
+      return tx.produto.findUniqueOrThrow({
         where: {
           id,
-        },
-        data: {
-          ...produto,
-          imagens: {
-            create: imagens.map((imagem) => ({
-              url: imagem.url,
-              ordem: imagem.ordem,
-            })),
-          },
         },
         include: this.includeRelations(),
       });
@@ -277,20 +285,25 @@ export class ProdutoRepository {
     produtoId: string,
     imagens: ProdutoImagemInput[]
   ) {
-    await prisma.$transaction([
-      prisma.produtoImagem.deleteMany({
+    await prisma.$transaction(async (tx) => {
+      await tx.produtoImagem.deleteMany({
         where: {
           produtoId,
         },
-      }),
-      prisma.produtoImagem.createMany({
+      });
+
+      if (imagens.length === 0) {
+        return;
+      }
+
+      await tx.produtoImagem.createMany({
         data: imagens.map((imagem) => ({
           produtoId,
           url: imagem.url,
           ordem: imagem.ordem,
         })),
-      }),
-    ]);
+      });
+    });
   }
 
   async updateStatus(

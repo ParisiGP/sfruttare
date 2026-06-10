@@ -124,7 +124,7 @@ export function ProdutosAdmin({
 
       <section className={styles.metrics}>
         <MetricCard
-          label="Total"
+          label="Produtos"
           value={metricas.total}
         />
         <MetricCard
@@ -132,11 +132,11 @@ export function ProdutosAdmin({
           value={metricas.disponiveis}
         />
         <MetricCard
-          label="Reservados"
+          label="Reservado"
           value={metricas.reservados}
         />
         <MetricCard
-          label="Vendidos"
+          label="Vendido"
           value={metricas.vendidos}
         />
         <MetricCard
@@ -299,6 +299,7 @@ export function ProdutosAdmin({
         onClose={fecharModalProduto}
       >
         <ProdutoForm
+          key={produtoEmEdicao?.id ?? "novo-produto"}
           categorias={categorias}
           produto={produtoEmEdicao ?? undefined}
           onSaved={fecharModalProduto}
@@ -325,8 +326,8 @@ function MetricCard({
 }) {
   return (
     <article className={styles.metric}>
-      <span>{label}</span>
       <strong>{value}</strong>
+      <span>{label}</span>
     </article>
   );
 }

@@ -1,26 +1,33 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  gap: 22px;
 }
 
 .empty {
-  min-height: 260px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border: 1px dashed #cbd5e1;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.72);
-  color: #64748b;
+  gap: 10px;
+  border: 1px dashed rgba(139, 107, 63, 0.38);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.42);
+  color: var(--color-text-muted);
   text-align: center;
 }
 
 .empty strong {
-  color: #111827;
-  font-size: 18px;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.empty span {
+  max-width: 360px;
+  line-height: 1.6;
 }
 
 @media (max-width: 1180px) {

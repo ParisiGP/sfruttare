@@ -1,65 +1,84 @@
 .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(35, 28, 20, 0.62);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 160ms ease;
 }
 
 .modal {
-    background: #f3e9dc;
-    padding: 24px;
-    border-radius: 8px;
-    width: fit-content;
-    max-width: calc(100vw - 32px);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-}
-
-@media (max-width: 480px) {
-    .overlay {
-        align-items: flex-start;
-        padding: 16px;
-        overflow: auto;
-    }
-
-    .modal {
-        width: 100%;
-        padding: 16px;
-    }
+  width: fit-content;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: auto;
+  padding: 26px;
+  border: 1px solid rgba(232, 222, 209, 0.9);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  animation: modalIn 180ms ease;
 }
 
 .modalContainerButtons {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
-.modalExcluir{
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 16px;
+.modalExcluir,
+.modalCancelar {
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.modalExcluir:hover {
-    background-color: #c0392b;
+.modalExcluir {
+  background: var(--color-danger);
+  color: #fffaf1;
 }
 
-.modalCancelar{
-    background-color: #5457e4;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 16px;
+.modalCancelar {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
-.modalCancelar:hover {
-    background-color: #3b44a1;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+}
+
+@media (max-width: 480px) {
+  .overlay {
+    align-items: flex-start;
+    padding: 16px;
+    overflow: auto;
+  }
+
+  .modal {
+    width: 100%;
+    padding: 18px;
+  }
 }

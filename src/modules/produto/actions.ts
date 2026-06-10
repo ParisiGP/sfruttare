@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { uploadProdutoImage } from "@/lib/cloudinary";
@@ -23,6 +24,9 @@ const initialSuccess: ProdutoActionState = {
 
 const produtoService =
   new ProdutoService();
+
+const maxImageSizeInBytes =
+  10 * 1024 * 1024;
 
 function getText(
   formData: FormData,
@@ -89,6 +93,18 @@ async function uploadFiles(
       continue;
     }
 
+    if (!file.type.startsWith("image/")) {
+      throw new Error(
+        "Envie apenas arquivos de imagem."
+      );
+    }
+
+    if (file.size > maxImageSizeInBytes) {
+      throw new Error(
+        "Envie imagens com ate 10 MB."
+      );
+    }
+
     const url =
       await uploadProdutoImage(file);
 
@@ -132,13 +148,32 @@ async function buildProdutoPayload(
   };
 }
 
-function handleError(error: unknown) {
+function formatError(error: unknown) {
+  if (error instanceof z.ZodError) {
+    return error.issues
+      .map((issue) => issue.message)
+      .join(" ");
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "Nao foi possivel concluir a acao.";
+}
+
+function handleError(
+  action: string,
+  error: unknown
+) {
+  console.error(
+    `[produto:${action}]`,
+    error
+  );
+
   return {
     ok: false,
-    message:
-      error instanceof Error
-        ? error.message
-        : "Nao foi possivel concluir a acao.",
+    message: formatError(error),
   };
 }
 
@@ -172,7 +207,7 @@ export async function criarProduto(
       message: "Produto criado com sucesso.",
     };
   } catch (error) {
-    return handleError(error);
+    return handleError("criarProduto", error);
   }
 }
 
@@ -197,7 +232,7 @@ export async function editarProduto(
       message: "Produto atualizado com sucesso.",
     };
   } catch (error) {
-    return handleError(error);
+    return handleError("editarProduto", error);
   }
 }
 
@@ -220,7 +255,7 @@ export async function excluirProduto(
       message: "Produto excluido com sucesso.",
     };
   } catch (error) {
-    return handleError(error);
+    return handleError("excluirProduto", error);
   }
 }
 
@@ -250,7 +285,7 @@ export async function alterarStatusProduto(
       message: "Status atualizado com sucesso.",
     };
   } catch (error) {
-    return handleError(error);
+    return handleError("alterarStatusProduto", error);
   }
 }
 
@@ -279,6 +314,6 @@ export async function uploadImagemProduto(
       message: "Imagem enviada com sucesso.",
     };
   } catch (error) {
-    return handleError(error);
+    return handleError("uploadImagemProduto", error);
   }
 }
