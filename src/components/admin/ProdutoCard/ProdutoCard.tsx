@@ -53,15 +53,29 @@ export function ProdutoCard({
               {produto.nome}
             </h2>
 
-            <p className={styles.brand}>
-              {produto.marca || "Sem marca"}
-            </p>
+             {produto.marca && (
+              <p className={styles.brand}>
+                <span className={styles.brandLabel}>
+                  Marca:
+                </span>{" "}
+                {produto.marca}
+              </p>
+            )}
+
+            {produto.descricao && (
+              <p className={styles.description}>
+                <span className={styles.descriptionLabel}>
+                  Descrição:
+                </span>{" "}
+                {produto.descricao}
+              </p>
+            )}
+
           </div>
 
           <span
-            className={`${styles.status} ${
-              styles[produto.status.toLowerCase()]
-            }`}
+            className={`${styles.status} ${styles[produto.status.toLowerCase()]
+              }`}
           >
             {statusLabel[produto.status]}
           </span>

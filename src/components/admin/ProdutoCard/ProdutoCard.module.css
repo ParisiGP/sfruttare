@@ -70,6 +70,23 @@
   font-size: 13px;
 }
 
+.brandLabel{
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.description {
+  margin: 10px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  
+}
+
+.descriptionLabel{
+  font-weight: 700;
+  color: var(--color-text);
+}
+
 .status {
   flex: 0 0 auto;
   border: 1px solid currentColor;
