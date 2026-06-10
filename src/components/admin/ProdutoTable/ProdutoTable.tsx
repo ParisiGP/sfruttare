@@ -1,9 +1,22 @@
 import styles from "./ProdutoTable.module.css";
-import { excluirProduto } from "@/modules/produto/actions";
 import { ModalExcluirProduto } from "@/components/ui/Modal/ConfirmDeleteModal";
 
+type ProdutoTableItem = {
+  id: string;
+  nome: string;
+  descricao?: string | null;
+  categoria: {
+    nome: string;
+  };
+  tamanho?: string | null;
+  preco: number;
+  marca?: string | null;
+  estoque?: number | null;
+  tipo: string;
+};
+
 type ProdutoTableProps = {
-  produtos: any[];
+  produtos: ProdutoTableItem[];
 };
 
 export function ProdutoTable({

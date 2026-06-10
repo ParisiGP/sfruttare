@@ -1,0 +1,142 @@
+import { alterarStatusProdutoForm } from "@/modules/produto/actions";
+import type {
+  ProdutoAdminItem,
+  ProdutoStatus,
+} from "@/modules/produto/produto.types";
+
+import styles from "./ProdutoCard.module.css";
+
+type ProdutoCardProps = {
+  produto: ProdutoAdminItem;
+  onEditar: (produto: ProdutoAdminItem) => void;
+  onExcluir: (produto: ProdutoAdminItem) => void;
+};
+
+const statusLabel: Record<ProdutoStatus, string> = {
+  DISPONIVEL: "Disponivel",
+  RESERVADO: "Reservado",
+  VENDIDO: "Vendido",
+};
+
+export function ProdutoCard({
+  produto,
+  onEditar,
+  onExcluir,
+}: ProdutoCardProps) {
+  const precoFormatado =
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(produto.preco);
+
+  const imagemPrincipal =
+    produto.imagens[0]?.url;
+
+  return (
+    <article className={styles.card}>
+      {imagemPrincipal ? (
+        <img
+          className={styles.image}
+          src={imagemPrincipal}
+          alt={produto.nome}
+        />
+      ) : (
+        <div className={styles.imagePlaceholder}>
+          <span>Sem imagem</span>
+        </div>
+      )}
+
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <div>
+            <h2 className={styles.name}>
+              {produto.nome}
+            </h2>
+
+            <p className={styles.brand}>
+              {produto.marca || "Sem marca"}
+            </p>
+          </div>
+
+          <span
+            className={`${styles.status} ${
+              styles[produto.status.toLowerCase()]
+            }`}
+          >
+            {statusLabel[produto.status]}
+          </span>
+        </div>
+
+        <dl className={styles.details}>
+          <div>
+            <dt>Categoria</dt>
+            <dd>{produto.categoria.nome}</dd>
+          </div>
+
+          <div>
+            <dt>Preco</dt>
+            <dd>{precoFormatado}</dd>
+          </div>
+
+          <div>
+            <dt>Estoque</dt>
+            <dd>{produto.estoque}</dd>
+          </div>
+        </dl>
+
+        <form
+          action={alterarStatusProdutoForm}
+          className={styles.statusForm}
+        >
+          <input
+            type="hidden"
+            name="id"
+            value={produto.id}
+          />
+
+          <select
+            name="status"
+            defaultValue={produto.status}
+            aria-label="Status do produto"
+          >
+            <option value="DISPONIVEL">
+              Disponivel
+            </option>
+            <option value="RESERVADO">
+              Reservado
+            </option>
+            <option value="VENDIDO">
+              Vendido
+            </option>
+          </select>
+
+          <button type="submit">
+            Atualizar
+          </button>
+        </form>
+
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.editButton}
+            onClick={() =>
+              onEditar(produto)
+            }
+          >
+            Editar
+          </button>
+
+          <button
+            type="button"
+            className={styles.deleteButton}
+            onClick={() =>
+              onExcluir(produto)
+            }
+          >
+            Excluir
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}

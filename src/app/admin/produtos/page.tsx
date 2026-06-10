@@ -1,34 +1,118 @@
-import { ProdutoForm } from "@/components/forms/ProdutoForm/ProdutoForm";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { CategoriaService } from "@/modules/categoria/categoria.service";
 import { ProdutoService } from "@/modules/produto/produto.service";
-import { ProdutoTable } from "@/components/admin/ProdutoTable/ProdutoTable";
-import styles from "./produtos.module.css";
+import { ProdutosAdmin } from "@/components/admin/ProdutosAdmin/ProdutosAdmin";
+import type { ProdutoListFilters } from "@/modules/produto/produto.types";
 
+type ProdutosPageProps = {
+  searchParams?: Promise<
+    Record<string, string | string[] | undefined>
+  >;
+};
 
-export default async function ProdutosPage() {
+function getParam(
+  params: Record<
+    string,
+    string | string[] | undefined
+  >,
+  key: string
+) {
+  const value =
+    params[key];
+
+  return Array.isArray(value)
+    ? value[0]
+    : value;
+}
+
+function buildFilters(
+  params: Record<
+    string,
+    string | string[] | undefined
+  >
+): ProdutoListFilters {
+  return {
+    busca: getParam(params, "busca") ?? "",
+    categoriaId:
+      getParam(params, "categoriaId") ?? "",
+    status:
+      (getParam(params, "status") as
+        | ProdutoListFilters["status"]
+        | undefined) ?? "TODOS",
+    tipo:
+      (getParam(params, "tipo") as
+        | ProdutoListFilters["tipo"]
+        | undefined) ?? "TODOS",
+    estoque:
+      (getParam(params, "estoque") as
+        | ProdutoListFilters["estoque"]
+        | undefined) ?? "TODOS",
+    ordem:
+      (getParam(params, "ordem") as
+        | ProdutoListFilters["ordem"]
+        | undefined) ?? "recentes",
+    pagina: Number(getParam(params, "pagina") ?? 1),
+    limite: 12,
+  };
+}
+
+export default async function ProdutosPage({
+  searchParams,
+}: ProdutosPageProps) {
+  await requireAdmin();
+
+  const params =
+    (await searchParams) ?? {};
+
   const categoriaService =
     new CategoriaService();
 
   const produtoService =
     new ProdutoService();
 
-  const categorias =
-    await categoriaService.listarCategorias();
+  const filters =
+    buildFilters(params);
+
+  const [
+    categorias,
+    produtosPaginados,
+    metricas,
+  ] = await Promise.all([
+    categoriaService.listarCategorias(),
+    produtoService.listarProdutos(filters),
+    produtoService.obterMetricas(),
+  ]);
 
   const produtos =
-        await produtoService.listarProdutos();
+    produtosPaginados.produtos.map((produto) =>
+      produtoService.serializeProduto(produto)
+    );
 
   return (
     <main>
-
-      <h1>Produtos</h1>
-
-      <div className={styles.container}>
-      <pre>
-        <ProdutoTable produtos={produtos} />
-      </pre>
-      <ProdutoForm categorias={categorias} />
-      </div>
+      <ProdutosAdmin
+        produtos={produtos}
+        categorias={categorias.map((categoria) => ({
+          id: categoria.id,
+          nome: categoria.nome,
+        }))}
+        metricas={metricas}
+        filtros={{
+          busca: filters.busca ?? "",
+          categoriaId: filters.categoriaId ?? "",
+          status: filters.status ?? "TODOS",
+          tipo: filters.tipo ?? "TODOS",
+          estoque: filters.estoque ?? "TODOS",
+          ordem: filters.ordem ?? "recentes",
+        }}
+        paginacao={{
+          pagina: produtosPaginados.pagina,
+          limite: produtosPaginados.limite,
+          total: produtosPaginados.total,
+          totalPaginas:
+            produtosPaginados.totalPaginas,
+        }}
+      />
     </main>
   );
 }

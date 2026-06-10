@@ -2,58 +2,283 @@
 
 import { revalidatePath } from "next/cache";
 
+import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { uploadProdutoImage } from "@/lib/cloudinary";
 import { ProdutoService } from "./produto.service";
+import type {
+  ProdutoImagemInput,
+  ProdutoStatus,
+  ProdutoTipo,
+} from "./produto.types";
+
+export type ProdutoActionState = {
+  ok: boolean;
+  message: string;
+};
+
+const initialSuccess: ProdutoActionState = {
+  ok: true,
+  message: "",
+};
 
 const produtoService =
-    new ProdutoService();
+  new ProdutoService();
+
+function getText(
+  formData: FormData,
+  key: string
+) {
+  const value =
+    formData.get(key);
+
+  return typeof value === "string"
+    ? value
+    : "";
+}
+
+function getTipo(formData: FormData): ProdutoTipo {
+  return getText(formData, "tipo") === "NA_ETIQUETA"
+    ? "NA_ETIQUETA"
+    : "BRECHO";
+}
+
+function getStatus(
+  formData: FormData
+): ProdutoStatus {
+  const status =
+    getText(formData, "status");
+
+  if (
+    status === "RESERVADO" ||
+    status === "VENDIDO"
+  ) {
+    return status;
+  }
+
+  return "DISPONIVEL";
+}
+
+function parseImageRows(
+  formData: FormData
+): ProdutoImagemInput[] {
+  const urls =
+    formData.getAll("imagemUrl");
+
+  const ordens =
+    formData.getAll("imagemOrdem");
+
+  return urls
+    .map((url, index) => ({
+      url: String(url).trim(),
+      ordem: Number(ordens[index] ?? index),
+    }))
+    .filter((imagem) => imagem.url.length > 0);
+}
+
+async function uploadFiles(
+  formData: FormData,
+  startOrder: number
+) {
+  const files =
+    formData.getAll("imagemArquivo");
+
+  const uploaded: ProdutoImagemInput[] = [];
+
+  for (const file of files) {
+    if (!(file instanceof File) || file.size === 0) {
+      continue;
+    }
+
+    const url =
+      await uploadProdutoImage(file);
+
+    if (url) {
+      uploaded.push({
+        url,
+        ordem: startOrder + uploaded.length,
+      });
+    }
+  }
+
+  return uploaded;
+}
+
+async function buildProdutoPayload(
+  formData: FormData
+) {
+  const imagens =
+    parseImageRows(formData);
+
+  const imagensUpload =
+    await uploadFiles(
+      formData,
+      imagens.length
+    );
+
+  return {
+    nome: getText(formData, "nome"),
+    descricao: getText(formData, "descricao"),
+    marca: getText(formData, "marca"),
+    tamanho: getText(formData, "tamanho"),
+    preco: Number(getText(formData, "preco")),
+    estoque: Number(getText(formData, "estoque")),
+    categoriaId: getText(formData, "categoriaId"),
+    tipo: getTipo(formData),
+    status: getStatus(formData),
+    imagens: [
+      ...imagens,
+      ...imagensUpload,
+    ],
+  };
+}
+
+function handleError(error: unknown) {
+  return {
+    ok: false,
+    message:
+      error instanceof Error
+        ? error.message
+        : "Nao foi possivel concluir a acao.",
+  };
+}
+
+function resolveFormData(
+  stateOrFormData: ProdutoActionState | FormData,
+  formData?: FormData
+) {
+  if (formData) {
+    return formData;
+  }
+
+  return stateOrFormData as FormData;
+}
 
 export async function criarProduto(
-    formData: FormData
-) {
-    const nome = formData.get("nome");
+  stateOrFormData: ProdutoActionState | FormData,
+  formData?: FormData
+): Promise<ProdutoActionState> {
+  try {
+    const data =
+      resolveFormData(stateOrFormData, formData);
 
-    const descricao =
-        formData.get("descricao");
-
-    const marca =
-        formData.get("marca");
-
-    const tamanho =
-        formData.get("tamanho");
-
-    const preco =
-        formData.get("preco");
-
-    const estoque =
-        formData.get("estoque");
-
-    const categoriaId =
-        formData.get("categoriaId");
-
-    const tipo =
-        formData.get("tipo");
-
-    await produtoService.criarProduto({
-        nome: String(nome),
-        descricao: String(descricao || ""),
-        marca: String(marca || ""),
-        tamanho: String(tamanho || ""),
-        preco: Number(preco),
-        estoque: Number(estoque),
-        categoriaId: String(categoriaId),
-        tipo:
-            tipo === "NA_ETIQUETA"
-                ? "NA_ETIQUETA"
-                : "BRECHO",
-    });
-
+    await requireAdmin();
+    await produtoService.criarProduto(
+      await buildProdutoPayload(data)
+    );
     revalidatePath("/admin/produtos");
+
+    return {
+      ...initialSuccess,
+      message: "Produto criado com sucesso.",
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export async function editarProduto(
+  stateOrFormData: ProdutoActionState | FormData,
+  formData?: FormData
+): Promise<ProdutoActionState> {
+  try {
+    const data =
+      resolveFormData(stateOrFormData, formData);
+
+    await requireAdmin();
+
+    await produtoService.editarProduto({
+      id: getText(data, "id"),
+      ...(await buildProdutoPayload(data)),
+    });
+    revalidatePath("/admin/produtos");
+
+    return {
+      ...initialSuccess,
+      message: "Produto atualizado com sucesso.",
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }
 
 export async function excluirProduto(
-    formData: FormData
-) {
-    const id = formData.get("id");
-    await produtoService.excluirProduto(String(id));
+  stateOrFormData: ProdutoActionState | FormData,
+  formData?: FormData
+): Promise<ProdutoActionState> {
+  try {
+    const data =
+      resolveFormData(stateOrFormData, formData);
+
+    await requireAdmin();
+    await produtoService.excluirProduto(
+      getText(data, "id")
+    );
     revalidatePath("/admin/produtos");
+
+    return {
+      ...initialSuccess,
+      message: "Produto excluido com sucesso.",
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export async function excluirProdutoForm(
+  formData: FormData
+) {
+  await excluirProduto(initialSuccess, formData);
+}
+
+export async function alterarStatusProduto(
+  stateOrFormData: ProdutoActionState | FormData,
+  formData?: FormData
+): Promise<ProdutoActionState> {
+  try {
+    const data =
+      resolveFormData(stateOrFormData, formData);
+
+    await requireAdmin();
+    await produtoService.alterarStatusProduto(
+      getText(data, "id"),
+      getStatus(data)
+    );
+    revalidatePath("/admin/produtos");
+
+    return {
+      ...initialSuccess,
+      message: "Status atualizado com sucesso.",
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export async function alterarStatusProdutoForm(
+  formData: FormData
+) {
+  await alterarStatusProduto(
+    initialSuccess,
+    formData
+  );
+}
+
+export async function uploadImagemProduto(
+  stateOrFormData: ProdutoActionState | FormData,
+  formData?: FormData
+): Promise<ProdutoActionState> {
+  try {
+    const data =
+      resolveFormData(stateOrFormData, formData);
+
+    await requireAdmin();
+    await uploadFiles(data, 0);
+
+    return {
+      ...initialSuccess,
+      message: "Imagem enviada com sucesso.",
+    };
+  } catch (error) {
+    return handleError(error);
+  }
 }

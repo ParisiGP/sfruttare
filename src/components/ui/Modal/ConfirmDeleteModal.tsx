@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Modal } from "./Modal";
 
-import { excluirProduto } from "@/modules/produto/actions";
+import { excluirProdutoForm } from "@/modules/produto/actions";
 
 import styles from "./Modal.module.css";
 
@@ -48,7 +48,7 @@ export function ModalExcluirProduto({
           {produto.nome}
         </strong>
 
-        <form action={excluirProduto} className={styles.buttons}>
+        <form action={excluirProdutoForm} className={styles.buttons}>
           <input
             type="hidden"
             name="id"

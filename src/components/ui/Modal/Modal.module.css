@@ -11,13 +11,26 @@
 .modal {
     background: #f3e9dc;
     padding: 24px;
-    border-radius: 12px;
-    min-width: 400px;
-    max-width: 600px;
+    border-radius: 8px;
+    width: fit-content;
+    max-width: calc(100vw - 32px);
     display: flex;
     flex-direction: column;
     gap: 16px;
 
+}
+
+@media (max-width: 480px) {
+    .overlay {
+        align-items: flex-start;
+        padding: 16px;
+        overflow: auto;
+    }
+
+    .modal {
+        width: 100%;
+        padding: 16px;
+    }
 }
 
 .modalContainerButtons {

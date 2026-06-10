@@ -1,0 +1,185 @@
+.card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.image,
+.imagePlaceholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.image {
+  display: block;
+  object-fit: cover;
+  background: #f8fafc;
+}
+
+.imagePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.name {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.brand {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.disponivel {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.reservado {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.vendido {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.details div {
+  min-width: 0;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.details dt {
+  margin: 0 0 4px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.details dd {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.statusForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.statusForm select,
+.statusForm button {
+  min-height: 40px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.statusForm select {
+  min-width: 0;
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+  background: #ffffff;
+}
+
+.statusForm button {
+  border: none;
+  padding: 8px 12px;
+  background: #334155;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton,
+.deleteButton {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.editButton {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.deleteButton {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 420px) {
+  .header,
+  .actions,
+  .statusForm {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .status,
+  .editButton,
+  .deleteButton,
+  .statusForm button {
+    width: 100%;
+  }
+
+  .details {
+    grid-template-columns: 1fr;
+  }
+}
