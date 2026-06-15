@@ -1,19 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import {
+    useActionState,
+    useEffect,
+    useState,
+} from "react";
 
 import { Modal } from "@/components/ui/Modal/Modal";
-
-import { criarCategoria } from "@/modules/categoria/actions";
 import { Button } from "@/components/ui/Button/Button";
+
+import {
+    criarCategoria,
+    type CategoriaActionState,
+} from "@/modules/categoria/actions";
+
+import styles from "./CategoriaModal.module.css";
+
+const initialState: CategoriaActionState = {
+    ok: false,
+    message: "",
+};
 
 export function CategoriaModal() {
     const [aberto, setAberto] =
         useState(false);
 
+    const [formKey, setFormKey] =
+        useState(0);
+
+    const fecharModal = () => {
+        setErrorMessage("");
+
+        setAberto(false);
+
+        setFormKey((prev) => prev + 1);
+    };
+
+    const [state, formAction, pending] =
+        useActionState(
+            criarCategoria,
+            initialState
+        );
+    const [errorMessage, setErrorMessage] =
+        useState("");
+
+    useEffect(() => {
+        if (state.ok) {
+            fecharModal();
+            return;
+        }
+
+        if (state.message) {
+            setErrorMessage(state.message);
+        }
+    }, [state]);
+
     return (
         <>
-            <Button variant="primary"
+            <Button
+                variant="primary"
                 onClick={() =>
                     setAberto(true)
                 }
@@ -21,38 +66,58 @@ export function CategoriaModal() {
                 Nova Categoria
             </Button>
 
-            <Modal
-                aberto={aberto}
-                onClose={() =>
-                    setAberto(false)
-                }
-            >
-                <h2>
-                    Nova Categoria
-                </h2>
+            {aberto && (
+                <Modal
+                    aberto={aberto}
+                    onClose={fecharModal}
+                >
+                    <div className={styles.content}>
+                        <h2 className={styles.title}>
+                            Nova Categoria
+                        </h2>
 
-                <form action={criarCategoria}>
-                    <input
-                        type="text"
-                        name="nome"
-                        placeholder="Nome da categoria"
-                    />
+                        <form
+                            key={formKey}
+                            action={formAction}
+                            className={styles.form}
+                        >
+                            <input
+                                type="text"
+                                name="nome"
+                                placeholder="Nome da categoria"
+                                className={styles.field}
+                            />
 
-                    <div>
+                            {errorMessage && (
+                                <p className={styles.error}>
+                                    {errorMessage}
+                                </p>
+                            )}
 
-                        <Button variant="outline" onClick={() =>
-                                setAberto(false)
-                            }>
-                            Cancelar
-                        </Button>
+                            <div
+                                className={styles.actions}
+                            >
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={fecharModal}
+                                >
+                                    Cancelar
+                                </Button>
 
-                        <Button type="submit">
-                            Confirmar
-                        </Button>
-                        
+                                <Button
+                                    type="submit"
+                                    disabled={pending}
+                                >
+                                    {pending
+                                        ? "Salvando..."
+                                        : "Confirmar"}
+                                </Button>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </Modal>
+                </Modal>
+            )}
         </>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { CategoriaCard } from "../CategoriaCard/CategoriaCard";
 import styles from "./CategoriaGrid.module.css";
 

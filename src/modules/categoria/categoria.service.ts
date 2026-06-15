@@ -8,7 +8,7 @@ export class CategoriaService {
   constructor(
     private categoriaRepository =
       new CategoriaRepository()
-  ) {}
+  ) { }
 
   async listarCategorias() {
     return this.categoriaRepository.findAll();
@@ -35,8 +35,37 @@ export class CategoriaService {
   }
 
   async excluirCategoria(id: string) {
-    return this.categoriaRepository.delete(id);
-}
+    const categoria =
+      await this.categoriaRepository.findByIdWithCount(id);
+
+    const produtos =
+      await this.categoriaRepository
+        .findProdutosByCategoriaId(id);
+
+    if (!categoria) {
+      throw new Error(
+        "Categoria não encontrada"
+      );
+    }
+
+    if (produtos.length > 0) {
+      const nomes = produtos
+        .slice(0, 5)
+        .map((p) => p.nome)
+        .join(", ");
+
+      const restantes =
+        produtos.length - 5;
+
+      throw new Error(
+        restantes > 0
+          ? `Esta categoria possui produtos vinculados: ${nomes} e mais ${restantes}.`
+          : `Esta categoria possui produtos vinculados: ${nomes}.`
+      );
+    }
+
+    await this.categoriaRepository.delete(id);
+  }
 
   async editarCategoria(
     id: string,
@@ -48,7 +77,11 @@ export class CategoriaService {
       await this.categoriaRepository.findByName(
         dadosValidados.nome
       );
-    if (categoriaExistente) {
+
+    if (
+      categoriaExistente &&
+      categoriaExistente.id !== id
+    ) {
       throw new Error(
         "Categoria já cadastrada"
       );
