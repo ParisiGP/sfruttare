@@ -1,5 +1,8 @@
 import { CategoriaService } from "@/modules/categoria/categoria.service";
 import { criarCategoria, excluirCategoria, editarCategoria } from "@/modules/categoria/actions";
+import { CategoriaGrid } from "@/components/admin/CategoriaGrid/CategoriaGrid";
+import { CategoriaModal } from "@/components/admin/categoriaModal/CategoriaModal";
+import styles from "./categorias.module.css";
 
 export default async function CategoriasPage() {
   const categoriaService =
@@ -10,59 +13,32 @@ export default async function CategoriasPage() {
 
   return (
     <main>
-      <h1>Categorias</h1>
+      <div className={styles.wrapper}>
+        <header className={styles.header}>
+          <div>
+            <p className={styles.eyebrow}>
+              Catálogo
+            </p>
 
-      <form action={criarCategoria}>
-        <input
-          type="text"
-          name="nome"
-          placeholder="Nome da categoria"
+            <h1>
+              Categorias
+            </h1>
+
+            <p className={styles.description}>
+              Gerencie as categorias utilizadas
+              no catálogo da Sfruttare.
+            </p>
+          </div>
+          <CategoriaModal />
+        </header>
+
+
+
+
+        <CategoriaGrid
+          categorias={categorias}
         />
-
-        <button type="submit">
-          Salvar
-        </button>
-      </form>
-
-      <hr />
-
-      <ul>
-  {categorias.map((categoria) => (
-    <li key={categoria.id}>
-      {categoria.nome}
-
-      <form action={excluirCategoria}>
-        <input
-          type="hidden"
-          name="id"
-          value={categoria.id}
-        />
-
-        <button type="submit">
-          Excluir
-        </button>
-      </form>
-
-    <form action={editarCategoria}>
-        <input
-          type="hidden"
-          name="id"
-          value={categoria.id}
-        />
-        <input
-          type="text"
-          name="nome"
-          defaultValue={categoria.nome}
-        />
-
-        <button type="submit">
-          Editar
-        </button>
-      </form>
-
-    </li>
-  ))}
-</ul>
+      </div>
     </main>
   );
 }

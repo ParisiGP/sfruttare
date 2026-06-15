@@ -1,0 +1,15 @@
+.grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(280px, 280px)
+    );
+
+  justify-content: center;
+
+  gap: 2rem;
+
+  padding: 2rem 0;
+}

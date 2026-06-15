@@ -88,7 +88,7 @@ export function ProdutoCard({
           </div>
 
           <div>
-            <dt>Preco</dt>
+            <dt>Preço</dt>
             <dd>{precoFormatado}</dd>
           </div>
 

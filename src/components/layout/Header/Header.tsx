@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 
 import styles from "./Header.module.css";
+import { usePathname } from "next/navigation";
+import { useEffect, useState, } from "react";
 
 const navItems = [
   {
@@ -22,8 +26,59 @@ const navItems = [
 ];
 
 export function Header() {
+
+  const pathname = usePathname();
+
+    const [visible, setVisible] =
+    useState(true);
+
+  useEffect(() => {
+    let lastScrollY =
+      window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY =
+        window.scrollY;
+
+      if (
+        currentScrollY >
+          lastScrollY &&
+        currentScrollY > 150
+      ) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+
+      lastScrollY =
+        currentScrollY;
+    };
+
+    window.addEventListener(
+      "scroll",
+      handleScroll
+    );
+
+    return () => {
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
+  }, []);
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
-    <header className={styles.header}>
+    <header
+  className={`${styles.header} ${
+    visible
+      ? styles.visible
+      : styles.hidden
+  }`}
+>
       <div className={styles.topBar}>
         Brecho com estilo, historia e autenticidade
       </div>
