@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const imagemSchema = z.object({
   id: z.string().optional(),
+
   url: z
     .string()
     .trim()
@@ -12,6 +13,9 @@ const imagemSchema = z.object({
         url.includes("cloudinary.com"),
       "Use uma URL publica do Cloudinary"
     ),
+
+  publicId: z.string().default(""),
+
   ordem: z.coerce.number().int().min(0),
 });
 
