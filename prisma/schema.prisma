@@ -55,6 +55,8 @@ model ProdutoImagem {
 
   url       String
 
+  publicId  String
+
   produtoId String
 
   produto Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)

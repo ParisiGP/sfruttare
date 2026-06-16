@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
@@ -9,11 +9,27 @@ type ModalProps = {
   children: ReactNode;
 };
 
+
 export function Modal({
   aberto,
   onClose,
   children,
 }: ModalProps) {
+
+  useEffect(() => {
+    if (!aberto) {
+      document.body.style.overflow = "";
+
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [aberto]);
+
   if (!aberto) {
     return null;
   }

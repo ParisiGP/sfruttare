@@ -15,10 +15,14 @@
   width: fit-content;
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 32px);
+
   display: flex;
   flex-direction: column;
   gap: 16px;
-  overflow: auto;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
   padding: 26px;
   border: 1px solid rgba(232, 222, 209, 0.9);
   border-radius: var(--radius-lg);
@@ -26,6 +30,7 @@
   box-shadow: var(--shadow-soft);
   animation: modalIn 180ms ease;
 }
+
 
 .modalContainerButtons {
   display: flex;
@@ -74,11 +79,13 @@
   .overlay {
     align-items: flex-start;
     padding: 16px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .modal {
     width: 100%;
+    max-width: 100%;
     padding: 18px;
   }
 }
