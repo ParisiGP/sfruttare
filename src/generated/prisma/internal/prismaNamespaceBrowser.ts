@@ -148,6 +148,7 @@ export const PedidoScalarFieldEnum = {
   id: 'id',
   usuarioId: 'usuarioId',
   status: 'status',
+  frete: 'frete',
   total: 'total',
   createdAt: 'createdAt'
 } as const
