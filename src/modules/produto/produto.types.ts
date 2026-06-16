@@ -8,8 +8,8 @@ export type ProdutoStatus =
   | "VENDIDO";
 
 export type ProdutoImagemInput = {
-  id?: string;
   url: string;
+  publicId: string;
   ordem: number;
 };
 

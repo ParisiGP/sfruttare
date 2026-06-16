@@ -51,12 +51,17 @@ enum ProdutoStatus {
 }
 
 model ProdutoImagem {
-  id          String    @id @default(cuid())
-  url         String
-  produtoId   String
-  ordem Int @default(0)
-  produto     Produto   @relation(fields: [produtoId], references: [id])
-  createdAt   DateTime @default(now())
+  id        String @id @default(cuid())
+
+  url       String
+
+  produtoId String
+
+  produto Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  ordem     Int @default(0)
+
+  createdAt DateTime @default(now())
 }
 
 model Usuario {

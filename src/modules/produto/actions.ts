@@ -74,6 +74,10 @@ function parseImageRows(
   return urls
     .map((url, index) => ({
       url: String(url).trim(),
+
+      // imagens antigas não possuem publicId
+      publicId: "",
+
       ordem: Number(ordens[index] ?? index),
     }))
     .filter((imagem) => imagem.url.length > 0);
@@ -89,29 +93,45 @@ async function uploadFiles(
   const uploaded: ProdutoImagemInput[] = [];
 
   for (const file of files) {
-    if (!(file instanceof File) || file.size === 0) {
+    if (
+      !(file instanceof File) ||
+      file.size === 0
+    ) {
       continue;
     }
 
-    if (!file.type.startsWith("image/")) {
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
       throw new Error(
         "Envie apenas arquivos de imagem."
       );
     }
 
-    if (file.size > maxImageSizeInBytes) {
+    if (
+      file.size >
+      maxImageSizeInBytes
+    ) {
       throw new Error(
         "Envie imagens com ate 10 MB."
       );
     }
 
-    const url =
-      await uploadProdutoImage(file);
+    const image =
+      await uploadProdutoImage(
+        file
+      );
 
-    if (url) {
+    if (image) {
       uploaded.push({
-        url,
-        ordem: startOrder + uploaded.length,
+        url: image.url,
+        publicId:
+          image.publicId,
+        ordem:
+          startOrder +
+          uploaded.length,
       });
     }
   }
@@ -119,201 +139,201 @@ async function uploadFiles(
   return uploaded;
 }
 
-async function buildProdutoPayload(
-  formData: FormData
-) {
-  const imagens =
-    parseImageRows(formData);
+    async function buildProdutoPayload(
+      formData: FormData
+    ) {
+      const imagens =
+        parseImageRows(formData);
 
-  const imagensUpload =
-    await uploadFiles(
-      formData,
-      imagens.length
-    );
+      const imagensUpload =
+        await uploadFiles(
+          formData,
+          imagens.length
+        );
 
-  return {
-    nome: getText(formData, "nome"),
-    descricao: getText(formData, "descricao"),
-    marca: getText(formData, "marca"),
-    tamanho: getText(formData, "tamanho"),
-    preco: Number(getText(formData, "preco")),
-    estoque: Number(getText(formData, "estoque")),
-    categoriaId: getText(formData, "categoriaId"),
-    tipo: getTipo(formData),
-    status: getStatus(formData),
-    imagens: [
-      ...imagens,
-      ...imagensUpload,
-    ],
-  };
-}
+      return {
+        nome: getText(formData, "nome"),
+        descricao: getText(formData, "descricao"),
+        marca: getText(formData, "marca"),
+        tamanho: getText(formData, "tamanho"),
+        preco: Number(getText(formData, "preco")),
+        estoque: Number(getText(formData, "estoque")),
+        categoriaId: getText(formData, "categoriaId"),
+        tipo: getTipo(formData),
+        status: getStatus(formData),
+        imagens: [
+          ...imagens,
+          ...imagensUpload,
+        ],
+      };
+    }
 
-function formatError(error: unknown) {
-  if (error instanceof z.ZodError) {
-    return error.issues
-      .map((issue) => issue.message)
-      .join(" ");
-  }
+    function formatError(error: unknown) {
+      if (error instanceof z.ZodError) {
+        return error.issues
+          .map((issue) => issue.message)
+          .join(" ");
+      }
 
-  if (error instanceof Error) {
-    return error.message;
-  }
+      if (error instanceof Error) {
+        return error.message;
+      }
 
-  return "Nao foi possivel concluir a acao.";
-}
+      return "Nao foi possivel concluir a acao.";
+    }
 
-function handleError(
-  action: string,
-  error: unknown
-) {
-  console.error(
-    `[produto:${action}]`,
-    error
-  );
+    function handleError(
+      action: string,
+      error: unknown
+    ) {
+      console.error(
+        `[produto:${action}]`,
+        error
+      );
 
-  return {
-    ok: false,
-    message: formatError(error),
-  };
-}
+      return {
+        ok: false,
+        message: formatError(error),
+      };
+    }
 
-function resolveFormData(
-  stateOrFormData: ProdutoActionState | FormData,
-  formData?: FormData
-) {
-  if (formData) {
-    return formData;
-  }
+    function resolveFormData(
+      stateOrFormData: ProdutoActionState | FormData,
+      formData?: FormData
+    ) {
+      if (formData) {
+        return formData;
+      }
 
-  return stateOrFormData as FormData;
-}
+      return stateOrFormData as FormData;
+    }
 
-export async function criarProduto(
-  stateOrFormData: ProdutoActionState | FormData,
-  formData?: FormData
-): Promise<ProdutoActionState> {
-  try {
-    const data =
-      resolveFormData(stateOrFormData, formData);
+    export async function criarProduto(
+      stateOrFormData: ProdutoActionState | FormData,
+      formData?: FormData
+    ): Promise<ProdutoActionState> {
+      try {
+        const data =
+          resolveFormData(stateOrFormData, formData);
 
-    await requireAdmin();
-    await produtoService.criarProduto(
-      await buildProdutoPayload(data)
-    );
-    revalidatePath("/admin/produtos");
+        await requireAdmin();
+        await produtoService.criarProduto(
+          await buildProdutoPayload(data)
+        );
+        revalidatePath("/admin/produtos");
 
-    return {
-      ...initialSuccess,
-      message: "Produto criado com sucesso.",
-    };
-  } catch (error) {
-    return handleError("criarProduto", error);
-  }
-}
+        return {
+          ...initialSuccess,
+          message: "Produto criado com sucesso.",
+        };
+      } catch (error) {
+        return handleError("criarProduto", error);
+      }
+    }
 
-export async function editarProduto(
-  stateOrFormData: ProdutoActionState | FormData,
-  formData?: FormData
-): Promise<ProdutoActionState> {
-  try {
-    const data =
-      resolveFormData(stateOrFormData, formData);
+    export async function editarProduto(
+      stateOrFormData: ProdutoActionState | FormData,
+      formData?: FormData
+    ): Promise<ProdutoActionState> {
+      try {
+        const data =
+          resolveFormData(stateOrFormData, formData);
 
-    await requireAdmin();
+        await requireAdmin();
 
-    await produtoService.editarProduto({
-      id: getText(data, "id"),
-      ...(await buildProdutoPayload(data)),
-    });
-    revalidatePath("/admin/produtos");
+        await produtoService.editarProduto({
+          id: getText(data, "id"),
+          ...(await buildProdutoPayload(data)),
+        });
+        revalidatePath("/admin/produtos");
 
-    return {
-      ...initialSuccess,
-      message: "Produto atualizado com sucesso.",
-    };
-  } catch (error) {
-    return handleError("editarProduto", error);
-  }
-}
+        return {
+          ...initialSuccess,
+          message: "Produto atualizado com sucesso.",
+        };
+      } catch (error) {
+        return handleError("editarProduto", error);
+      }
+    }
 
-export async function excluirProduto(
-  stateOrFormData: ProdutoActionState | FormData,
-  formData?: FormData
-): Promise<ProdutoActionState> {
-  try {
-    const data =
-      resolveFormData(stateOrFormData, formData);
+    export async function excluirProduto(
+      stateOrFormData: ProdutoActionState | FormData,
+      formData?: FormData
+    ): Promise<ProdutoActionState> {
+      try {
+        const data =
+          resolveFormData(stateOrFormData, formData);
 
-    await requireAdmin();
-    await produtoService.excluirProduto(
-      getText(data, "id")
-    );
-    revalidatePath("/admin/produtos");
+        await requireAdmin();
+        await produtoService.excluirProduto(
+          getText(data, "id")
+        );
+        revalidatePath("/admin/produtos");
 
-    return {
-      ...initialSuccess,
-      message: "Produto excluido com sucesso.",
-    };
-  } catch (error) {
-    return handleError("excluirProduto", error);
-  }
-}
+        return {
+          ...initialSuccess,
+          message: "Produto excluido com sucesso.",
+        };
+      } catch (error) {
+        return handleError("excluirProduto", error);
+      }
+    }
 
-export async function excluirProdutoForm(
-  formData: FormData
-) {
-  await excluirProduto(initialSuccess, formData);
-}
+    export async function excluirProdutoForm(
+      formData: FormData
+    ) {
+      await excluirProduto(initialSuccess, formData);
+    }
 
-export async function alterarStatusProduto(
-  stateOrFormData: ProdutoActionState | FormData,
-  formData?: FormData
-): Promise<ProdutoActionState> {
-  try {
-    const data =
-      resolveFormData(stateOrFormData, formData);
+    export async function alterarStatusProduto(
+      stateOrFormData: ProdutoActionState | FormData,
+      formData?: FormData
+    ): Promise<ProdutoActionState> {
+      try {
+        const data =
+          resolveFormData(stateOrFormData, formData);
 
-    await requireAdmin();
-    await produtoService.alterarStatusProduto(
-      getText(data, "id"),
-      getStatus(data)
-    );
-    revalidatePath("/admin/produtos");
+        await requireAdmin();
+        await produtoService.alterarStatusProduto(
+          getText(data, "id"),
+          getStatus(data)
+        );
+        revalidatePath("/admin/produtos");
 
-    return {
-      ...initialSuccess,
-      message: "Status atualizado com sucesso.",
-    };
-  } catch (error) {
-    return handleError("alterarStatusProduto", error);
-  }
-}
+        return {
+          ...initialSuccess,
+          message: "Status atualizado com sucesso.",
+        };
+      } catch (error) {
+        return handleError("alterarStatusProduto", error);
+      }
+    }
 
-export async function alterarStatusProdutoForm(
-  formData: FormData
-) {
-  await alterarStatusProduto(
-    initialSuccess,
-    formData
-  );
-}
+    export async function alterarStatusProdutoForm(
+      formData: FormData
+    ) {
+      await alterarStatusProduto(
+        initialSuccess,
+        formData
+      );
+    }
 
-export async function uploadImagemProduto(
-  stateOrFormData: ProdutoActionState | FormData,
-  formData?: FormData
-): Promise<ProdutoActionState> {
-  try {
-    const data =
-      resolveFormData(stateOrFormData, formData);
+    export async function uploadImagemProduto(
+      stateOrFormData: ProdutoActionState | FormData,
+      formData?: FormData
+    ): Promise<ProdutoActionState> {
+      try {
+        const data =
+          resolveFormData(stateOrFormData, formData);
 
-    await requireAdmin();
-    await uploadFiles(data, 0);
+        await requireAdmin();
+        await uploadFiles(data, 0);
 
-    return {
-      ...initialSuccess,
-      message: "Imagem enviada com sucesso.",
-    };
-  } catch (error) {
-    return handleError("uploadImagemProduto", error);
-  }
-}
+        return {
+          ...initialSuccess,
+          message: "Imagem enviada com sucesso.",
+        };
+      } catch (error) {
+        return handleError("uploadImagemProduto", error);
+      }
+    }

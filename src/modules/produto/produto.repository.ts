@@ -99,21 +99,22 @@ function buildOrderBy(
 
 export class ProdutoRepository {
   async create(data: ProdutoWriteData) {
-    const { imagens = [], ...produto } = data;
+  const { imagens = [], ...produto } = data;
 
-    return prisma.produto.create({
-      data: {
-        ...produto,
-        imagens: {
-          create: imagens.map((imagem) => ({
-            url: imagem.url,
-            ordem: imagem.ordem,
-          })),
-        },
+  return prisma.produto.create({
+    data: {
+      ...produto,
+      imagens: {
+        create: imagens.map((imagem) => ({
+          url: imagem.url,
+          publicId: imagem.publicId,
+          ordem: imagem.ordem,
+        })),
       },
-      include: this.includeRelations(),
-    });
-  }
+    },
+    include: this.includeRelations(),
+  });
+}
 
   async update(
     id: string,

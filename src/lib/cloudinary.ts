@@ -23,9 +23,14 @@ function assertCloudinaryConfig() {
   }
 }
 
+type UploadProdutoImageResult = {
+  url: string;
+  publicId: string;
+};
+
 export async function uploadProdutoImage(
   file: File
-) {
+): Promise<UploadProdutoImageResult | null> {
   if (!file.size) {
     return null;
   }
@@ -38,7 +43,7 @@ export async function uploadProdutoImage(
   const buffer =
     Buffer.from(bytes);
 
-  return new Promise<string>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const stream =
       cloudinary.uploader.upload_stream(
         {
@@ -51,19 +56,35 @@ export async function uploadProdutoImage(
             return;
           }
 
-          if (!result?.secure_url) {
+          if (
+            !result?.secure_url ||
+            !result.public_id
+          ) {
             reject(
               new Error(
-                "Cloudinary nao retornou uma URL segura."
+                "Cloudinary nao retornou os dados esperados."
               )
             );
             return;
           }
 
-          resolve(result.secure_url);
+          resolve({
+            url: result.secure_url,
+            publicId: result.public_id,
+          });
         }
       );
 
     stream.end(buffer);
   });
+}
+
+export async function deleteProdutoImage(
+  publicId: string
+) {
+  assertCloudinaryConfig();
+
+  return cloudinary.uploader.destroy(
+    publicId
+  );
 }
