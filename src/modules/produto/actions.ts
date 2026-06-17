@@ -221,6 +221,7 @@ async function uploadFiles(
           await buildProdutoPayload(data)
         );
         revalidatePath("/admin/produtos");
+        revalidatePath("/admin/categorias");
 
         return {
           ...initialSuccess,
@@ -246,6 +247,7 @@ async function uploadFiles(
           ...(await buildProdutoPayload(data)),
         });
         revalidatePath("/admin/produtos");
+        revalidatePath("/admin/categorias");
 
         return {
           ...initialSuccess,
@@ -269,6 +271,7 @@ async function uploadFiles(
           getText(data, "id")
         );
         revalidatePath("/admin/produtos");
+        revalidatePath("/admin/categorias");
 
         return {
           ...initialSuccess,
@@ -299,6 +302,7 @@ async function uploadFiles(
           getStatus(data)
         );
         revalidatePath("/admin/produtos");
+        revalidatePath("/admin/categorias");
 
         return {
           ...initialSuccess,
