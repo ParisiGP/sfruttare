@@ -3,6 +3,9 @@ import { criarCategoria, excluirCategoria, editarCategoria } from "@/modules/cat
 import { CategoriaGrid } from "@/components/admin/CategoriaGrid/CategoriaGrid";
 import { CategoriaModal } from "@/components/admin/categoriaModal/CategoriaModal";
 import styles from "./categorias.module.css";
+import {
+  revalidatePath,
+} from "next/cache";
 
 export default async function CategoriasPage() {
   const categoriaService =
@@ -40,5 +43,9 @@ export default async function CategoriasPage() {
         />
       </div>
     </main>
+  );
+
+  revalidatePath(
+    "/admin/categorias"
   );
 }
