@@ -78,6 +78,30 @@ export function ProdutoForm({
   const [clientError, setClientError] =
     useState("");
 
+  const [formValues, setFormValues] =
+    useState(() => ({
+      nome: produto?.nome ?? "",
+      marca: produto?.marca ?? "",
+      tamanho: produto?.tamanho ?? "",
+      descricao:
+        produto?.descricao ?? "",
+      categoriaId:
+        produto?.categoriaId ?? "",
+      preco:
+        produto?.preco?.toString() ??
+        "",
+      estoque:
+        String(
+          produto?.estoque ?? 1
+        ),
+      tipo:
+        produto?.tipo ??
+        "BRECHO",
+      status:
+        produto?.status ??
+        "DISPONIVEL",
+    }));
+
   useEffect(() => {
     if (state.ok && state.message) {
       router.refresh();
@@ -92,6 +116,16 @@ export function ProdutoForm({
       );
     };
   }, [filePreviews]);
+
+  function updateField(
+    field: keyof typeof formValues,
+    value: string
+  ) {
+    setFormValues((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  }
 
   function addImageRow() {
     setImageRows((rows) => [
@@ -113,12 +147,12 @@ export function ProdutoForm({
       rows.map((row) =>
         row.key === key
           ? {
-              ...row,
-              [field]:
-                field === "ordem"
-                  ? Number(value)
-                  : value,
-            }
+            ...row,
+            [field]:
+              field === "ordem"
+                ? Number(value)
+                : value,
+          }
           : row
       )
     );
@@ -224,8 +258,15 @@ export function ProdutoForm({
             <input
               name="nome"
               type="text"
-              defaultValue={produto?.nome}
+              value={formValues.nome}
               required
+              onChange={(event) =>
+                setFormValues((current) => ({
+                  ...current,
+                  nome:
+                    event.target.value,
+                }))
+              }
             />
           </Field>
 
@@ -233,7 +274,14 @@ export function ProdutoForm({
             <input
               name="marca"
               type="text"
-              defaultValue={produto?.marca}
+              value={formValues.marca}
+              onChange={(event) =>
+                setFormValues((current) => ({
+                  ...current,
+                  marca:
+                    event.target.value,
+                }))
+              }
             />
           </Field>
 
@@ -241,15 +289,29 @@ export function ProdutoForm({
             <input
               name="tamanho"
               type="text"
-              defaultValue={produto?.tamanho}
+              value={formValues.tamanho}
+              onChange={(event) =>
+                setFormValues((current) => ({
+                  ...current,
+                  tamanho:
+                    event.target.value,
+                }))
+              }
             />
           </Field>
 
           <Field label="Categoria" required>
             <select
               name="categoriaId"
-              defaultValue={produto?.categoriaId}
               required
+              value={formValues.categoriaId}
+              onChange={(event) =>
+                setFormValues((current) => ({
+                  ...current,
+                  categoriaId:
+                    event.target.value,
+                }))
+              }
             >
               <option value="" disabled>
                 Selecione
@@ -269,7 +331,18 @@ export function ProdutoForm({
         <Field label="Descricao">
           <textarea
             name="descricao"
-            defaultValue={produto?.descricao}
+            value={
+              formValues.descricao
+            }
+            onChange={(event) =>
+              setFormValues(
+                (current) => ({
+                  ...current,
+                  descricao:
+                    event.target.value,
+                })
+              )
+            }
           />
         </Field>
       </section>
@@ -284,7 +357,14 @@ export function ProdutoForm({
               type="number"
               min="0"
               step="0.01"
-              defaultValue={produto?.preco}
+              value={formValues.preco}
+              onChange={(event) =>
+                setFormValues((current) => ({
+                  ...current,
+                  preco:
+                    event.target.value,
+                }))
+              }
               required
             />
           </Field>
@@ -294,7 +374,13 @@ export function ProdutoForm({
               name="estoque"
               type="number"
               min="0"
-              defaultValue={produto?.estoque ?? 1}
+              value={formValues.estoque}
+              onChange={(event) =>
+                updateField(
+                  "estoque",
+                  event.target.value
+                )
+              }
               required
             />
           </Field>
@@ -302,10 +388,18 @@ export function ProdutoForm({
           <Field label="Tipo" required>
             <select
               name="tipo"
-              defaultValue={produto?.tipo ?? "BRECHO"}
+              value={formValues.tipo}
+              onChange={(event) =>
+                updateField(
+                  "tipo",
+                  event.target.value
+                )
+              }
               required
             >
-              <option value="BRECHO">Brecho</option>
+              <option value="BRECHO">
+                Brecho
+              </option>
               <option value="NA_ETIQUETA">
                 Na etiqueta
               </option>
@@ -315,8 +409,12 @@ export function ProdutoForm({
           <Field label="Status" required>
             <select
               name="status"
-              defaultValue={
-                produto?.status ?? "DISPONIVEL"
+              value={formValues.status}
+              onChange={(event) =>
+                updateField(
+                  "status",
+                  event.target.value
+                )
               }
               required
             >
