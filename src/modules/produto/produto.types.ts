@@ -31,6 +31,7 @@ export type ProdutoAdminItem = {
   imagens: {
     id: string;
     url: string;
+    publicId: string;
     ordem: number;
   }[];
   createdAt: string;

@@ -69,9 +69,6 @@ export function ProdutoForm({
       [produto]
     );
 
-  const [imageRows, setImageRows] =
-    useState<ImageRow[]>(() => initialImages);
-
   const [filePreviews, setFilePreviews] =
     useState<string[]>([]);
 
@@ -102,6 +99,13 @@ export function ProdutoForm({
         "DISPONIVEL",
     }));
 
+  const [
+    imagensAtuais,
+    setImagensAtuais,
+  ] = useState(
+    produto?.imagens ?? []
+  );
+
   useEffect(() => {
     if (state.ok && state.message) {
       router.refresh();
@@ -127,42 +131,19 @@ export function ProdutoForm({
     }));
   }
 
-  function addImageRow() {
-    setImageRows((rows) => [
-      ...rows,
-      {
-        key: crypto.randomUUID(),
-        url: "",
-        ordem: rows.length,
-      },
-    ]);
-  }
+ 
 
-  function updateImageRow(
-    key: string,
-    field: "url" | "ordem",
-    value: string
-  ) {
-    setImageRows((rows) =>
-      rows.map((row) =>
-        row.key === key
-          ? {
-            ...row,
-            [field]:
-              field === "ordem"
-                ? Number(value)
-                : value,
-          }
-          : row
+  function removeImage(
+  imageId: string
+) {
+  setImagensAtuais(
+    (current) =>
+      current.filter(
+        (imagem) =>
+          imagem.id !== imageId
       )
-    );
-  }
-
-  function removeImageRow(key: string) {
-    setImageRows((rows) =>
-      rows.filter((row) => row.key !== key)
-    );
-  }
+  );
+}
 
   function handleFilePreview(
     event: ChangeEvent<HTMLInputElement>
@@ -433,85 +414,109 @@ export function ProdutoForm({
       </section>
 
       <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h3>Imagens</h3>
+  <div className={styles.sectionHeader}>
+    <h3>Imagens</h3>
+  </div>
 
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={addImageRow}
-          >
-            Adicionar URL
-          </button>
-        </div>
+  {imagensAtuais.length > 0 && (
+    <>
+      <span>
+        Imagens atuais
+      </span>
 
-        <Field label="Upload Cloudinary">
-          <input
-            name="imagemArquivo"
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFilePreview}
-          />
-        </Field>
-
-        {filePreviews.length > 0 && (
-          <div className={styles.previewGrid}>
-            {filePreviews.map((url) => (
-              <img
-                key={url}
-                src={url}
-                alt="Preview do upload"
-              />
-            ))}
-          </div>
-        )}
-
-        {imageRows.map((row) => (
-          <div
-            key={row.key}
-            className={styles.imageRow}
-          >
-            <input
-              name="imagemUrl"
-              type="url"
-              value={row.url}
-              placeholder="https://res.cloudinary.com/..."
-              onChange={(event) =>
-                updateImageRow(
-                  row.key,
-                  "url",
-                  event.target.value
-                )
-              }
-            />
-
-            <input
-              name="imagemOrdem"
-              type="number"
-              min="0"
-              value={row.ordem}
-              aria-label="Ordem da imagem"
-              onChange={(event) =>
-                updateImageRow(
-                  row.key,
-                  "ordem",
-                  event.target.value
-                )
-              }
-            />
-
-            <button
-              type="button"
-              onClick={() =>
-                removeImageRow(row.key)
+      <div
+        className={
+          styles.previewGrid
+        }
+      >
+        {imagensAtuais.map(
+          (imagem) => (
+            <div
+              key={imagem.id}
+              className={
+                styles.imageCard
               }
             >
-              Remover
-            </button>
-          </div>
-        ))}
-      </section>
+              <img
+                src={imagem.url}
+                alt={
+                  produto?.nome ??
+                  "Imagem"
+                }
+              />
+
+              <button
+                type="button"
+                className={
+                  styles.removeImageButton
+                }
+                onClick={() =>
+                  removeImage(
+                    imagem.id
+                  )
+                }
+              >
+                ✕
+              </button>
+
+              <input
+                type="hidden"
+                name="imagemExistente"
+                value={
+                  imagem.url
+                }
+              />
+
+              <input
+                type="hidden"
+                name="imagemExistentePublicId"
+                value={
+                  imagem.publicId
+                }
+              />
+            </div>
+          )
+        )}
+      </div>
+    </>
+  )}
+
+  <Field label="Adicionar novas imagens">
+    <input
+      name="imagemArquivo"
+      type="file"
+      accept="image/*"
+      multiple
+      onChange={
+        handleFilePreview
+      }
+    />
+  </Field>
+
+  {filePreviews.length > 0 && (
+    <>
+      <span>
+        Novas imagens
+      </span>
+
+      <div
+        className={
+          styles.previewGrid
+        }
+      >
+        {filePreviews.map(
+          (url) => (
+            <img
+              key={url}
+              src={url}
+              alt="Preview"
+            />
+          )
+        )}
+      </div>
+    </>
+  )}
+</section>
 
       <div className={styles.actions}>
         <button
