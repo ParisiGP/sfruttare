@@ -123,6 +123,7 @@ export class ProdutoService {
     status: "DISPONIVEL" | "RESERVADO" | "VENDIDO";
     imagens: {
       id: string;
+      publicId: string;
       url: string;
       ordem: number;
     }[];
@@ -145,7 +146,8 @@ export class ProdutoService {
       tipo: produto.tipo,
       status: produto.status,
       imagens: produto.imagens.map((imagem) => ({
-        id: imagem.id,
+        id:imagem.publicId,
+        publicId: imagem.publicId,
         url: imagem.url,
         ordem: imagem.ordem,
       })),

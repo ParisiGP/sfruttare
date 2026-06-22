@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 import { alterarStatusProdutoForm } from "@/modules/produto/actions";
 import type {
@@ -40,6 +40,27 @@ export function ProdutoCard({
 
   const possuiVariasImagens = produto.imagens.length > 1;
 
+  useEffect(() => {
+  if (
+    produto.imagens.length <= 1
+  ) {
+    return;
+  }
+
+  const interval =
+    setInterval(() => {
+      setImagemAtual(
+        (current) =>
+          current + 1 >=
+          produto.imagens.length
+            ? 0
+            : current + 1
+      );
+    }, 10000);
+
+  return () =>
+    clearInterval(interval);
+}, [produto.imagens.length]);
  
   return (
     <article className={styles.card}>
