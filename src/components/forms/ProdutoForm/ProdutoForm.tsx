@@ -6,6 +6,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useRef,
   type ChangeEvent,
   type ReactNode,
 } from "react";
@@ -41,6 +42,8 @@ const initialState: ProdutoActionState = {
   message: "",
 };
 
+
+
 const maxImageSizeInBytes =
   10 * 1024 * 1024;
 
@@ -68,6 +71,9 @@ export function ProdutoForm({
         })) ?? [],
       [produto]
     );
+
+  const fileInputRef =
+    useRef<HTMLInputElement>(null);
 
   const [filePreviews, setFilePreviews] =
     useState<string[]>([]);
@@ -131,19 +137,19 @@ export function ProdutoForm({
     }));
   }
 
- 
+
 
   function removeImage(
-  imageId: string
-) {
-  setImagensAtuais(
-    (current) =>
-      current.filter(
-        (imagem) =>
-          imagem.id !== imageId
-      )
-  );
-}
+    imageId: string
+  ) {
+    setImagensAtuais(
+      (current) =>
+        current.filter(
+          (imagem) =>
+            imagem.id !== imageId
+        )
+    );
+  }
 
   function handleFilePreview(
     event: ChangeEvent<HTMLInputElement>
@@ -414,109 +420,133 @@ export function ProdutoForm({
       </section>
 
       <section className={styles.section}>
-  <div className={styles.sectionHeader}>
-    <h3>Imagens</h3>
-  </div>
+        <div className={styles.sectionHeader}>
+          <h3>Imagens</h3>
+        </div>
 
-  {imagensAtuais.length > 0 && (
-    <>
-      <span>
-        Imagens atuais
-      </span>
+        {imagensAtuais.length > 0 && (
+          <>
+            <span>
+              Imagens atuais
+            </span>
 
-      <div
-        className={
-          styles.previewGrid
-        }
-      >
-        {imagensAtuais.map(
-          (imagem) => (
             <div
-              key={imagem.id}
               className={
-                styles.imageCard
+                styles.previewGrid
               }
             >
-              <img
-                src={imagem.url}
-                alt={
-                  produto?.nome ??
-                  "Imagem"
-                }
-              />
+              {imagensAtuais.map(
+                (imagem) => (
+                  <div
+                    key={imagem.id}
+                    className={
+                      styles.imageCard
+                    }
+                  >
+                    
+                    <img
+                      src={imagem.url}
+                      alt={
+                        produto?.nome ??
+                        "Imagem"
+                      }
+                    />
+                    <button
+                      type="button"
+                      className={
+                        styles.removeImageButton
+                      }
+                      onClick={() =>
+                        removeImage(
+                          imagem.id
+                        )
+                      }
+                    >
+                      ✕
+                    </button>
 
-              <button
-                type="button"
-                className={
-                  styles.removeImageButton
-                }
-                onClick={() =>
-                  removeImage(
-                    imagem.id
-                  )
-                }
-              >
-                ✕
-              </button>
 
-              <input
-                type="hidden"
-                name="imagemExistente"
-                value={
-                  imagem.url
-                }
-              />
+                    <input
+                      type="hidden"
+                      name="imagemExistente"
+                      value={
+                        imagem.url
+                      }
+                    />
 
-              <input
-                type="hidden"
-                name="imagemExistentePublicId"
-                value={
-                  imagem.publicId
-                }
-              />
+                    <input
+                      type="hidden"
+                      name="imagemExistentePublicId"
+                      value={
+                        imagem.publicId
+                      }
+                    />
+                  </div>
+                )
+              )}
             </div>
-          )
+          </>
         )}
-      </div>
-    </>
-  )}
 
-  <Field label="Adicionar novas imagens">
-    <input
-      name="imagemArquivo"
-      type="file"
-      accept="image/*"
-      multiple
-      onChange={
-        handleFilePreview
-      }
-    />
-  </Field>
+        <Field label="Adicionar novas imagens">
+          <input
+            ref={fileInputRef}
+            name="imagemArquivo"
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            onChange={handleFilePreview}
+          />
 
-  {filePreviews.length > 0 && (
-    <>
-      <span>
-        Novas imagens
-      </span>
+          <button
+            type="button"
+            className={styles.uploadButton}
+            onClick={() =>
+              fileInputRef.current?.click()
+            }
+          >
+            📷 Adicionar Fotos
+          </button>
+        </Field>
 
-      <div
-        className={
-          styles.previewGrid
-        }
-      >
-        {filePreviews.map(
-          (url) => (
-            <img
-              key={url}
-              src={url}
-              alt="Preview"
-            />
-          )
+        {filePreviews.length > 0 && (
+          <>
+            <span>
+              Novas imagens
+            </span>
+
+            <div
+              className={
+                styles.previewGrid
+              }
+            >
+              {filePreviews.map(
+                (url) => (
+                  <div
+                    key={url}
+                    className={
+                      styles.imageCard
+                    }
+                  >
+                    <img
+                      src={url}
+                      alt="Preview"
+                    />
+                  </div>
+
+                )
+              )}
+
+            </div>
+            <span>
+              {filePreviews.length}
+              {" "}
+              nova(s) imagem(ns)
+            </span>
+          </>
         )}
-      </div>
-    </>
-  )}
-</section>
+      </section>
 
       <div className={styles.actions}>
         <button

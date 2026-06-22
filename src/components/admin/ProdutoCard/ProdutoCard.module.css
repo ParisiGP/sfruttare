@@ -218,6 +218,101 @@
   background: rgba(168, 92, 74, 0.08);
 }
 
+.imageWrapper{
+  position: relative;
+  overflow: hidden;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(
+    35,
+    28,
+    20,
+    0.65
+  );
+
+  color: white;
+  font-size: 26px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transition:
+    opacity 160ms,
+    background 160ms;
+}
+
+.imageWrapper:hover .arrow {
+  opacity: 1;
+}
+
+.arrow:hover {
+  background:
+    rgba(
+      35,
+      28,
+      20,
+      0.9
+    );
+}
+
+.arrowLeft {
+  left: 12px;
+}
+
+.arrowRight {
+  right: 12px;
+}
+
+.indicators {
+  position: absolute;
+
+  left: 50%;
+  bottom: 12px;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+  gap: 8px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+
+  border: none;
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+
+  cursor: pointer;
+}
+
+.active {
+  background: white;
+}
+
 @media (max-width: 420px) {
   .header,
   .actions,

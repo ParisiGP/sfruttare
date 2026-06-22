@@ -114,8 +114,14 @@
 
 .previewGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(160px, 1fr)
+    );
+
+  gap: 12px;
 }
 
 .previewGrid img {
@@ -190,6 +196,98 @@
   border: 1px solid rgba(122, 155, 118, 0.26);
   background: rgba(122, 155, 118, 0.1);
   color: var(--color-success);
+}
+
+
+.uploadButton {
+  width: 100%;
+  min-height: 54px;
+
+  border: 2px dashed
+    var(--color-border);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    rgba(
+      248,
+      244,
+      237,
+      0.45
+    );
+
+  color:
+    var(--color-primary);
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    border-color 160ms,
+    background 160ms;
+}
+
+.uploadButton:hover {
+  border-color:
+    var(--color-primary);
+
+  background:
+    rgba(
+      139,
+      107,
+      63,
+      0.08
+    );
+}
+
+.imageCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.imageCard img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.removeImageButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(35, 28, 20, 0.75);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  transition:
+    background 160ms,
+    transform 160ms;
+}
+
+.removeImageButton:hover {
+  background: var(--color-danger);
+  transform: scale(1.08);
 }
 
 @media (max-width: 640px) {

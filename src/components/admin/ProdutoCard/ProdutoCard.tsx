@@ -1,3 +1,7 @@
+"use client"
+
+import {useState} from "react";
+
 import { alterarStatusProdutoForm } from "@/modules/produto/actions";
 import type {
   ProdutoAdminItem,
@@ -29,22 +33,96 @@ export function ProdutoCard({
       currency: "BRL",
     }).format(produto.preco);
 
-  const imagemPrincipal =
-    produto.imagens[0]?.url;
+  const [imagemAtual, setImagemAtual] = useState(0);
 
+  const imagemPrincipal =
+    produto.imagens[imagemAtual]?.url;
+
+  const possuiVariasImagens = produto.imagens.length > 1;
+
+ 
   return (
     <article className={styles.card}>
       {imagemPrincipal ? (
-        <img
-          className={styles.image}
-          src={imagemPrincipal}
-          alt={produto.nome}
-        />
-      ) : (
-        <div className={styles.imagePlaceholder}>
-          <span>Sem imagem</span>
+  <div
+    className={styles.imageWrapper}
+  >
+    <img
+      className={styles.image}
+      src={imagemPrincipal}
+      alt={produto.nome}
+    />
+
+    {possuiVariasImagens && (
+      <>
+        <button
+          type="button"
+          className={`${styles.arrow} ${styles.arrowLeft}`}
+          onClick={() =>
+            setImagemAtual(
+              (current) =>
+                current === 0
+                  ? produto.imagens.length - 1
+                  : current - 1
+            )
+          }
+        >
+          ‹
+        </button>
+
+        <button
+          type="button"
+          className={`${styles.arrow} ${styles.arrowRight}`}
+          onClick={() =>
+            setImagemAtual(
+              (current) =>
+                current + 1 >=
+                produto.imagens.length
+                  ? 0
+                  : current + 1
+            )
+          }
+        >
+          ›
+        </button>
+
+        <div
+          className={
+            styles.indicators
+          }
+        >
+          {produto.imagens.map(
+            (_, index) => (
+              <button
+                key={index}
+                type="button"
+                className={`${styles.indicator} ${
+                  index ===
+                  imagemAtual
+                    ? styles.active
+                    : ""
+                }`}
+                onClick={() =>
+                  setImagemAtual(
+                    index
+                  )
+                }
+              />
+            )
+          )}
         </div>
-      )}
+      </>
+    )}
+  </div>
+) : (
+  <div
+    className={
+      styles.imagePlaceholder
+    }
+  >
+    <span>Sem imagem</span>
+  </div>
+)}
 
       <div className={styles.content}>
         <div className={styles.header}>
