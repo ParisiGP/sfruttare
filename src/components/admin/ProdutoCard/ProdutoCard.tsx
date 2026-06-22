@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import {useState, useEffect} from "react";
+import { useRef, useState, useEffect } from "react";
 
 import { alterarStatusProdutoForm } from "@/modules/produto/actions";
 import type {
@@ -33,117 +33,185 @@ export function ProdutoCard({
       currency: "BRL",
     }).format(produto.preco);
 
-  const [imagemAtual, setImagemAtual] = useState(0);
+  const [imagemAtual, setImagemAtual] =
+    useState(0);
+
+  const touchStart =
+    useRef<number | null>(null);
+
+  const touchEnd =
+    useRef<number | null>(null);
+
+  const minSwipeDistance = 50;
 
   const imagemPrincipal =
     produto.imagens[imagemAtual]?.url;
 
-  const possuiVariasImagens = produto.imagens.length > 1;
+  const possuiVariasImagens =
+    produto.imagens.length > 1;
 
-  useEffect(() => {
-  if (
-    produto.imagens.length <= 1
-  ) {
-    return;
+  function proximaImagem() {
+    setImagemAtual((current) =>
+      current + 1 >=
+      produto.imagens.length
+        ? 0
+        : current + 1
+    );
   }
 
-  const interval =
-    setInterval(() => {
-      setImagemAtual(
-        (current) =>
-          current + 1 >=
-          produto.imagens.length
-            ? 0
-            : current + 1
-      );
-    }, 10000);
+  function imagemAnterior() {
+    setImagemAtual((current) =>
+      current === 0
+        ? produto.imagens.length - 1
+        : current - 1
+    );
+  }
 
-  return () =>
-    clearInterval(interval);
-}, [produto.imagens.length]);
- 
+  function handleSwipe() {
+    if (
+      touchStart.current === null ||
+      touchEnd.current === null
+    ) {
+      return;
+    }
+
+    const distance =
+      touchStart.current -
+      touchEnd.current;
+
+    if (
+      distance >
+      minSwipeDistance
+    ) {
+      proximaImagem();
+    }
+
+    if (
+      distance <
+      -minSwipeDistance
+    ) {
+      imagemAnterior();
+    }
+
+    touchStart.current = null;
+    touchEnd.current = null;
+  }
+
+  useEffect(() => {
+    if (
+      produto.imagens.length <= 1
+    ) {
+      return;
+    }
+
+    const interval =
+      setInterval(() => {
+        proximaImagem();
+      }, 10000);
+
+    return () =>
+      clearInterval(interval);
+  }, [produto.imagens.length]);
+
   return (
     <article className={styles.card}>
       {imagemPrincipal ? (
-  <div
-    className={styles.imageWrapper}
-  >
-    <img
-      className={styles.image}
-      src={imagemPrincipal}
-      alt={produto.nome}
-    />
-
-    {possuiVariasImagens && (
-      <>
-        <button
-          type="button"
-          className={`${styles.arrow} ${styles.arrowLeft}`}
-          onClick={() =>
-            setImagemAtual(
-              (current) =>
-                current === 0
-                  ? produto.imagens.length - 1
-                  : current - 1
-            )
-          }
-        >
-          ‹
-        </button>
-
-        <button
-          type="button"
-          className={`${styles.arrow} ${styles.arrowRight}`}
-          onClick={() =>
-            setImagemAtual(
-              (current) =>
-                current + 1 >=
-                produto.imagens.length
-                  ? 0
-                  : current + 1
-            )
-          }
-        >
-          ›
-        </button>
-
         <div
           className={
-            styles.indicators
+            styles.imageWrapper
+          }
+          onTouchStart={(event) => {
+            touchStart.current =
+              event.targetTouches[0]
+                .clientX;
+          }}
+          onTouchMove={(event) => {
+            touchEnd.current =
+              event.targetTouches[0]
+                .clientX;
+          }}
+          onTouchEnd={
+            handleSwipe
           }
         >
-          {produto.imagens.map(
-            (_, index) => (
+          <img
+            className={
+              styles.image
+            }
+            src={
+              imagemPrincipal
+            }
+            alt={
+              produto.nome
+            }
+          />
+
+          {possuiVariasImagens && (
+            <>
               <button
-                key={index}
                 type="button"
-                className={`${styles.indicator} ${
-                  index ===
-                  imagemAtual
-                    ? styles.active
-                    : ""
-                }`}
-                onClick={() =>
-                  setImagemAtual(
-                    index
-                  )
+                className={`${styles.arrow} ${styles.arrowLeft}`}
+                onClick={
+                  imagemAnterior
                 }
-              />
-            )
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.arrow} ${styles.arrowRight}`}
+                onClick={
+                  proximaImagem
+                }
+              >
+                ›
+              </button>
+
+              <div
+                className={
+                  styles.indicators
+                }
+              >
+                {produto.imagens.map(
+                  (
+                    _,
+                    index
+                  ) => (
+                    <button
+                      key={
+                        index
+                      }
+                      type="button"
+                      className={`${styles.indicator} ${
+                        index ===
+                        imagemAtual
+                          ? styles.active
+                          : ""
+                      }`}
+                      onClick={() =>
+                        setImagemAtual(
+                          index
+                        )
+                      }
+                    />
+                  )
+                )}
+              </div>
+            </>
           )}
         </div>
-      </>
-    )}
-  </div>
-) : (
-  <div
-    className={
-      styles.imagePlaceholder
-    }
-  >
-    <span>Sem imagem</span>
-  </div>
-)}
+      ) : (
+        <div
+          className={
+            styles.imagePlaceholder
+          }
+        >
+          <span>
+            Sem imagem
+          </span>
+        </div>
+      )}
 
       <div className={styles.content}>
         <div className={styles.header}>
