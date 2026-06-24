@@ -29,8 +29,11 @@ export function Header() {
 
   const pathname = usePathname();
 
-    const [visible, setVisible] =
+  const [visible, setVisible] =
     useState(true);
+
+  const [menuAberto, setMenuAberto] =
+    useState(false);
 
   useEffect(() => {
     let lastScrollY =
@@ -42,7 +45,7 @@ export function Header() {
 
       if (
         currentScrollY >
-          lastScrollY &&
+        lastScrollY &&
         currentScrollY > 150
       ) {
         setVisible(false);
@@ -73,21 +76,36 @@ export function Header() {
 
   return (
     <header
-  className={`${styles.header} ${
-    visible
-      ? styles.visible
-      : styles.hidden
-  }`}
->
+      className={`${styles.header} ${visible
+          ? styles.visible
+          : styles.hidden
+        }`}
+    >
       <div className={styles.topBar}>
         Brecho com estilo, historia e autenticidade
       </div>
 
       <div className={styles.inner}>
+
+        <button
+        type="button"
+        className={styles.menuButton}
+        onClick={() =>
+          setMenuAberto(
+            (aberto) => !aberto
+          )
+        }
+        aria-label="Abrir menu"
+      >
+        {menuAberto ? "✕" : "☰"}
+      </button>
         <nav
-          className={styles.nav}
-          aria-label="Navegacao principal"
-        >
+  className={`${styles.nav} ${
+    menuAberto
+      ? styles.navOpen
+      : ""
+  }`}
+>
           {navItems.map((item) => (
             <Link
               key={item.href}

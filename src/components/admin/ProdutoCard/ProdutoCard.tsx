@@ -107,7 +107,7 @@ export function ProdutoCard({
     const interval =
       setInterval(() => {
         proximaImagem();
-      }, 10000);
+      }, 30000);
 
     return () =>
       clearInterval(interval);

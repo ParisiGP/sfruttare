@@ -7,8 +7,35 @@ import styles from "./AdminHeader.module.css";
 import { useEffect, useState } from "react";
 
 export function AdminHeader() {
- const [visible, setVisible] =
+  const [visible, setVisible] =
     useState(true);
+
+  const [menuAberto, setMenuAberto] =
+    useState(false);
+
+  const navItems = [
+    {
+      href: "/admin/produtos",
+      label: "Produtos",
+    },
+    {
+      href: "/admin/categorias",
+      label: "Categorias",
+    },
+    {
+      href: "/admin/produtos",
+      label: "Pecas",
+    },
+    {
+      href: "/admin/pedidos",
+      label: "Pedidos",
+    },
+    {
+      href: "/admin/inspiracoes",
+      label: "Inspiração",
+    }
+  ];
+
 
   useEffect(() => {
     let lastScrollY =
@@ -20,7 +47,7 @@ export function AdminHeader() {
 
       if (
         currentScrollY >
-          lastScrollY &&
+        lastScrollY &&
         currentScrollY > 150
       ) {
         setVisible(false);
@@ -47,12 +74,11 @@ export function AdminHeader() {
 
   return (
     <header
-  className={`${styles.header} ${
-    visible
-      ? styles.visible
-      : styles.hidden
-  }`}
->
+      className={`${styles.header} ${visible
+          ? styles.visible
+          : styles.hidden
+        }`}
+    >
       <div className={styles.inner}>
         <div className={styles.brand}>
           <span className={styles.brandTitle}>
@@ -66,22 +92,33 @@ export function AdminHeader() {
           </span>
         </div>
 
-        <nav className={styles.nav}>
-          <Link href="/admin/produtos">
-            Produtos
-          </Link>
+        <button
+          type="button"
+          className={styles.menuButton}
+          onClick={() =>
+            setMenuAberto(
+              (aberto) => !aberto
+            )
+          }
+          aria-label="Abrir menu"
+        >
+          {menuAberto ? "✕" : "☰"}
+        </button>
 
-          <Link href="/admin/categorias">
-            Categorias
-          </Link>
-
-          <Link href="/admin/pedidos">
-            Pedidos
-          </Link>
-
-          <Link href="/admin/inspiracoes">
-            Inspiração
-          </Link>
+        <nav
+          className={`${styles.nav} ${menuAberto
+              ? styles.navOpen
+              : ""
+            }`}
+        >
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className={styles.actions}>
