@@ -38,8 +38,8 @@
 
 .closeButton {
   position: absolute;
-  top: 25;
-  right: 60px;
+  top: 0;
+  left: 10px;
   width: 44px;
   height: 44px;
   display: flex;
