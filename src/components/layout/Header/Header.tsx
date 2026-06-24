@@ -112,12 +112,17 @@ export function Header() {
 
         <nav
           id="mobile-nav"
-          className={`${styles.nav} ${menuAberto ? styles.navOpen : ""}`}
+          className={`${styles.nav} ${menuAberto
+              ? styles.navOpen
+              : ""
+            }`}
           aria-label="Navegação principal"
         >
           <button
             type="button"
-            className={styles.closeMenuButton}
+            className={
+              styles.closeMenuButton
+            }
             onClick={closeMenu}
             aria-label="Fechar menu"
           >
@@ -129,11 +134,44 @@ export function Header() {
               key={item.href}
               href={item.href}
               onClick={closeMenu}
-              aria-current={pathname === item.href ? "page" : undefined}
+              aria-current={
+                pathname === item.href
+                  ? "page"
+                  : undefined
+              }
             >
               {item.label}
             </Link>
           ))}
+
+
+          <div
+            className={
+              styles.mobileAccount
+            }
+          >
+            <span
+              className={
+                styles.mobileAccountTitle
+              }
+            >
+              Minha Conta
+            </span>
+
+            <Link
+              href="/perfil"
+              onClick={closeMenu}
+            >
+              Perfil
+            </Link>
+
+            <Link
+              href="/carrinho"
+              onClick={closeMenu}
+            >
+              Carrinho
+            </Link>
+          </div>
         </nav>
 
         <Link
@@ -149,10 +187,13 @@ export function Header() {
           </span>
         </Link>
 
+
+
         <nav
           className={styles.actions}
           aria-label="Ações da conta"
         >
+
           <Link href="/perfil">Perfil</Link>
           <Link href="/carrinho">Carrinho</Link>
         </nav>

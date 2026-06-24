@@ -20,8 +20,8 @@ export function AdminHeader() {
       label: "Categorias",
     },
     {
-      href: "/admin/produtos",
-      label: "Pecas",
+      href: "/admin/pecas",
+      label: "Peças",
     },
     {
       href: "/admin/pedidos",
