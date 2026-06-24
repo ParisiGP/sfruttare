@@ -23,7 +23,8 @@ export function ProdutoTable({
   produtos,
 }: ProdutoTableProps) {
   return (
-    <table className={styles.table}>
+    <div className={styles.tableWrap}>
+      <table className={styles.table}>
       <thead>
         <tr>
           <th>Nome</th>
@@ -79,5 +80,6 @@ export function ProdutoTable({
         ))}
       </tbody>
     </table>
+    </div>
   );
 }

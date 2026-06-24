@@ -7,11 +7,8 @@ import styles from "./AdminHeader.module.css";
 import { useEffect, useState } from "react";
 
 export function AdminHeader() {
-  const [visible, setVisible] =
-    useState(true);
-
-  const [menuAberto, setMenuAberto] =
-    useState(false);
+  const [visible, setVisible] = useState(true);
+  const [menuAberto, setMenuAberto] = useState(false);
 
   const navItems = [
     {
@@ -38,47 +35,66 @@ export function AdminHeader() {
 
 
   useEffect(() => {
-    let lastScrollY =
-      window.scrollY;
+    let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
-      const currentScrollY =
-        window.scrollY;
+      const currentScrollY = window.scrollY;
 
-      if (
-        currentScrollY >
-        lastScrollY &&
-        currentScrollY > 150
-      ) {
+      if (currentScrollY > lastScrollY && currentScrollY > 150) {
         setVisible(false);
       } else {
         setVisible(true);
       }
 
-      lastScrollY =
-        currentScrollY;
+      lastScrollY = currentScrollY;
     };
 
-    window.addEventListener(
-      "scroll",
-      handleScroll
-    );
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
+  useEffect(() => {
+    if (menuAberto) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuAberto]);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && menuAberto) {
+        setMenuAberto(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [menuAberto]);
+
+  const closeMenu = () => {
+    setMenuAberto(false);
+  };
+
+  const toggleMenu = () => {
+    setMenuAberto((aberto) => !aberto);
+  };
+
   return (
-    <header
-      className={`${styles.header} ${visible
-          ? styles.visible
-          : styles.hidden
-        }`}
-    >
+    <>
+      <header
+        className={`${styles.header} ${visible ? styles.visible : styles.hidden}`}
+      >
       <div className={styles.inner}>
         <div className={styles.brand}>
           <span className={styles.brandTitle}>
@@ -95,41 +111,46 @@ export function AdminHeader() {
         <button
           type="button"
           className={styles.menuButton}
-          onClick={() =>
-            setMenuAberto(
-              (aberto) => !aberto
-            )
-          }
-          aria-label="Abrir menu"
+          onClick={toggleMenu}
+          aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={menuAberto}
+          aria-controls="admin-nav"
         >
-          {menuAberto ? "✕" : "☰"}
+          {menuAberto ? "" : "☰"}
         </button>
 
         <nav
-          className={`${styles.nav} ${menuAberto
-              ? styles.navOpen
-              : ""
-            }`}
+          id="admin-nav"
+          className={`${styles.nav} ${menuAberto ? styles.navOpen : ""}`}
+          aria-label="Menu de administração"
         >
+          <button
+            type="button"
+            className={styles.closeMenuButton}
+            onClick={closeMenu}
+            aria-label="Fechar menu"
+          >
+            ✕
+          </button>
+
           {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-            >
+            <Link key={item.href} href={item.href} onClick={closeMenu}>
               {item.label}
             </Link>
           ))}
+
+          <Link href="/" className={`${styles.storeLink} ${styles.mobileStoreLink}`} onClick={closeMenu}>
+            Ver Loja
+          </Link>
         </nav>
 
         <div className={styles.actions}>
-          <Link
-            href="/"
-            className={styles.storeLink}
-          >
+          <Link href="/" className={styles.storeLink}>
             Ver Loja
           </Link>
         </div>
       </div>
-    </header>
+      </header>
+    </>
   );
 }

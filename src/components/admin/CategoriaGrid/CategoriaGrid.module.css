@@ -1,15 +1,13 @@
 .grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(280px, 280px)
-    );
-
-  justify-content: center;
-
-  gap: 2rem;
-
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 1.25rem;
   padding: 2rem 0;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 1rem 0 1.5rem;
+  }
 }

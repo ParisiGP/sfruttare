@@ -199,8 +199,9 @@
 
 @media (max-width: 720px) {
   .wrapper {
-    width: min(100% - 28px, 1180px);
-    padding-top: 32px;
+    width: min(100% - 24px, 1180px);
+    padding-top: 24px;
+    gap: 20px;
   }
 
   .header,
@@ -217,5 +218,10 @@
   .metrics,
   .filters {
     grid-template-columns: 1fr;
+  }
+
+  .filters {
+    gap: 10px;
+    padding: 12px;
   }
 }

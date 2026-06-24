@@ -302,4 +302,17 @@
     align-items: stretch;
     flex-direction: column;
   }
+
+  .submitButton,
+  .secondaryButton,
+  .imageRow button {
+    width: 100%;
+  }
+
+  .field input,
+  .field textarea,
+  .field select,
+  .imageRow input {
+    min-height: 46px;
+  }
 }

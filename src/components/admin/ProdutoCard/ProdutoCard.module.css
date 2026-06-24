@@ -314,15 +314,26 @@
   background: white;
 }
 
-@media (max-width: 420px) {
-  .header,
+@media (max-width: 640px) {
+  .content {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status {
+    align-self: flex-start;
+  }
+
   .actions,
   .statusForm {
-    grid-template-columns: 1fr;
     flex-direction: column;
   }
 
-  .status,
   .editButton,
   .deleteButton,
   .statusForm button {

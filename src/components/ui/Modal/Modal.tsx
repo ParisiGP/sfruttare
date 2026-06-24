@@ -35,17 +35,25 @@ export function Modal({
   }
 
   return (
-    <div
-      className={styles.overlay}
-      onClick={onClose}
-    >
+    <div className={styles.overlay} onClick={onClose}>
       <div
         className={styles.modal}
-        onClick={(e) =>
-          e.stopPropagation()
-        }
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
       >
-        {children}
+        <div className={styles.content}>
+         <button
+          type="button"
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Fechar modal"
+        >
+          ×
+        </button>
+          {children}
+          
+        </div>
       </div>
     </div>
   );

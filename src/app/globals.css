@@ -31,6 +31,11 @@
   padding: 0;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 html {
   min-height: 100%;
   background: var(--color-background);
@@ -52,6 +57,13 @@ body {
 
 body::selection {
   background: rgba(139, 107, 63, 0.24);
+}
+
+[class*="grid"] > *,
+[class*="flex"] > *,
+.app-shell > *,
+.app-content > * {
+  min-width: 0;
 }
 
 a {
@@ -150,5 +162,19 @@ select:focus {
   .site-footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  form,
+  [role="form"] {
+    width: 100%;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    width: 100%;
   }
 }

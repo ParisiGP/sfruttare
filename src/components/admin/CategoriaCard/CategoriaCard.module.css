@@ -1,23 +1,14 @@
 .card {
   background: white;
-
   border: 1px solid var(--color-border);
-
   border-radius: 18px;
-
-  padding: 2rem;
-
+  padding: 1.25rem;
   min-height: 180px;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: space-between;
-
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
+  gap: 16px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .card:hover {
@@ -35,8 +26,23 @@
 
 .actions {
   display: flex;
-
   gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
 }
 
 .preview {
