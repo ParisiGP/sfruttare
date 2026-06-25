@@ -26,35 +26,38 @@
 }
 
 .storeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+
   padding: 10px 16px;
 
-  border:
-    1px solid
-    var(--color-primary);
-
+  border: 1px solid var(--color-primary);
   border-radius: 999px;
 
-  color:
-    var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
 
   font-size: 12px;
   font-weight: 700;
-
   letter-spacing: 0.08em;
-
-  text-transform:
-    uppercase;
+  text-transform: uppercase;
 
   transition:
-    180ms ease;
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .storeLink:hover {
-  background:
-    transparent;
-
-  color:
-    var(--color-text);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow:
+    0 10px 24px rgba(139, 107, 63, 0.18);
 }
 
 .mobileStoreLink {

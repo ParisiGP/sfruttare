@@ -65,6 +65,7 @@ export function ClientHeader() {
             <Link
               key={item.id}
               href={item.href}
+              className={styles.navLink}
             >
               {item.label}
             </Link>

@@ -1,150 +1,93 @@
 "use client";
 
-import Link from "next/link";
-
-import {
-    ReactNode,
-} from "react";
+import { ReactNode } from "react";
 
 import styles from "./BaseHeader.module.css";
 
-import {
-    useHeader,
-} from "./useHeader";
-
-type NavItem = {
-    id: string;
-    href: string;
-    label: string;
-};
+import { useHeader } from "./useHeader";
+import { HeaderSidebar } from "./HeaderSidebar";
 
 type BaseHeaderProps = {
-    topBar?: ReactNode;
-    logo: ReactNode;
-    actions?: ReactNode;
-    navContent?: ReactNode;
-    navLabel?: string;
-    mobileExtra?: ReactNode;
-    mobileTitle?: ReactNode;
+  topBar?: ReactNode;
+  logo: ReactNode;
+  actions?: ReactNode;
+  navContent?: ReactNode;
+  navLabel?: string;
+  mobileExtra?: ReactNode;
+  mobileTitle?: ReactNode;
 };
 
 export function BaseHeader({
-    topBar,
-    logo,
-    actions,
-    navContent,
-    mobileTitle,
-    mobileExtra,
-    navLabel,
+  topBar,
+  logo,
+  actions,
+  navContent,
+  mobileTitle,
+  mobileExtra,
+  navLabel,
 }: BaseHeaderProps) {
-    const {
-        visible,
-        menuAberto,
-        toggleMenu,
-        closeMenu,
-    } = useHeader();
+  const {
+    visible,
+    menuAberto,
+    toggleMenu,
+    closeMenu,
+  } = useHeader();
 
-    return (
-        <>
-            <header
-                className={`${styles.header}${visible? styles.visible: styles.hidden}${menuAberto? styles.menuOpen: ""}`}>
-                <div
-                    className={
-                        styles.inner
-                    }
-                >
-                    <button
-                        type="button"
-                        className={
-                            styles.menuButton
-                        }
-                        onClick={
-                            toggleMenu
-                        }
-                        aria-label={
-                            menuAberto
-                                ? "Fechar menu"
-                                : "Abrir menu"
-                        }
-                        aria-expanded={
-                            menuAberto
-                        }
-                    >
-                        {menuAberto
-                            ? ""
-                            : "☰"}
-                    </button>
+  return (
+    <>
+      <header
+        className={`${styles.header} ${visible ? styles.visible : styles.hidden} ${menuAberto ? styles.menuOpen : ""}`}
+      >
+        {topBar && (
+          <div className={styles.topBar}>
+            {topBar}
+          </div>
+        )}
 
-                    <nav
-                        className={`${styles.nav} ${menuAberto
-                            ? styles.navOpen
-                            : ""
-                            }`}
-                        aria-label={navLabel}
-                    >
-                        <button
-                            type="button"
-                            className={
-                                styles.closeMenuButton
-                            }
-                            onClick={closeMenu}
-                            aria-label="Fechar menu"
-                        >
-                            ✕
-                        </button>
+        <div className={styles.inner}>
+          <button
+            type="button"
+            className={`${styles.menuButton} ${menuAberto ? styles.menuButtonHidden : ""}`}
+            onClick={toggleMenu}
+            aria-label="Abrir menu"
+            aria-expanded={menuAberto}
+          >
+            ☰
+          </button>
 
-                        {navContent}
+          <nav
+            className={styles.desktopNav}
+            aria-label={navLabel}
+          >
+            {navContent}
+          </nav>
 
-                        {mobileExtra && (
-                            <div
-                                className={
-                                    styles.mobileExtra
-                                }
-                            >
-                                {mobileTitle && (
-                                    <span
-                                        className={
-                                            styles.mobileTitle
-                                        }
-                                    >
-                                        {mobileTitle}
-                                    </span>
-                                )}
+          <div className={styles.logo}>
+            {logo}
+          </div>
 
-                                {mobileExtra}
-                            </div>
-                        )}
-                    </nav>
+          <div className={styles.actions}>
+            {actions}
+          </div>
+        </div>
+      </header>
 
-                    <div
-                        className={
-                            styles.logo
-                        }
-                    >
-                        {logo}
-                    </div>
+      <div
+        className={`${styles.headerSpacer} ${
+          topBar
+            ? styles.headerSpacerLarge
+            : ""
+        }`}
+      />
 
-                    <div
-                        className={
-                            styles.actions
-                        }
-                    >
-                        {actions}
-                    </div>
-                </div>
-            </header >
-
-            {menuAberto && (
-                <div
-                    className={
-                        styles.overlay
-                    }
-                    onClick={
-                        closeMenu
-                    }
-                />
-            )
-            }
-        </>
-    );
+      <HeaderSidebar
+        aberto={menuAberto}
+        onClose={closeMenu}
+        navLabel={navLabel}
+        navContent={navContent}
+        mobileTitle={mobileTitle}
+        mobileExtra={mobileExtra}
+      />
+    </>
+  );
 }

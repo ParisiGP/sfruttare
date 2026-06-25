@@ -68,6 +68,7 @@ export function AdminHeader() {
                 href={
                   item.href
                 }
+                className={styles.navLink}
               >
                 {item.label}
               </Link>

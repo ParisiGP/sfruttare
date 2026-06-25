@@ -14,6 +14,7 @@ export function useHeader() {
         useState(false);
 
     const closeMenu = useCallback(() => {
+        console.log("Close Menu");
         setMenuAberto(false);
     }, []);
 
@@ -22,6 +23,7 @@ export function useHeader() {
     }, []);
 
     const toggleMenu = useCallback(() => {
+        console.log("toggle menu");
         setMenuAberto((aberto) => !aberto);
     }, []);
 
