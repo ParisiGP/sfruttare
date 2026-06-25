@@ -220,12 +220,30 @@ export function ProdutoCard({
               {produto.nome}
             </h2>
 
+            {produto.referencia && (
+              <p className={styles.brand}>
+                <span className={styles.brandLabel}>
+                  Referência:
+                </span>{" "}
+                {produto.referencia}
+              </p>
+            )}
+
              {produto.marca && (
               <p className={styles.brand}>
                 <span className={styles.brandLabel}>
                   Marca:
                 </span>{" "}
                 {produto.marca}
+              </p>
+            )}
+
+            {produto.cor && (
+              <p className={styles.brand}>
+                <span className={styles.brandLabel}>
+                  Cor:
+                </span>{" "}
+                {produto.cor}
               </p>
             )}
 

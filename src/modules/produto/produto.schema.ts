@@ -35,6 +35,27 @@ export const produtoSchema = z.object({
     .trim()
     .optional(),
 
+  cor:
+    z
+      .string()
+      .trim()
+      .max(
+        40,
+        "Cor muito longa."
+      )
+      .optional(),
+
+  referencia:
+    z
+      .string()
+      .trim()
+      .regex(
+        /^[A-Z]{3}-\d{4}$/,
+        "Referencia invalida."
+      )
+      .optional()
+      .or(z.literal("")),
+
   tamanho: z
     .string()
     .trim()

@@ -11,6 +11,8 @@ type ProdutoWriteData = {
   slug: string;
   descricao?: string;
   marca?: string;
+  cor?: string;
+  referencia?: string;
   tamanho?: string;
   preco: number;
   estoque: number;

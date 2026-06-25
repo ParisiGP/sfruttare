@@ -160,6 +160,17 @@ async function buildProdutoPayload(
       formData,
       "marca"
     ),
+
+    cor: getText(
+      formData,
+      "cor"
+    ),
+
+    referencia: getText(
+      formData,
+      "referencia"
+    ),
+
     tamanho: getText(
       formData,
       "tamanho"

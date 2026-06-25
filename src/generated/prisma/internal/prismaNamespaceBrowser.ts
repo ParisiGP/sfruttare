@@ -92,6 +92,8 @@ export const ProdutoScalarFieldEnum = {
   slug: 'slug',
   tamanho: 'tamanho',
   descricao: 'descricao',
+  cor: 'cor',
+  referencia: 'referencia',
   marca: 'marca',
   preco: 'preco',
   tipo: 'tipo',

@@ -85,6 +85,8 @@ export function ProdutoForm({
     useState(() => ({
       nome: produto?.nome ?? "",
       marca: produto?.marca ?? "",
+      cor: produto?.cor ?? "",
+      referencia: produto?.referencia ?? "",
       tamanho: produto?.tamanho ?? "",
       descricao:
         produto?.descricao ?? "",
@@ -112,6 +114,11 @@ export function ProdutoForm({
     produto?.imagens ?? []
   );
 
+  const [referencia, setReferencia] =
+    useState(
+      produto?.referencia ?? ""
+    );
+
   useEffect(() => {
     if (state.ok && state.message) {
       router.refresh();
@@ -126,6 +133,26 @@ export function ProdutoForm({
       );
     };
   }, [filePreviews]);
+
+  function handleReferenciaChange(
+    event: ChangeEvent<HTMLInputElement>
+  ) {
+    let value =
+      event.target.value
+        .toUpperCase()
+        .replace(
+          /[^A-Z0-9]/g,
+          ""
+        );
+
+    if (value.length > 3) {
+      value =
+        `${value.slice(0, 3)}-${value.slice(3, 7)}`;
+    }
+
+    setReferencia(value);
+  }
+
 
   function updateField(
     field: keyof typeof formValues,
@@ -269,6 +296,29 @@ export function ProdutoForm({
                     event.target.value,
                 }))
               }
+            />
+          </Field>
+
+          <Field label="Cor">
+            <input
+              name="cor"
+              type="text"
+              maxLength={40}
+              defaultValue={produto?.cor ?? ""}
+              placeholder="Ex.: Bege"
+            />
+          </Field>
+
+          <Field label="Referência">
+            <input
+              name="referencia"
+              type="text"
+              value={referencia}
+              onChange={
+                handleReferenciaChange
+              }
+              placeholder="AAA-0000"
+              maxLength={8}
             />
           </Field>
 
@@ -443,7 +493,7 @@ export function ProdutoForm({
                       styles.imageCard
                     }
                   >
-                    
+
                     <img
                       src={imagem.url}
                       alt={

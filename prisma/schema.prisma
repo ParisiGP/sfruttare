@@ -26,6 +26,8 @@ model Produto {
   slug String @unique
   tamanho     String?
   descricao   String?
+  cor          String?
+  referencia   String?          @unique
   marca       String?
   preco       Decimal @db.Decimal(10,2)
   tipo        ProdutoTipo @default(BRECHO)

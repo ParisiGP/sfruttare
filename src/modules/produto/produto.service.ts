@@ -112,6 +112,8 @@ export class ProdutoService {
     slug: string;
     descricao?: string | null;
     marca?: string | null;
+    cor?: string | null;
+    referencia?: string | null;
     tamanho?: string | null;
     preco: unknown;
     estoque: number;
@@ -136,6 +138,8 @@ export class ProdutoService {
       slug: produto.slug,
       descricao: produto.descricao ?? "",
       marca: produto.marca ?? "",
+      cor:produto.cor ?? "",
+      referencia: produto.referencia ?? "",
       tamanho: produto.tamanho ?? "",
       preco: Number(produto.preco),
       estoque: produto.estoque,

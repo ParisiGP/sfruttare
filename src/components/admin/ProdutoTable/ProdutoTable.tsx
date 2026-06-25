@@ -11,6 +11,8 @@ type ProdutoTableItem = {
   tamanho?: string | null;
   preco: number;
   marca?: string | null;
+  cor?: string | null;
+  referencia?: string | null;
   estoque?: number | null;
   tipo: string;
 };
@@ -33,6 +35,8 @@ export function ProdutoTable({
           <th>Tamanho</th>
           <th>Preço</th>
           <th>Marca</th>
+          <th>cor</th>
+          <th>referência</th>
           <th>Estoque</th>
           <th>Tipo</th>
           <th>Ações</th>
@@ -65,6 +69,10 @@ export function ProdutoTable({
             </td>
 
             <td>{produto.marca}</td>
+
+            <td>{produto.cor}</td>
+
+            <td>{produto.referencia}</td>
 
             <td className={styles.stock}>
               {produto.estoque}
