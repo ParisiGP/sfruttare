@@ -247,6 +247,15 @@ export function ProdutoCard({
               </p>
             )}
 
+            {produto.tamanho && (
+              <p className={styles.brand}>
+                <span className={styles.brandLabel}>
+                  Tamanho:
+                </span>{" "}
+                {produto.tamanho}
+              </p>
+            )}
+
             {produto.descricao && (
               <p className={styles.description}>
                 <span className={styles.descriptionLabel}>
