@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Header } from "@/components/layout/Header/Header";
+import {
+  ClientHeader,
+} from "@/components/layout/Header/ClientHeader/ClientHeader";
 import "@/styles/globals.scss";
 import "./globals.css";
 
@@ -32,7 +34,7 @@ export default function RootLayout({
     >
       <body>
         <div className="app-shell">
-          <Header />
+          <ClientHeader />
           <div className="app-content">
             {children}
           </div>

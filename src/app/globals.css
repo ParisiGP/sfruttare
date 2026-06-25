@@ -36,6 +36,8 @@ body {
   overflow-x: hidden;
 }
 
+
+
 html {
   min-height: 100%;
   background: var(--color-background);
@@ -163,6 +165,8 @@ select:focus {
     align-items: flex-start;
     flex-direction: column;
   }
+
+
 }
 
 @media (max-width: 640px) {
@@ -177,4 +181,7 @@ select:focus {
   select {
     width: 100%;
   }
+
+
+
 }
