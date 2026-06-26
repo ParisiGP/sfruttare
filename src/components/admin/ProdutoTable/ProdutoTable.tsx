@@ -30,16 +30,13 @@ export function ProdutoTable({
       <thead>
         <tr>
           <th>Nome</th>
-          <th>Descrição</th>
           <th>Categoria</th>
           <th>Tamanho</th>
           <th>Preço</th>
           <th>Marca</th>
-          <th>cor</th>
           <th>referência</th>
           <th>Estoque</th>
           <th>Tipo</th>
-          <th>Ações</th>
         </tr>
       </thead>
 
@@ -47,10 +44,6 @@ export function ProdutoTable({
         {produtos.map((produto) => (
           <tr key={produto.id}>
             <td>{produto.nome}</td>
-
-            <td className={styles.description}>
-              {produto.descricao}
-            </td>
 
             <td>
               {produto.categoria.nome}
@@ -70,8 +63,6 @@ export function ProdutoTable({
 
             <td>{produto.marca}</td>
 
-            <td>{produto.cor}</td>
-
             <td>{produto.referencia}</td>
 
             <td className={styles.stock}>
@@ -79,10 +70,6 @@ export function ProdutoTable({
             </td>
 
             <td>{produto.tipo}</td>
-
-            <td>
-              <ModalExcluirProduto produto={produto} />
-            </td>
 
           </tr>
         ))}

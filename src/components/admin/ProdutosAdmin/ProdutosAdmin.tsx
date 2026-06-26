@@ -7,6 +7,7 @@ import { ProdutoForm } from "@/components/forms/ProdutoForm/ProdutoForm";
 import { Modal } from "@/components/ui/Modal/Modal";
 import { ProdutoDeleteModal } from "@/components/admin/ProdutoDeleteModal/ProdutoDeleteModal";
 import { ProdutoGrid } from "@/components/admin/ProdutoGrid/ProdutoGrid";
+import {ProdutoTable} from "@/components/admin/ProdutoTable/ProdutoTable"
 import type {
   ProdutoAdminItem,
   ProdutoListFilters,
@@ -81,6 +82,8 @@ export function ProdutosAdmin({
   const [produtoParaExcluir, setProdutoParaExcluir] =
     useState<ProdutoAdminItem | null>(null);
 
+  const [modoOrdenacao, setModoOrdenacao] = useState(false);
+
   function abrirNovoProduto() {
     setProdutoEmEdicao(null);
     setModalProdutoAberto(true);
@@ -113,13 +116,41 @@ export function ProdutosAdmin({
           </p>
         </div>
 
-        <button
-          type="button"
-          className={styles.newButton}
-          onClick={abrirNovoProduto}
-        >
-          Novo produto
-        </button>
+        <div className={styles.actions}>
+          {!modoOrdenacao && (
+            <>
+              <button
+                type="button"
+                className={styles.newButton}
+                onClick={abrirNovoProduto}
+              >
+                Novo produto
+              </button>
+
+              <button
+                type="button"
+                className={styles.newButton}
+                onClick={() =>
+                  setModoOrdenacao(true)
+                }
+              >
+                Ordenar produtos
+              </button>
+            </>
+          )}
+
+          {modoOrdenacao && (
+            <button
+              type="button"
+              className={styles.newButton}
+              onClick={() =>
+                setModoOrdenacao(false)
+              }
+            >
+              Cancelar ordenação
+            </button>
+          )}
+        </div>
       </header>
 
       <section className={styles.metrics}>
@@ -265,12 +296,17 @@ export function ProdutosAdmin({
         </button>
       </form>
 
-      <ProdutoGrid
-        produtos={produtos}
-        onEditar={abrirEdicao}
-        onExcluir={setProdutoParaExcluir}
-      />
-
+      {modoOrdenacao ? (
+        <ProdutoTable
+          produtos={produtos}
+        />
+      ) : (
+        <ProdutoGrid
+          produtos={produtos}
+          onEditar={abrirEdicao}
+          onExcluir={setProdutoParaExcluir}
+        />
+      )}
       <footer className={styles.pagination}>
         <span>
           {paginacao.total} produtos encontrados
