@@ -1,55 +1,93 @@
 .tableWrap {
-  width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid #ece8e1;
+  box-shadow:
+    0 12px 32px rgba(15, 23, 42, 0.05),
+    0 2px 6px rgba(15, 23, 42, 0.03);
 }
 
 .table {
   width: 100%;
-  min-width: 720px;
   border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 950px;
 }
 
 .table thead {
-  background-color: #f3f4f6;
+  background: #faf8f5;
 }
 
 .table th {
+  padding: 1rem 1.5rem;
   text-align: left;
-
-  padding: 12px 16px;
-
+  font-size: 0.8rem;
   font-weight: 600;
-
-  border-bottom: 1px solid #e5e7eb;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7c6f64;
+  border-bottom: 1px solid #ece8e1;
 }
 
 .table td {
-  padding: 12px 16px;
+  padding: 1.25rem 1.5rem;
+  font-size: 0.95rem;
+  color: #2f2b27;
+  border-bottom: 1px solid #f5f2ee;
+  vertical-align: middle;
+}
 
-  border-bottom: 1px solid #f3f4f6;
+.table tbody tr {
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .table tbody tr:hover {
-  background-color: #fafafa;
+  background: #faf8f5;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .price {
   font-weight: 600;
+  color: #8a5a44;
+  white-space: nowrap;
 }
 
 .stock {
-  text-align: center;
+  font-weight: 600;
 }
 
-.description {
-  max-width: 300px;
+.dragColumn {
+  width: 60px;
+}
 
-  white-space: normal;
+.dragHandle {
+  width: 60px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #b5a79a;
+  user-select: none;
+  cursor: grab;
+}
 
-  word-break: break-word;
+.dragHandle:hover {
+  color: #8a5a44;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  background: #ffffff;
+  box-shadow:
+    0 12px 24px
+      rgba(0, 0, 0, 0.12),
+    0 4px 12px
+      rgba(0, 0, 0, 0.08);
+  opacity: 0.95;
 }

@@ -7,7 +7,7 @@ import { ProdutoForm } from "@/components/forms/ProdutoForm/ProdutoForm";
 import { Modal } from "@/components/ui/Modal/Modal";
 import { ProdutoDeleteModal } from "@/components/admin/ProdutoDeleteModal/ProdutoDeleteModal";
 import { ProdutoGrid } from "@/components/admin/ProdutoGrid/ProdutoGrid";
-import {ProdutoTable} from "@/components/admin/ProdutoTable/ProdutoTable"
+import { ProdutoTable } from "@/components/admin/ProdutoTable/ProdutoTable"
 import type {
   ProdutoAdminItem,
   ProdutoListFilters,
@@ -119,13 +119,6 @@ export function ProdutosAdmin({
         <div className={styles.actions}>
           {!modoOrdenacao && (
             <>
-              <button
-                type="button"
-                className={styles.newButton}
-                onClick={abrirNovoProduto}
-              >
-                Novo produto
-              </button>
 
               <button
                 type="button"
@@ -136,6 +129,14 @@ export function ProdutosAdmin({
               >
                 Ordenar produtos
               </button>
+              <button
+                type="button"
+                className={styles.newButton}
+                onClick={abrirNovoProduto}
+              >
+                Novo produto
+              </button>
+
             </>
           )}
 
@@ -152,153 +153,156 @@ export function ProdutosAdmin({
           )}
         </div>
       </header>
+      {!modoOrdenacao && (
+        <>
+          <section className={styles.metrics}>
+            <MetricCard
+              label="Produtos"
+              value={metricas.total}
+            />
+            <MetricCard
+              label="Disponiveis"
+              value={metricas.disponiveis}
+            />
+            <MetricCard
+              label="Reservado"
+              value={metricas.reservados}
+            />
+            <MetricCard
+              label="Vendido"
+              value={metricas.vendidos}
+            />
+            <MetricCard
+              label="Sem estoque"
+              value={metricas.semEstoque}
+            />
+          </section>
 
-      <section className={styles.metrics}>
-        <MetricCard
-          label="Produtos"
-          value={metricas.total}
-        />
-        <MetricCard
-          label="Disponiveis"
-          value={metricas.disponiveis}
-        />
-        <MetricCard
-          label="Reservado"
-          value={metricas.reservados}
-        />
-        <MetricCard
-          label="Vendido"
-          value={metricas.vendidos}
-        />
-        <MetricCard
-          label="Sem estoque"
-          value={metricas.semEstoque}
-        />
-      </section>
-
-      <form
-        className={styles.filters}
-        method="GET"
-      >
-        <label className={styles.search}>
-          <span>Busca</span>
-          <input
-            name="busca"
-            type="search"
-            placeholder="Nome, marca ou descricao"
-            defaultValue={filtros.busca}
-          />
-        </label>
-
-        <label>
-          <span>Categoria</span>
-          <select
-            name="categoriaId"
-            defaultValue={filtros.categoriaId}
+          <form
+            className={styles.filters}
+            method="GET"
           >
-            <option value="">Todas</option>
-            {categorias.map((categoria) => (
-              <option
-                key={categoria.id}
-                value={categoria.id}
+            <label className={styles.search}>
+              <span>Busca</span>
+              <input
+                name="busca"
+                type="search"
+                placeholder="Nome, marca ou descricao"
+                defaultValue={filtros.busca}
+              />
+            </label>
+
+            <label>
+              <span>Categoria</span>
+              <select
+                name="categoriaId"
+                defaultValue={filtros.categoriaId}
               >
-                {categoria.nome}
-              </option>
-            ))}
-          </select>
-        </label>
+                <option value="">Todas</option>
+                {categorias.map((categoria) => (
+                  <option
+                    key={categoria.id}
+                    value={categoria.id}
+                  >
+                    {categoria.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <label>
-          <span>Status</span>
-          <select
-            name="status"
-            defaultValue={filtros.status}
-          >
-            <option value="TODOS">Todos</option>
-            <option value="DISPONIVEL">
-              Disponivel
-            </option>
-            <option value="RESERVADO">
-              Reservado
-            </option>
-            <option value="VENDIDO">
-              Vendido
-            </option>
-          </select>
-        </label>
+            <label>
+              <span>Status</span>
+              <select
+                name="status"
+                defaultValue={filtros.status}
+              >
+                <option value="TODOS">Todos</option>
+                <option value="DISPONIVEL">
+                  Disponivel
+                </option>
+                <option value="RESERVADO">
+                  Reservado
+                </option>
+                <option value="VENDIDO">
+                  Vendido
+                </option>
+              </select>
+            </label>
 
-        <label>
-          <span>Tipo</span>
-          <select
-            name="tipo"
-            defaultValue={filtros.tipo}
-          >
-            <option value="TODOS">Todos</option>
-            <option value="BRECHO">Brecho</option>
-            <option value="NA_ETIQUETA">
-              Na etiqueta
-            </option>
-          </select>
-        </label>
+            <label>
+              <span>Tipo</span>
+              <select
+                name="tipo"
+                defaultValue={filtros.tipo}
+              >
+                <option value="TODOS">Todos</option>
+                <option value="BRECHO">Brecho</option>
+                <option value="NA_ETIQUETA">
+                  Na etiqueta
+                </option>
+              </select>
+            </label>
 
-        <label>
-          <span>Estoque</span>
-          <select
-            name="estoque"
-            defaultValue={filtros.estoque}
-          >
-            <option value="TODOS">Todos</option>
-            <option value="COM_ESTOQUE">
-              Com estoque
-            </option>
-            <option value="SEM_ESTOQUE">
-              Sem estoque
-            </option>
-          </select>
-        </label>
+            <label>
+              <span>Estoque</span>
+              <select
+                name="estoque"
+                defaultValue={filtros.estoque}
+              >
+                <option value="TODOS">Todos</option>
+                <option value="COM_ESTOQUE">
+                  Com estoque
+                </option>
+                <option value="SEM_ESTOQUE">
+                  Sem estoque
+                </option>
+              </select>
+            </label>
 
-        <label>
-          <span>Ordenar</span>
-          <select
-            name="ordem"
-            defaultValue={filtros.ordem}
-          >
-            <option value="vitrine">
-              Ordem da vitrine
-            </option>
+            <label>
+              <span>Ordenar</span>
+              <select
+                name="ordem"
+                defaultValue={filtros.ordem}
+              >
+                <option value="vitrine">
+                  Ordem da vitrine
+                </option>
 
-            <option value="recentes">
-              Mais recentes
-            </option>
+                <option value="recentes">
+                  Mais recentes
+                </option>
 
-            <option value="nome">
-              Nome
-            </option>
+                <option value="nome">
+                  Nome
+                </option>
 
-            <option value="preco">
-              Preço
-            </option>
+                <option value="preco">
+                  Preço
+                </option>
 
-            <option value="estoque">
-              Estoque
-            </option>
-          </select>
-        </label>
+                <option value="estoque">
+                  Estoque
+                </option>
+              </select>
+            </label>
 
-        <input
-          type="hidden"
-          name="pagina"
-          value="1"
-        />
+            <input
+              type="hidden"
+              name="pagina"
+              value="1"
+            />
 
-        <button type="submit">
-          Filtrar
-        </button>
-      </form>
-
+            <button type="submit">
+              Filtrar
+            </button>
+          </form>
+        </>
+      )}
       {modoOrdenacao ? (
         <ProdutoTable
           produtos={produtos}
+          modoOrdenacao={true}
         />
       ) : (
         <ProdutoGrid
