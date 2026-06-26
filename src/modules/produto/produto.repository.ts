@@ -74,7 +74,7 @@ function buildWhere(filters: ProdutoListFilters = {}) {
 }
 
 function buildOrderBy(
-  ordem: ProdutoListFilters["ordem"] = "recentes"
+  ordem: ProdutoListFilters["ordem"] = "vitrine"
 ) {
 
   if (ordem === "vitrine") {
@@ -365,6 +365,26 @@ export class ProdutoRepository {
         id,
       },
     });
+  }
+
+  async updateOrder(
+    produtos: {
+      id: string;
+      ordem: number;
+    }[]
+  ) {
+    await prisma.$transaction(
+      produtos.map((produto) =>
+        prisma.produto.update({
+          where: {
+            id: produto.id,
+          },
+          data: {
+            ordem: produto.ordem,
+          },
+        })
+      )
+    );
   }
 
   private includeRelations() {

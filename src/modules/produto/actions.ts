@@ -387,3 +387,31 @@ export async function uploadImagemProduto(
     return handleError("uploadImagemProduto", error);
   }
 }
+
+export async function reordenarProdutos(
+  produtos: {
+    id: string;
+    ordem: number;
+  }[]
+): Promise<ProdutoActionState> {
+  try {
+    await requireAdmin();
+
+    await produtoService.atualizarOrdemProdutos(
+      produtos
+    );
+
+    revalidatePath("/admin/produtos");
+
+    return {
+      ...initialSuccess,
+      message:
+        "Ordem atualizada com sucesso.",
+    };
+  } catch (error) {
+    return handleError(
+      "reordenarProdutos",
+      error
+    );
+  }
+}

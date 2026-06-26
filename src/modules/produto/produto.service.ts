@@ -106,6 +106,17 @@ export class ProdutoService {
     return this.produtoRepository.delete(id);
   }
 
+  async atualizarOrdemProdutos(
+  produtos: {
+    id: string;
+    ordem: number;
+  }[]
+) {
+  await this.produtoRepository.updateOrder(
+    produtos
+  );
+}
+
   serializeProduto(produto: {
     id: string;
     nome: string;

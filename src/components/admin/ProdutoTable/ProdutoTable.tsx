@@ -21,35 +21,37 @@ import { SortableRow } from "./SortableRow";
 
 import styles from "./ProdutoTable.module.css";
 
-type ProdutoTableItem = {
-  id: string;
-  nome: string;
-  descricao?: string | null;
-  categoria: {
-    nome: string;
-  };
-  tamanho?: string | null;
-  preco: number;
-  marca?: string | null;
-  cor?: string | null;
-  referencia?: string | null;
-  estoque?: number | null;
-  tipo: string;
-};
+import type {
+  ProdutoAdminItem,
+} from "@/modules/produto/produto.types"
+
 
 type ProdutoTableProps = {
-  produtos: ProdutoTableItem[];
+  produtos: ProdutoAdminItem[];
   modoOrdenacao?: boolean;
+  onOrderChange?: (
+    produtos: ProdutoAdminItem[]
+  ) => void;
 };
+
+
 
 export function ProdutoTable({
   produtos,
   modoOrdenacao = false,
+  onOrderChange,
 }: ProdutoTableProps) {
   const [itens, setItens] =
-    useState<ProdutoTableItem[]>(
+    useState<ProdutoAdminItem[]>(
       produtos
     );
+
+  const [
+    ordensDigitadas,
+    setOrdensDigitadas,
+  ] = useState<
+    Record<string, string>
+  >({});
 
   useEffect(() => {
     setItens(produtos);
@@ -72,26 +74,81 @@ export function ProdutoTable({
       return;
     }
 
-    setItens((items) => {
-      const oldIndex =
-        items.findIndex(
-          (item) =>
-            item.id === active.id
-        );
+    const oldIndex =
+      itens.findIndex(
+        (item) =>
+          item.id === active.id
+      );
 
-      const newIndex =
-        items.findIndex(
-          (item) =>
-            item.id === over.id
-        );
+    const newIndex =
+      itens.findIndex(
+        (item) =>
+          item.id === over.id
+      );
 
-      return arrayMove(
-        items,
+    const novosItens =
+      arrayMove(
+        itens,
         oldIndex,
         newIndex
       );
-    });
+
+    setItens(novosItens);
+
+    onOrderChange?.(
+      novosItens
+    );
   }
+
+
+
+  function moverParaPosicao(
+    produtoId: string,
+    novaPosicao: number
+  ) {
+    const novaIndex =
+      novaPosicao - 1;
+
+    const oldIndex =
+      itens.findIndex(
+        (item) =>
+          item.id === produtoId
+      );
+
+    if (oldIndex === -1) {
+      return;
+    }
+
+    const newIndex =
+      Math.max(
+        0,
+        Math.min(
+          novaPosicao - 1,
+          itens.length - 1
+        )
+      );
+
+    if (oldIndex === newIndex) {
+      return;
+    }
+
+    const novosItens =
+      arrayMove(
+        itens,
+        oldIndex,
+        newIndex
+      );
+
+    setItens(novosItens);
+
+    onOrderChange?.(
+      novosItens
+    );
+  }
+
+
+
+
 
   return (
     <DndContext
@@ -172,11 +229,55 @@ export function ProdutoTable({
                               type="number"
                               min={1}
                               max={itens.length}
-                              value={index + 1}
-                              className={
-                                styles.orderInput
+                              className={styles.orderInput}
+                              value={
+                                ordensDigitadas[
+                                produto.id
+                                ] ??
+                                String(index + 1)
                               }
-                              readOnly
+                              onChange={(event) => {
+                                const valor =
+                                  event.target.value;
+
+                                setOrdensDigitadas(
+                                  (prev) => ({
+                                    ...prev,
+                                    [produto.id]: valor,
+                                  })
+                                );
+                              }}
+                              onBlur={(event) => {
+                                const valor =
+                                  Number(
+                                    event.target.value
+                                  );
+
+                                if (
+                                  Number.isNaN(valor)
+                                ) {
+                                  setOrdensDigitadas(
+                                    {}
+                                  );
+                                  return;
+                                }
+
+                                moverParaPosicao(
+                                  produto.id,
+                                  valor
+                                );
+
+                                setOrdensDigitadas(
+                                  {}
+                                );
+                              }}
+                              onKeyDown={(event) => {
+                                if (
+                                  event.key === "Enter"
+                                ) {
+                                  event.currentTarget.blur();
+                                }
+                              }}
                             />
                           </td>
                         </>

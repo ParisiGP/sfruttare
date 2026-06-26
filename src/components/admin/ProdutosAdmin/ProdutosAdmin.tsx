@@ -8,6 +8,7 @@ import { Modal } from "@/components/ui/Modal/Modal";
 import { ProdutoDeleteModal } from "@/components/admin/ProdutoDeleteModal/ProdutoDeleteModal";
 import { ProdutoGrid } from "@/components/admin/ProdutoGrid/ProdutoGrid";
 import { ProdutoTable } from "@/components/admin/ProdutoTable/ProdutoTable"
+import { reordenarProdutos, } from "@/modules/produto/actions"
 import type {
   ProdutoAdminItem,
   ProdutoListFilters,
@@ -15,6 +16,7 @@ import type {
 } from "@/modules/produto/produto.types";
 
 import styles from "./ProdutosAdmin.module.css";
+import { useRouter } from "next/navigation";
 
 type Categoria = {
   id: string;
@@ -84,6 +86,12 @@ export function ProdutosAdmin({
 
   const [modoOrdenacao, setModoOrdenacao] = useState(false);
 
+  const [produtosOrdenados,
+    setProdutosOrdenados] =
+    useState(produtos);
+
+  const router = useRouter();
+
   function abrirNovoProduto() {
     setProdutoEmEdicao(null);
     setModalProdutoAberto(true);
@@ -97,6 +105,37 @@ export function ProdutosAdmin({
   function fecharModalProduto() {
     setModalProdutoAberto(false);
     setProdutoEmEdicao(null);
+  }
+
+  function abrirOrdenacao() {
+    setProdutosOrdenados(produtos);
+    setModoOrdenacao(true);
+  }
+
+  async function salvarOrdenacao() {
+    const payload =
+      produtosOrdenados.map(
+        (produto, index) => ({
+          id: produto.id,
+          ordem: index,
+        })
+      );
+
+    const resultado =
+      await reordenarProdutos(
+        payload
+      );
+
+    if (!resultado.ok) {
+      alert(
+        resultado.message
+      );
+      return;
+    }
+
+    setModoOrdenacao(false);
+
+    router.refresh();
   }
 
   return (
@@ -117,39 +156,50 @@ export function ProdutosAdmin({
         </div>
 
         <div className={styles.actions}>
-          {!modoOrdenacao && (
+          {modoOrdenacao ? (
             <>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() =>
+                  setModoOrdenacao(false)
+                }
+              >
+                Cancelar
+              </button>
 
               <button
                 type="button"
                 className={styles.newButton}
-                onClick={() =>
-                  setModoOrdenacao(true)
+                onClick={
+                  salvarOrdenacao
+                }
+              >
+                Salvar ordem
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={
+                  abrirOrdenacao
                 }
               >
                 Ordenar produtos
               </button>
+
               <button
                 type="button"
                 className={styles.newButton}
-                onClick={abrirNovoProduto}
+                onClick={
+                  abrirNovoProduto
+                }
               >
                 Novo produto
               </button>
-
             </>
-          )}
-
-          {modoOrdenacao && (
-            <button
-              type="button"
-              className={styles.newButton}
-              onClick={() =>
-                setModoOrdenacao(false)
-              }
-            >
-              Cancelar ordenação
-            </button>
           )}
         </div>
       </header>
@@ -301,8 +351,11 @@ export function ProdutosAdmin({
       )}
       {modoOrdenacao ? (
         <ProdutoTable
-          produtos={produtos}
-          modoOrdenacao={true}
+          produtos={produtosOrdenados}
+          modoOrdenacao
+          onOrderChange={
+            setProdutosOrdenados
+          }
         />
       ) : (
         <ProdutoGrid
