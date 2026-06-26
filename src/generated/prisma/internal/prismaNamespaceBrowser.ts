@@ -99,6 +99,7 @@ export const ProdutoScalarFieldEnum = {
   tipo: 'tipo',
   status: 'status',
   estoque: 'estoque',
+  ordem: 'ordem',
   categoriaId: 'categoriaId',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'

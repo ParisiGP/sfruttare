@@ -76,6 +76,18 @@ function buildWhere(filters: ProdutoListFilters = {}) {
 function buildOrderBy(
   ordem: ProdutoListFilters["ordem"] = "recentes"
 ) {
+
+  if (ordem === "vitrine") {
+    return [
+      {
+        ordem: "asc" as const,
+      },
+      {
+        createdAt: "desc" as const,
+      },
+    ];
+  }
+
   if (ordem === "nome") {
     return {
       nome: "asc" as const,
@@ -103,9 +115,13 @@ export class ProdutoRepository {
   async create(data: ProdutoWriteData) {
     const { imagens = [], ...produto } = data;
 
+    const ultimaOrdem = await prisma.produto.count();
+
     return prisma.produto.create({
       data: {
         ...produto,
+        ordem: ultimaOrdem,
+
         imagens: {
           create: imagens.map((imagem) => ({
             url: imagem.url,
@@ -178,9 +194,14 @@ export class ProdutoRepository {
   async findAll() {
     return prisma.produto.findMany({
       include: this.includeRelations(),
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: [
+        {
+          ordem: "asc",
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
     });
   }
 

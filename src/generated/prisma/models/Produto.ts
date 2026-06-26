@@ -29,11 +29,13 @@ export type AggregateProduto = {
 export type ProdutoAvgAggregateOutputType = {
   preco: runtime.Decimal | null
   estoque: number | null
+  ordem: number | null
 }
 
 export type ProdutoSumAggregateOutputType = {
   preco: runtime.Decimal | null
   estoque: number | null
+  ordem: number | null
 }
 
 export type ProdutoMinAggregateOutputType = {
@@ -49,6 +51,7 @@ export type ProdutoMinAggregateOutputType = {
   tipo: $Enums.ProdutoTipo | null
   status: $Enums.ProdutoStatus | null
   estoque: number | null
+  ordem: number | null
   categoriaId: string | null
   updatedAt: Date | null
   createdAt: Date | null
@@ -67,6 +70,7 @@ export type ProdutoMaxAggregateOutputType = {
   tipo: $Enums.ProdutoTipo | null
   status: $Enums.ProdutoStatus | null
   estoque: number | null
+  ordem: number | null
   categoriaId: string | null
   updatedAt: Date | null
   createdAt: Date | null
@@ -85,6 +89,7 @@ export type ProdutoCountAggregateOutputType = {
   tipo: number
   status: number
   estoque: number
+  ordem: number
   categoriaId: number
   updatedAt: number
   createdAt: number
@@ -95,11 +100,13 @@ export type ProdutoCountAggregateOutputType = {
 export type ProdutoAvgAggregateInputType = {
   preco?: true
   estoque?: true
+  ordem?: true
 }
 
 export type ProdutoSumAggregateInputType = {
   preco?: true
   estoque?: true
+  ordem?: true
 }
 
 export type ProdutoMinAggregateInputType = {
@@ -115,6 +122,7 @@ export type ProdutoMinAggregateInputType = {
   tipo?: true
   status?: true
   estoque?: true
+  ordem?: true
   categoriaId?: true
   updatedAt?: true
   createdAt?: true
@@ -133,6 +141,7 @@ export type ProdutoMaxAggregateInputType = {
   tipo?: true
   status?: true
   estoque?: true
+  ordem?: true
   categoriaId?: true
   updatedAt?: true
   createdAt?: true
@@ -151,6 +160,7 @@ export type ProdutoCountAggregateInputType = {
   tipo?: true
   status?: true
   estoque?: true
+  ordem?: true
   categoriaId?: true
   updatedAt?: true
   createdAt?: true
@@ -256,6 +266,7 @@ export type ProdutoGroupByOutputType = {
   tipo: $Enums.ProdutoTipo
   status: $Enums.ProdutoStatus
   estoque: number
+  ordem: number
   categoriaId: string
   updatedAt: Date
   createdAt: Date
@@ -297,6 +308,7 @@ export type ProdutoWhereInput = {
   tipo?: Prisma.EnumProdutoTipoFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntFilter<"Produto"> | number
+  ordem?: Prisma.IntFilter<"Produto"> | number
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -318,6 +330,7 @@ export type ProdutoOrderByWithRelationInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -329,7 +342,6 @@ export type ProdutoOrderByWithRelationInput = {
 export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   slug?: string
-  referencia?: string
   AND?: Prisma.ProdutoWhereInput | Prisma.ProdutoWhereInput[]
   OR?: Prisma.ProdutoWhereInput[]
   NOT?: Prisma.ProdutoWhereInput | Prisma.ProdutoWhereInput[]
@@ -337,18 +349,20 @@ export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
   tamanho?: Prisma.StringNullableFilter<"Produto"> | string | null
   descricao?: Prisma.StringNullableFilter<"Produto"> | string | null
   cor?: Prisma.StringNullableFilter<"Produto"> | string | null
+  referencia?: Prisma.StringNullableFilter<"Produto"> | string | null
   marca?: Prisma.StringNullableFilter<"Produto"> | string | null
   preco?: Prisma.DecimalFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   tipo?: Prisma.EnumProdutoTipoFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntFilter<"Produto"> | number
+  ordem?: Prisma.IntFilter<"Produto"> | number
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   categoria?: Prisma.XOR<Prisma.CategoriaScalarRelationFilter, Prisma.CategoriaWhereInput>
   imagens?: Prisma.ProdutoImagemListRelationFilter
   pedidoItens?: Prisma.PedidoItemListRelationFilter
-}, "id" | "slug" | "referencia">
+}, "id" | "slug">
 
 export type ProdutoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -363,6 +377,7 @@ export type ProdutoOrderByWithAggregationInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -389,6 +404,7 @@ export type ProdutoScalarWhereWithAggregatesInput = {
   tipo?: Prisma.EnumProdutoTipoWithAggregatesFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusWithAggregatesFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntWithAggregatesFilter<"Produto"> | number
+  ordem?: Prisma.IntWithAggregatesFilter<"Produto"> | number
   categoriaId?: Prisma.StringWithAggregatesFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Produto"> | Date | string
@@ -407,6 +423,7 @@ export type ProdutoCreateInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -427,6 +444,7 @@ export type ProdutoUncheckedCreateInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -447,6 +465,7 @@ export type ProdutoUpdateInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -467,6 +486,7 @@ export type ProdutoUncheckedUpdateInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -487,6 +507,7 @@ export type ProdutoCreateManyInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -505,6 +526,7 @@ export type ProdutoUpdateManyMutationInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -522,6 +544,7 @@ export type ProdutoUncheckedUpdateManyInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -550,6 +573,7 @@ export type ProdutoCountOrderByAggregateInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -558,6 +582,7 @@ export type ProdutoCountOrderByAggregateInput = {
 export type ProdutoAvgOrderByAggregateInput = {
   preco?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
 }
 
 export type ProdutoMaxOrderByAggregateInput = {
@@ -573,6 +598,7 @@ export type ProdutoMaxOrderByAggregateInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -591,6 +617,7 @@ export type ProdutoMinOrderByAggregateInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -599,6 +626,7 @@ export type ProdutoMinOrderByAggregateInput = {
 export type ProdutoSumOrderByAggregateInput = {
   preco?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  ordem?: Prisma.SortOrder
 }
 
 export type ProdutoScalarRelationFilter = {
@@ -717,6 +745,7 @@ export type ProdutoCreateWithoutCategoriaInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
@@ -736,6 +765,7 @@ export type ProdutoUncheckedCreateWithoutCategoriaInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
@@ -784,6 +814,7 @@ export type ProdutoScalarWhereInput = {
   tipo?: Prisma.EnumProdutoTipoFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntFilter<"Produto"> | number
+  ordem?: Prisma.IntFilter<"Produto"> | number
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -802,6 +833,7 @@ export type ProdutoCreateWithoutImagensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -821,6 +853,7 @@ export type ProdutoUncheckedCreateWithoutImagensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -856,6 +889,7 @@ export type ProdutoUpdateWithoutImagensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -875,6 +909,7 @@ export type ProdutoUncheckedUpdateWithoutImagensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -894,6 +929,7 @@ export type ProdutoCreateWithoutPedidoItensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -913,6 +949,7 @@ export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -948,6 +985,7 @@ export type ProdutoUpdateWithoutPedidoItensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -967,6 +1005,7 @@ export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -986,6 +1025,7 @@ export type ProdutoCreateManyCategoriaInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
 }
@@ -1003,6 +1043,7 @@ export type ProdutoUpdateWithoutCategoriaInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
@@ -1022,6 +1063,7 @@ export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
@@ -1041,6 +1083,7 @@ export type ProdutoUncheckedUpdateManyWithoutCategoriaInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1098,6 +1141,7 @@ export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
@@ -1120,6 +1164,7 @@ export type ProdutoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
@@ -1139,6 +1184,7 @@ export type ProdutoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
@@ -1158,12 +1204,13 @@ export type ProdutoSelectScalar = {
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
 }
 
-export type ProdutoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "tamanho" | "descricao" | "cor" | "referencia" | "marca" | "preco" | "tipo" | "status" | "estoque" | "categoriaId" | "updatedAt" | "createdAt", ExtArgs["result"]["produto"]>
+export type ProdutoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "tamanho" | "descricao" | "cor" | "referencia" | "marca" | "preco" | "tipo" | "status" | "estoque" | "ordem" | "categoriaId" | "updatedAt" | "createdAt", ExtArgs["result"]["produto"]>
 export type ProdutoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categoria?: boolean | Prisma.CategoriaDefaultArgs<ExtArgs>
   imagens?: boolean | Prisma.Produto$imagensArgs<ExtArgs>
@@ -1197,6 +1244,7 @@ export type $ProdutoPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tipo: $Enums.ProdutoTipo
     status: $Enums.ProdutoStatus
     estoque: number
+    ordem: number
     categoriaId: string
     updatedAt: Date
     createdAt: Date
@@ -1638,6 +1686,7 @@ export interface ProdutoFieldRefs {
   readonly tipo: Prisma.FieldRef<"Produto", 'ProdutoTipo'>
   readonly status: Prisma.FieldRef<"Produto", 'ProdutoStatus'>
   readonly estoque: Prisma.FieldRef<"Produto", 'Int'>
+  readonly ordem: Prisma.FieldRef<"Produto", 'Int'>
   readonly categoriaId: Prisma.FieldRef<"Produto", 'String'>
   readonly updatedAt: Prisma.FieldRef<"Produto", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Produto", 'DateTime'>

@@ -232,12 +232,25 @@ export function ProdutosAdmin({
             name="ordem"
             defaultValue={filtros.ordem}
           >
+            <option value="vitrine">
+              Ordem da vitrine
+            </option>
+
             <option value="recentes">
               Mais recentes
             </option>
-            <option value="nome">Nome</option>
-            <option value="preco">Preco</option>
-            <option value="estoque">Estoque</option>
+
+            <option value="nome">
+              Nome
+            </option>
+
+            <option value="preco">
+              Preço
+            </option>
+
+            <option value="estoque">
+              Estoque
+            </option>
           </select>
         </label>
 
@@ -282,15 +295,15 @@ export function ProdutosAdmin({
 
           {paginacao.pagina <
             paginacao.totalPaginas && (
-            <Link
-              href={buildPageHref(
-                paginacao.pagina + 1,
-                filtros
-              )}
-            >
-              Proxima
-            </Link>
-          )}
+              <Link
+                href={buildPageHref(
+                  paginacao.pagina + 1,
+                  filtros
+                )}
+              >
+                Proxima
+              </Link>
+            )}
         </div>
       </footer>
 

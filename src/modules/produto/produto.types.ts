@@ -54,7 +54,7 @@ export type ProdutoListFilters = {
   status?: ProdutoStatus | "TODOS";
   tipo?: ProdutoTipo | "TODOS";
   estoque?: "TODOS" | "COM_ESTOQUE" | "SEM_ESTOQUE";
-  ordem?: "recentes" | "nome" | "preco" | "estoque";
+  ordem?: "vitrine" | "recentes" | "nome" | "preco" | "estoque";
   pagina?: number;
   limite?: number;
 };

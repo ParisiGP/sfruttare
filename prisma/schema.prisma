@@ -23,21 +23,26 @@ model Categoria {
 model Produto {
   id          String    @id @default(cuid())
   nome        String
-  slug String @unique
+  slug        String    @unique
   tamanho     String?
   descricao   String?
-  cor          String?
-  referencia   String?          @unique
+  cor         String?
+  referencia  String?
   marca       String?
-  preco       Decimal @db.Decimal(10,2)
+  preco       Decimal   @db.Decimal(10,2)
   tipo        ProdutoTipo @default(BRECHO)
   status      ProdutoStatus @default(DISPONIVEL)
-  estoque Int @default(1)
+  estoque     Int @default(1)
+
+  ordem       Int @default(0)
+
   categoriaId String
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
+
   imagens     ProdutoImagem[]
   pedidoItens PedidoItem[]
-  updatedAt DateTime @updatedAt
+
+  updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
 }
 

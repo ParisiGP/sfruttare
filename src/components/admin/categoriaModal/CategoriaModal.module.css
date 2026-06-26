@@ -1,7 +1,7 @@
 .content {
-  width: min(460px, calc(100vw - 84px));
-  display: flex;
-  flex-direction: column;
+  /* width: min(460px, calc(100vw - 84px)); */
+  /* display: flex;
+  flex-direction: column; */
   gap: 16px;
   color: var(--color-text);
 }
