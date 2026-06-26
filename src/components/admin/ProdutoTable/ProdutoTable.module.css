@@ -91,3 +91,12 @@
       rgba(0, 0, 0, 0.08);
   opacity: 0.95;
 }
+
+.dragHandle {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  width: 76px;
+  min-width: 72px;
+}
+

@@ -50,7 +50,7 @@ function buildFilters(
     ordem:
       (getParam(params, "ordem") as
         | ProdutoListFilters["ordem"]
-        | undefined) ?? "recentes",
+        | undefined) ?? "vitrine",
     pagina: Number(getParam(params, "pagina") ?? 1),
     limite: 12,
   };
@@ -103,7 +103,7 @@ export default async function ProdutosPage({
           status: filters.status ?? "TODOS",
           tipo: filters.tipo ?? "TODOS",
           estoque: filters.estoque ?? "TODOS",
-          ordem: filters.ordem ?? "recentes",
+          ordem: filters.ordem ?? "vitrine",
         }}
         paginacao={{
           pagina: produtosPaginados.pagina,

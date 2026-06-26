@@ -6,6 +6,7 @@ import {
   DndContext,
   PointerSensor,
   closestCenter,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -58,8 +59,25 @@ export function ProdutoTable({
   }, [produtos]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor)
-  );
+  useSensor(
+    PointerSensor,
+    {
+      activationConstraint: {
+        distance: 8,
+      },
+    }
+  ),
+
+  useSensor(
+    TouchSensor,
+    {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    }
+  )
+);
 
   function handleDragEnd(
     event: DragEndEvent

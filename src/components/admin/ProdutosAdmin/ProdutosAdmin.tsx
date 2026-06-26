@@ -57,7 +57,7 @@ function buildPageHref(
     if (
       value &&
       value !== "TODOS" &&
-      value !== "recentes"
+      value !== "vitrine"
     ) {
       params.set(key, String(value));
     }
