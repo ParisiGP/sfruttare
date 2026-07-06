@@ -7,6 +7,7 @@ import {
   type ProdutoInput,
 } from "./produto.schema";
 import type {
+  ProdutoImagem,
   ProdutoAdminItem,
   ProdutoListFilters,
   ProdutoStatus,
@@ -16,7 +17,7 @@ export class ProdutoService {
   constructor(
     private produtoRepository =
       new ProdutoRepository()
-  ) {}
+  ) { }
 
   async criarProduto(data: ProdutoInput) {
     const dadosValidados =
@@ -73,6 +74,14 @@ export class ProdutoService {
     return this.produtoRepository.findAll();
   }
 
+  async salvarEnquadramentoFotos(
+  imagens: ProdutoImagem[]
+) {
+  return this.produtoRepository.salvarEnquadramentoFotos(
+    imagens
+  );
+}
+
   async obterMetricas() {
     return this.produtoRepository.metrics();
   }
@@ -93,6 +102,20 @@ export class ProdutoService {
     );
   }
 
+  async atualizarEnquadramentoImagem(
+    imagemId: string,
+    crop: {
+      zoom: number;
+      offsetX: number;
+      offsetY: number;
+    }
+  ) {
+    return this.produtoRepository.updateImageCrop(
+      imagemId,
+      crop
+    );
+  }
+
   async excluirProduto(id: string) {
     const temPedidos =
       await this.produtoRepository.hasPedidoItens(id);
@@ -107,15 +130,15 @@ export class ProdutoService {
   }
 
   async atualizarOrdemProdutos(
-  produtos: {
-    id: string;
-    ordem: number;
-  }[]
-) {
-  await this.produtoRepository.updateOrder(
-    produtos
-  );
-}
+    produtos: {
+      id: string;
+      ordem: number;
+    }[]
+  ) {
+    await this.produtoRepository.updateOrder(
+      produtos
+    );
+  }
 
   serializeProduto(produto: {
     id: string;
@@ -139,6 +162,9 @@ export class ProdutoService {
       publicId: string;
       url: string;
       ordem: number;
+      zoom: number;
+      offsetX: number;
+      offsetY: number;
     }[];
     createdAt: Date;
     updatedAt: Date;
@@ -149,7 +175,7 @@ export class ProdutoService {
       slug: produto.slug,
       descricao: produto.descricao ?? "",
       marca: produto.marca ?? "",
-      cor:produto.cor ?? "",
+      cor: produto.cor ?? "",
       referencia: produto.referencia ?? "",
       tamanho: produto.tamanho ?? "",
       preco: Number(produto.preco),
@@ -161,10 +187,13 @@ export class ProdutoService {
       tipo: produto.tipo,
       status: produto.status,
       imagens: produto.imagens.map((imagem) => ({
-        id:imagem.publicId,
+        id: imagem.id,
         publicId: imagem.publicId,
         url: imagem.url,
         ordem: imagem.ordem,
+        zoom: imagem.zoom,
+        offsetX: imagem.offsetX,
+        offsetY: imagem.offsetY,
       })),
       createdAt: produto.createdAt.toISOString(),
       updatedAt: produto.updatedAt.toISOString(),

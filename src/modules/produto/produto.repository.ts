@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type {
+  ProdutoImagem,
   ProdutoImagemInput,
   ProdutoListFilters,
   ProdutoStatus,
@@ -333,6 +334,26 @@ export class ProdutoRepository {
     });
   }
 
+  async updateImageCrop(
+    imagemId: string,
+    crop: {
+      zoom: number;
+      offsetX: number;
+      offsetY: number;
+    }
+  ) {
+    return prisma.produtoImagem.update({
+      where: {
+        id: imagemId,
+      },
+      data: {
+        zoom: crop.zoom,
+        offsetX: crop.offsetX,
+        offsetY: crop.offsetY,
+      },
+    });
+  }
+
   async updateStatus(
     id: string,
     status: ProdutoStatus
@@ -381,6 +402,25 @@ export class ProdutoRepository {
           },
           data: {
             ordem: produto.ordem,
+          },
+        })
+      )
+    );
+  }
+
+  async salvarEnquadramentoFotos(
+    imagens: ProdutoImagem[]
+  ) {
+    await prisma.$transaction(
+      imagens.map((imagem) =>
+        prisma.produtoImagem.update({
+          where: {
+            id: imagem.id,
+          },
+          data: {
+            zoom: imagem.zoom,
+            offsetX: imagem.offsetX,
+            offsetY: imagem.offsetY,
           },
         })
       )

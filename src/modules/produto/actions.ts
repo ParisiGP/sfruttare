@@ -7,6 +7,7 @@ import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { uploadProdutoImage } from "@/lib/cloudinary";
 import { ProdutoService } from "./produto.service";
 import type {
+  ProdutoImagem,
   ProdutoImagemInput,
   ProdutoStatus,
   ProdutoTipo,
@@ -388,6 +389,31 @@ export async function uploadImagemProduto(
   }
 }
 
+export async function salvarEnquadramentoFotos(
+  imagens: ProdutoImagem[]
+): Promise<ProdutoActionState> {
+  try {
+    await requireAdmin();
+
+    await produtoService.salvarEnquadramentoFotos(
+      imagens
+    );
+
+    revalidatePath("/admin/produtos");
+
+    return {
+      ok: true,
+      message:
+        "Enquadramento salvo com sucesso.",
+    };
+  } catch (error) {
+    return handleError(
+      "salvarEnquadramentoFotos",
+      error
+    );
+  }
+}
+
 export async function reordenarProdutos(
   produtos: {
     id: string;
@@ -411,6 +437,36 @@ export async function reordenarProdutos(
   } catch (error) {
     return handleError(
       "reordenarProdutos",
+      error
+    );
+  }
+}
+
+export async function atualizarEnquadramentoImagem(
+  imagemId: string,
+  crop: {
+    zoom: number;
+    offsetX: number;
+    offsetY: number;
+  }
+): Promise<ProdutoActionState> {
+  try {
+    await requireAdmin();
+
+    await produtoService.atualizarEnquadramentoImagem(
+      imagemId,
+      crop
+    );
+
+    revalidatePath("/admin/produtos");
+
+    return {
+      ...initialSuccess,
+      message: "Enquadramento salvo com sucesso.",
+    };
+  } catch (error) {
+    return handleError(
+      "atualizarEnquadramentoImagem",
       error
     );
   }

@@ -28,10 +28,16 @@ export type AggregateProdutoImagem = {
 
 export type ProdutoImagemAvgAggregateOutputType = {
   ordem: number | null
+  zoom: number | null
+  offsetX: number | null
+  offsetY: number | null
 }
 
 export type ProdutoImagemSumAggregateOutputType = {
   ordem: number | null
+  zoom: number | null
+  offsetX: number | null
+  offsetY: number | null
 }
 
 export type ProdutoImagemMinAggregateOutputType = {
@@ -40,6 +46,9 @@ export type ProdutoImagemMinAggregateOutputType = {
   publicId: string | null
   produtoId: string | null
   ordem: number | null
+  zoom: number | null
+  offsetX: number | null
+  offsetY: number | null
   createdAt: Date | null
 }
 
@@ -49,6 +58,9 @@ export type ProdutoImagemMaxAggregateOutputType = {
   publicId: string | null
   produtoId: string | null
   ordem: number | null
+  zoom: number | null
+  offsetX: number | null
+  offsetY: number | null
   createdAt: Date | null
 }
 
@@ -58,6 +70,9 @@ export type ProdutoImagemCountAggregateOutputType = {
   publicId: number
   produtoId: number
   ordem: number
+  zoom: number
+  offsetX: number
+  offsetY: number
   createdAt: number
   _all: number
 }
@@ -65,10 +80,16 @@ export type ProdutoImagemCountAggregateOutputType = {
 
 export type ProdutoImagemAvgAggregateInputType = {
   ordem?: true
+  zoom?: true
+  offsetX?: true
+  offsetY?: true
 }
 
 export type ProdutoImagemSumAggregateInputType = {
   ordem?: true
+  zoom?: true
+  offsetX?: true
+  offsetY?: true
 }
 
 export type ProdutoImagemMinAggregateInputType = {
@@ -77,6 +98,9 @@ export type ProdutoImagemMinAggregateInputType = {
   publicId?: true
   produtoId?: true
   ordem?: true
+  zoom?: true
+  offsetX?: true
+  offsetY?: true
   createdAt?: true
 }
 
@@ -86,6 +110,9 @@ export type ProdutoImagemMaxAggregateInputType = {
   publicId?: true
   produtoId?: true
   ordem?: true
+  zoom?: true
+  offsetX?: true
+  offsetY?: true
   createdAt?: true
 }
 
@@ -95,6 +122,9 @@ export type ProdutoImagemCountAggregateInputType = {
   publicId?: true
   produtoId?: true
   ordem?: true
+  zoom?: true
+  offsetX?: true
+  offsetY?: true
   createdAt?: true
   _all?: true
 }
@@ -191,6 +221,9 @@ export type ProdutoImagemGroupByOutputType = {
   publicId: string
   produtoId: string
   ordem: number
+  zoom: number
+  offsetX: number
+  offsetY: number
   createdAt: Date
   _count: ProdutoImagemCountAggregateOutputType | null
   _avg: ProdutoImagemAvgAggregateOutputType | null
@@ -223,6 +256,9 @@ export type ProdutoImagemWhereInput = {
   publicId?: Prisma.StringFilter<"ProdutoImagem"> | string
   produtoId?: Prisma.StringFilter<"ProdutoImagem"> | string
   ordem?: Prisma.IntFilter<"ProdutoImagem"> | number
+  zoom?: Prisma.FloatFilter<"ProdutoImagem"> | number
+  offsetX?: Prisma.IntFilter<"ProdutoImagem"> | number
+  offsetY?: Prisma.IntFilter<"ProdutoImagem"> | number
   createdAt?: Prisma.DateTimeFilter<"ProdutoImagem"> | Date | string
   produto?: Prisma.XOR<Prisma.ProdutoScalarRelationFilter, Prisma.ProdutoWhereInput>
 }
@@ -233,6 +269,9 @@ export type ProdutoImagemOrderByWithRelationInput = {
   publicId?: Prisma.SortOrder
   produtoId?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   produto?: Prisma.ProdutoOrderByWithRelationInput
 }
@@ -246,6 +285,9 @@ export type ProdutoImagemWhereUniqueInput = Prisma.AtLeast<{
   publicId?: Prisma.StringFilter<"ProdutoImagem"> | string
   produtoId?: Prisma.StringFilter<"ProdutoImagem"> | string
   ordem?: Prisma.IntFilter<"ProdutoImagem"> | number
+  zoom?: Prisma.FloatFilter<"ProdutoImagem"> | number
+  offsetX?: Prisma.IntFilter<"ProdutoImagem"> | number
+  offsetY?: Prisma.IntFilter<"ProdutoImagem"> | number
   createdAt?: Prisma.DateTimeFilter<"ProdutoImagem"> | Date | string
   produto?: Prisma.XOR<Prisma.ProdutoScalarRelationFilter, Prisma.ProdutoWhereInput>
 }, "id">
@@ -256,6 +298,9 @@ export type ProdutoImagemOrderByWithAggregationInput = {
   publicId?: Prisma.SortOrder
   produtoId?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ProdutoImagemCountOrderByAggregateInput
   _avg?: Prisma.ProdutoImagemAvgOrderByAggregateInput
@@ -273,6 +318,9 @@ export type ProdutoImagemScalarWhereWithAggregatesInput = {
   publicId?: Prisma.StringWithAggregatesFilter<"ProdutoImagem"> | string
   produtoId?: Prisma.StringWithAggregatesFilter<"ProdutoImagem"> | string
   ordem?: Prisma.IntWithAggregatesFilter<"ProdutoImagem"> | number
+  zoom?: Prisma.FloatWithAggregatesFilter<"ProdutoImagem"> | number
+  offsetX?: Prisma.IntWithAggregatesFilter<"ProdutoImagem"> | number
+  offsetY?: Prisma.IntWithAggregatesFilter<"ProdutoImagem"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProdutoImagem"> | Date | string
 }
 
@@ -281,6 +329,9 @@ export type ProdutoImagemCreateInput = {
   url: string
   publicId: string
   ordem?: number
+  zoom?: number
+  offsetX?: number
+  offsetY?: number
   createdAt?: Date | string
   produto: Prisma.ProdutoCreateNestedOneWithoutImagensInput
 }
@@ -291,6 +342,9 @@ export type ProdutoImagemUncheckedCreateInput = {
   publicId: string
   produtoId: string
   ordem?: number
+  zoom?: number
+  offsetX?: number
+  offsetY?: number
   createdAt?: Date | string
 }
 
@@ -299,6 +353,9 @@ export type ProdutoImagemUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produto?: Prisma.ProdutoUpdateOneRequiredWithoutImagensNestedInput
 }
@@ -309,6 +366,9 @@ export type ProdutoImagemUncheckedUpdateInput = {
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   produtoId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -318,6 +378,9 @@ export type ProdutoImagemCreateManyInput = {
   publicId: string
   produtoId: string
   ordem?: number
+  zoom?: number
+  offsetX?: number
+  offsetY?: number
   createdAt?: Date | string
 }
 
@@ -326,6 +389,9 @@ export type ProdutoImagemUpdateManyMutationInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -335,6 +401,9 @@ export type ProdutoImagemUncheckedUpdateManyInput = {
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   produtoId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -354,11 +423,17 @@ export type ProdutoImagemCountOrderByAggregateInput = {
   publicId?: Prisma.SortOrder
   produtoId?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type ProdutoImagemAvgOrderByAggregateInput = {
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
 }
 
 export type ProdutoImagemMaxOrderByAggregateInput = {
@@ -367,6 +442,9 @@ export type ProdutoImagemMaxOrderByAggregateInput = {
   publicId?: Prisma.SortOrder
   produtoId?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -376,11 +454,17 @@ export type ProdutoImagemMinOrderByAggregateInput = {
   publicId?: Prisma.SortOrder
   produtoId?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type ProdutoImagemSumOrderByAggregateInput = {
   ordem?: Prisma.SortOrder
+  zoom?: Prisma.SortOrder
+  offsetX?: Prisma.SortOrder
+  offsetY?: Prisma.SortOrder
 }
 
 export type ProdutoImagemCreateNestedManyWithoutProdutoInput = {
@@ -425,11 +509,22 @@ export type ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput = {
   deleteMany?: Prisma.ProdutoImagemScalarWhereInput | Prisma.ProdutoImagemScalarWhereInput[]
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type ProdutoImagemCreateWithoutProdutoInput = {
   id?: string
   url: string
   publicId: string
   ordem?: number
+  zoom?: number
+  offsetX?: number
+  offsetY?: number
   createdAt?: Date | string
 }
 
@@ -438,6 +533,9 @@ export type ProdutoImagemUncheckedCreateWithoutProdutoInput = {
   url: string
   publicId: string
   ordem?: number
+  zoom?: number
+  offsetX?: number
+  offsetY?: number
   createdAt?: Date | string
 }
 
@@ -476,6 +574,9 @@ export type ProdutoImagemScalarWhereInput = {
   publicId?: Prisma.StringFilter<"ProdutoImagem"> | string
   produtoId?: Prisma.StringFilter<"ProdutoImagem"> | string
   ordem?: Prisma.IntFilter<"ProdutoImagem"> | number
+  zoom?: Prisma.FloatFilter<"ProdutoImagem"> | number
+  offsetX?: Prisma.IntFilter<"ProdutoImagem"> | number
+  offsetY?: Prisma.IntFilter<"ProdutoImagem"> | number
   createdAt?: Prisma.DateTimeFilter<"ProdutoImagem"> | Date | string
 }
 
@@ -484,6 +585,9 @@ export type ProdutoImagemCreateManyProdutoInput = {
   url: string
   publicId: string
   ordem?: number
+  zoom?: number
+  offsetX?: number
+  offsetY?: number
   createdAt?: Date | string
 }
 
@@ -492,6 +596,9 @@ export type ProdutoImagemUpdateWithoutProdutoInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -500,6 +607,9 @@ export type ProdutoImagemUncheckedUpdateWithoutProdutoInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -508,6 +618,9 @@ export type ProdutoImagemUncheckedUpdateManyWithoutProdutoInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   publicId?: Prisma.StringFieldUpdateOperationsInput | string
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  zoom?: Prisma.FloatFieldUpdateOperationsInput | number
+  offsetX?: Prisma.IntFieldUpdateOperationsInput | number
+  offsetY?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -519,6 +632,9 @@ export type ProdutoImagemSelect<ExtArgs extends runtime.Types.Extensions.Interna
   publicId?: boolean
   produtoId?: boolean
   ordem?: boolean
+  zoom?: boolean
+  offsetX?: boolean
+  offsetY?: boolean
   createdAt?: boolean
   produto?: boolean | Prisma.ProdutoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["produtoImagem"]>
@@ -529,6 +645,9 @@ export type ProdutoImagemSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   publicId?: boolean
   produtoId?: boolean
   ordem?: boolean
+  zoom?: boolean
+  offsetX?: boolean
+  offsetY?: boolean
   createdAt?: boolean
   produto?: boolean | Prisma.ProdutoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["produtoImagem"]>
@@ -539,6 +658,9 @@ export type ProdutoImagemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   publicId?: boolean
   produtoId?: boolean
   ordem?: boolean
+  zoom?: boolean
+  offsetX?: boolean
+  offsetY?: boolean
   createdAt?: boolean
   produto?: boolean | Prisma.ProdutoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["produtoImagem"]>
@@ -549,10 +671,13 @@ export type ProdutoImagemSelectScalar = {
   publicId?: boolean
   produtoId?: boolean
   ordem?: boolean
+  zoom?: boolean
+  offsetX?: boolean
+  offsetY?: boolean
   createdAt?: boolean
 }
 
-export type ProdutoImagemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "publicId" | "produtoId" | "ordem" | "createdAt", ExtArgs["result"]["produtoImagem"]>
+export type ProdutoImagemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "publicId" | "produtoId" | "ordem" | "zoom" | "offsetX" | "offsetY" | "createdAt", ExtArgs["result"]["produtoImagem"]>
 export type ProdutoImagemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   produto?: boolean | Prisma.ProdutoDefaultArgs<ExtArgs>
 }
@@ -574,6 +699,9 @@ export type $ProdutoImagemPayload<ExtArgs extends runtime.Types.Extensions.Inter
     publicId: string
     produtoId: string
     ordem: number
+    zoom: number
+    offsetX: number
+    offsetY: number
     createdAt: Date
   }, ExtArgs["result"]["produtoImagem"]>
   composites: {}
@@ -1004,6 +1132,9 @@ export interface ProdutoImagemFieldRefs {
   readonly publicId: Prisma.FieldRef<"ProdutoImagem", 'String'>
   readonly produtoId: Prisma.FieldRef<"ProdutoImagem", 'String'>
   readonly ordem: Prisma.FieldRef<"ProdutoImagem", 'Int'>
+  readonly zoom: Prisma.FieldRef<"ProdutoImagem", 'Float'>
+  readonly offsetX: Prisma.FieldRef<"ProdutoImagem", 'Int'>
+  readonly offsetY: Prisma.FieldRef<"ProdutoImagem", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProdutoImagem", 'DateTime'>
 }
     

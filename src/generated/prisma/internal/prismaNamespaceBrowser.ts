@@ -114,6 +114,9 @@ export const ProdutoImagemScalarFieldEnum = {
   publicId: 'publicId',
   produtoId: 'produtoId',
   ordem: 'ordem',
+  zoom: 'zoom',
+  offsetX: 'offsetX',
+  offsetY: 'offsetY',
   createdAt: 'createdAt'
 } as const
 

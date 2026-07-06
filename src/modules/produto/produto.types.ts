@@ -13,6 +13,17 @@ export type ProdutoImagemInput = {
   ordem: number;
 };
 
+export type ProdutoImagem = {
+  id: string;
+  url: string;
+  publicId: string;
+  ordem: number;
+
+  zoom: number;
+  offsetX: number;
+  offsetY: number;
+};
+
 export type ProdutoAdminItem = {
   id: string;
   nome: string;
@@ -30,12 +41,7 @@ export type ProdutoAdminItem = {
   };
   tipo: ProdutoTipo;
   status: ProdutoStatus;
-  imagens: {
-    id: string;
-    url: string;
-    publicId: string;
-    ordem: number;
-  }[];
+  imagens: ProdutoImagem[];
   createdAt: string;
   updatedAt: string;
 };

@@ -68,7 +68,13 @@ model ProdutoImagem {
 
   produto Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
 
-  ordem     Int @default(0)
+  ordem Int @default(0)
+
+  zoom Float @default(1)
+
+  offsetX Int @default(0)
+
+  offsetY Int @default(0)
 
   createdAt DateTime @default(now())
 }
