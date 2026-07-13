@@ -57,6 +57,7 @@ export type ProdutoMetrics = {
 export type ProdutoListFilters = {
   busca?: string;
   categoriaId?: string;
+  referencia?: string;
   status?: ProdutoStatus | "TODOS";
   tipo?: ProdutoTipo | "TODOS";
   estoque?: "TODOS" | "COM_ESTOQUE" | "SEM_ESTOQUE";

@@ -35,6 +35,8 @@ function buildFilters(
     busca: getParam(params, "busca") ?? "",
     categoriaId:
       getParam(params, "categoriaId") ?? "",
+    referencia:
+      getParam(params, "referencia") ?? "",
     status:
       (getParam(params, "status") as
         | ProdutoListFilters["status"]
@@ -100,6 +102,7 @@ export default async function ProdutosPage({
         filtros={{
           busca: filters.busca ?? "",
           categoriaId: filters.categoriaId ?? "",
+          referencia: filters.referencia ?? "",
           status: filters.status ?? "TODOS",
           tipo: filters.tipo ?? "TODOS",
           estoque: filters.estoque ?? "TODOS",

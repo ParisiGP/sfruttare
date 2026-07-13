@@ -46,11 +46,24 @@ function buildWhere(filters: ProdutoListFilters = {}) {
           mode: "insensitive",
         },
       },
+      {
+        referencia: {
+          contains: filters.busca,
+          mode: "insensitive",
+        },
+      },
     ];
   }
 
   if (filters.categoriaId) {
     where.categoriaId = filters.categoriaId;
+  }
+
+  if (filters.referencia) {
+    where.referencia = {
+      contains: filters.referencia,
+      mode: "insensitive",
+    };
   }
 
   if (filters.status && filters.status !== "TODOS") {

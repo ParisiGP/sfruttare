@@ -32,6 +32,7 @@ type ProdutosAdminProps = {
       ProdutoListFilters,
       | "busca"
       | "categoriaId"
+      | "referencia"
       | "status"
       | "tipo"
       | "estoque"
@@ -258,6 +259,17 @@ export function ProdutosAdmin({
                   </option>
                 ))}
               </select>
+            </label>
+
+            <label>
+              <span>Referência</span>
+
+              <input
+                type="text"
+                name="referencia"
+                defaultValue={filtros.referencia}
+                placeholder="Código da peça"
+              />
             </label>
 
             <label>
