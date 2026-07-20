@@ -16,4 +16,15 @@ export class UsuarioRepository {
       },
     });
   }
+
+  async create(data: {
+  nome: string;
+  email: string;
+  senha: string;
+  role: "ADMIN" | "CLIENTE";
+}) {
+  return prisma.usuario.create({
+    data,
+  });
+}
 }
