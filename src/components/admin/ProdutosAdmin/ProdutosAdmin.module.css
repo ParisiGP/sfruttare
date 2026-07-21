@@ -195,6 +195,7 @@
 }
 
 .secondaryButton {
+  min-height: 42px;
   border: 1px solid #d8d2ca;
   background: #ffffff;
   color: #8a5a44;
@@ -203,6 +204,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .secondaryButton:hover {

@@ -2,6 +2,7 @@
 
 import {
   ReactNode,
+  type MouseEvent,
 } from "react";
 
 import styles from "./BaseHeader.module.css";
@@ -27,6 +28,20 @@ export function HeaderSidebar({
     return null;
   }
 
+  function handleNavClick(
+    event: MouseEvent<HTMLElement>
+  ) {
+    const target =
+      event.target;
+
+    if (
+      target instanceof Element &&
+      target.closest("a")
+    ) {
+      onClose();
+    }
+  }
+
   return (
     <>
       <div
@@ -37,6 +52,7 @@ export function HeaderSidebar({
       <nav
         className={`${styles.nav} ${styles.navOpen}`}
         aria-label={navLabel}
+        onClick={handleNavClick}
       >
         <button
           type="button"

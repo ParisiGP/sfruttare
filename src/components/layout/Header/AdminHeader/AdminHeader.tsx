@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import styles from "./AdminHeader.module.css";
 
@@ -10,36 +11,36 @@ import {
 
 const navItems = [
   {
-    id: "produtos",
-    href: "/admin/produtos",
-    label: "Produtos",
-  },
-  {
     id: "categorias",
     href: "/admin/categorias",
     label: "Categorias",
   },
+];
+
+const produtoItems = [
   {
-    id: "pecas",
-    href: "/admin/pecas",
-    label: "Peças",
+    id: "listar-produtos",
+    href: "/admin/produtos",
+    label: "Listar Produtos",
   },
   {
-    id: "pedidos",
-    href: "/admin/pedidos",
-    label: "Pedidos",
-  },
-  {
-    id: "inspiracao",
-    href: "/admin/inspiracoes",
-    label: "Inspiração",
+    id: "importar-produtos",
+    href: "/admin/produtos/importar",
+    label: "Importar Produtos",
   },
 ];
 
 export function AdminHeader() {
+  const pathname =
+    usePathname();
+
+  if (pathname === "/admin/login") {
+    return null;
+  }
+
   return (
     <BaseHeader
-      navLabel="Menu de administração"
+      navLabel="Menu de administracao"
       logo={
         <>
           <span
@@ -61,6 +62,28 @@ export function AdminHeader() {
       }
       navContent={
         <>
+          <details className={styles.navGroup}>
+            <summary>
+              Produtos
+            </summary>
+
+            <div className={styles.subNav}>
+              {produtoItems.map(
+                (item) => (
+                  <Link
+                    key={item.id}
+                    href={
+                      item.href
+                    }
+                    className={styles.navLink}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
+            </div>
+          </details>
+
           {navItems.map(
             (item) => (
               <Link

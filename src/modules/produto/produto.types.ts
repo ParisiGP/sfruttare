@@ -65,3 +65,51 @@ export type ProdutoListFilters = {
   pagina?: number;
   limite?: number;
 };
+
+export type ProdutoImportRowStatus =
+  | "VALIDO"
+  | "INVALIDO"
+  | "DUPLICADO"
+  | "IGNORADO";
+
+export type ProdutoImportPreviewRow = {
+  linha: number;
+  referencia: string;
+  descricao: string;
+  modelo: string;
+  nome: string;
+  cor: string;
+  tamanho: string;
+  preco: number | null;
+  produtoStatus: ProdutoStatus | "";
+  quantidade: number | null;
+  categoriaId: string;
+  status: ProdutoImportRowStatus;
+  mensagem: string;
+};
+
+export type ProdutoImportAdjustment = {
+  linha: number;
+  referencia: string;
+  descricao: string;
+  modelo: string;
+  cor: string;
+  tamanho: string;
+  categoriaId: string;
+  preco: number;
+  status: ProdutoStatus;
+  quantidade: number;
+};
+
+export type ProdutoImportSummary = {
+  total: number;
+  validos: number;
+  ignorados: number;
+  duplicados: number;
+  invalidos: number;
+};
+
+export type ProdutoImportPreview = {
+  resumo: ProdutoImportSummary;
+  linhas: ProdutoImportPreviewRow[];
+};

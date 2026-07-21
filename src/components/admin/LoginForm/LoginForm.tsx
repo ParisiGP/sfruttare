@@ -12,6 +12,7 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
   async function handleSubmit(
     event: React.FormEvent<HTMLFormElement>
@@ -19,7 +20,7 @@ export function LoginForm() {
     event.preventDefault();
 
     setErro("");
-
+    setCarregando(true);
     const result = await signIn("credentials", {
       email,
       senha,
@@ -27,6 +28,7 @@ export function LoginForm() {
     });
 
     if (result?.error) {
+      setCarregando(false);
       setErro("E-mail ou senha inválidos.");
       return;
     }
@@ -79,8 +81,11 @@ export function LoginForm() {
             {erro}
           </p>
         )}
-        <button type="submit">
-          Entrar
+        <button
+          type="submit"
+          disabled={carregando}
+        >
+          {carregando ? "Entrando..." : "Entrar"}
         </button>
       </form>
     </section>

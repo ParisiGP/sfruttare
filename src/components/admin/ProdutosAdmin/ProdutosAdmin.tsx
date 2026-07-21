@@ -191,6 +191,13 @@ export function ProdutosAdmin({
                 Ordenar produtos
               </button>
 
+              <Link
+                href="/admin/produtos/importar"
+                className={styles.secondaryButton}
+              >
+                Importar produtos
+              </Link>
+
               <button
                 type="button"
                 className={styles.newButton}

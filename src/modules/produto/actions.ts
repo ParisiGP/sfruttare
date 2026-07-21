@@ -9,6 +9,8 @@ import { ProdutoService } from "./produto.service";
 import type {
   ProdutoImagem,
   ProdutoImagemInput,
+  ProdutoImportAdjustment,
+  ProdutoImportPreview,
   ProdutoStatus,
   ProdutoTipo,
 } from "./produto.types";
@@ -17,6 +19,12 @@ export type ProdutoActionState = {
   ok: boolean;
   message: string;
 };
+
+export type ProdutoImportActionState =
+  ProdutoActionState & {
+    preview?: ProdutoImportPreview;
+    importados?: number;
+  };
 
 const initialSuccess: ProdutoActionState = {
   ok: true,
@@ -61,6 +69,40 @@ function getStatus(
   }
 
   return "DISPONIVEL";
+}
+
+function getFile(
+  formData: FormData,
+  key: string
+) {
+  const file =
+    formData.get(key);
+
+  if (!(file instanceof File)) {
+    throw new Error("Selecione uma planilha para importar.");
+  }
+
+  return file;
+}
+
+function getImportAdjustments(
+  formData: FormData
+): ProdutoImportAdjustment[] {
+  const raw =
+    getText(formData, "ajustes");
+
+  if (!raw) {
+    return [];
+  }
+
+  const parsed =
+    JSON.parse(raw);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("Ajustes da importacao invalidos.");
+  }
+
+  return parsed as ProdutoImportAdjustment[];
 }
 
 
@@ -467,6 +509,60 @@ export async function atualizarEnquadramentoImagem(
   } catch (error) {
     return handleError(
       "atualizarEnquadramentoImagem",
+      error
+    );
+  }
+}
+
+export async function preVisualizarImportacaoProdutos(
+  formData: FormData
+): Promise<ProdutoImportActionState> {
+  try {
+    await requireAdmin();
+
+    const preview =
+      await produtoService.preVisualizarImportacao(
+        getFile(formData, "planilha")
+      );
+
+    return {
+      ok: true,
+      message: "Planilha validada com sucesso.",
+      preview,
+    };
+  } catch (error) {
+    return handleError(
+      "preVisualizarImportacaoProdutos",
+      error
+    );
+  }
+}
+
+export async function confirmarImportacaoProdutos(
+  formData: FormData
+): Promise<ProdutoImportActionState> {
+  try {
+    await requireAdmin();
+
+    const resultado =
+      await produtoService.importarProdutosPorPlanilha(
+        getFile(formData, "planilha"),
+        getImportAdjustments(formData)
+      );
+
+    revalidatePath("/admin/produtos");
+    revalidatePath("/admin/produtos/importar");
+    revalidatePath("/admin/categorias");
+
+    return {
+      ok: true,
+      message: `${resultado.importados} produto(s) importado(s) com sucesso.`,
+      importados: resultado.importados,
+      preview: resultado.preview,
+    };
+  } catch (error) {
+    return handleError(
+      "confirmarImportacaoProdutos",
       error
     );
   }

@@ -7,7 +7,7 @@ import type {
   ProdutoTipo,
 } from "./produto.types";
 
-type ProdutoWriteData = {
+export type ProdutoWriteData = {
   nome: string;
   slug: string;
   descricao?: string;
@@ -22,6 +22,11 @@ type ProdutoWriteData = {
   status: ProdutoStatus;
   imagens?: ProdutoImagemInput[];
 };
+
+export type ProdutoImportCreateData = Omit<
+  ProdutoWriteData,
+  "imagens"
+>;
 
 function buildWhere(filters: ProdutoListFilters = {}) {
   const where: Record<string, unknown> = {};
@@ -205,6 +210,33 @@ export class ProdutoRepository {
     });
   }
 
+  async findExistingReferences(
+    referencias: string[]
+  ) {
+    if (referencias.length === 0) {
+      return [];
+    }
+
+    const produtos =
+      await prisma.produto.findMany({
+        where: {
+          referencia: {
+            in: referencias,
+          },
+        },
+        select: {
+          referencia: true,
+        },
+      });
+
+    return produtos
+      .map((produto) => produto.referencia)
+      .filter(
+        (referencia): referencia is string =>
+          Boolean(referencia)
+      );
+  }
+
   async findAll() {
     return prisma.produto.findMany({
       include: this.includeRelations(),
@@ -318,6 +350,28 @@ export class ProdutoRepository {
         publicId: imagem.publicId,
         ordem: imagem.ordem,
       })),
+    });
+  }
+
+  async createManyImported(
+    produtos: ProdutoImportCreateData[]
+  ) {
+    if (produtos.length === 0) {
+      return 0;
+    }
+
+    return prisma.$transaction(async (tx) => {
+      const totalProdutos =
+        await tx.produto.count();
+
+      await tx.produto.createMany({
+        data: produtos.map((produto, index) => ({
+          ...produto,
+          ordem: totalProdutos + index,
+        })),
+      });
+
+      return produtos.length;
     });
   }
 
