@@ -31,8 +31,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/admin/produtos");
-    router.refresh();
+    window.location.href = "/admin/produtos";
   }
 
   return (
