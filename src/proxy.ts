@@ -5,7 +5,9 @@ export default auth((req) => {
   const isAdmin = req.auth?.user?.role === "ADMIN";
   const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
   const isLoginRoute = req.nextUrl.pathname === "/admin/login";
-  const isPerfilRoute = req.nextUrl.pathname === "/perfil";
+  const isRotaAutenticada =
+    req.nextUrl.pathname === "/perfil" ||
+    req.nextUrl.pathname === "/carrinho";
 
   // Permite acessar a tela de login sem estar autenticado
   if (isLoginRoute) {
@@ -17,12 +19,12 @@ export default auth((req) => {
     return Response.redirect(new URL("/admin/login", req.nextUrl));
   }
 
-  // Perfil exige apenas sessão ativa, qualquer role
-  if (isPerfilRoute && !isLoggedIn) {
+  // Perfil e Carrinho exigem apenas sessão ativa, qualquer role
+  if (isRotaAutenticada && !isLoggedIn) {
     return Response.redirect(new URL("/login", req.nextUrl));
   }
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/perfil"],
+  matcher: ["/admin/:path*", "/perfil", "/carrinho"],
 };

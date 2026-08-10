@@ -59,6 +59,27 @@
     uppercase;
 }
 
+.cartLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cartBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fffaf1;
+  font-size: 10px;
+  font-weight: 800;
+}
+
 @media (max-width: 480px) {
   .brandMark {
     font-size: 46px;

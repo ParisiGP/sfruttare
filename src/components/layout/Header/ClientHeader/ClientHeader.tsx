@@ -19,7 +19,13 @@ const navItems = [
   },
 ];
 
-export function ClientHeader() {
+type ClientHeaderProps = {
+  quantidadeCarrinho?: number;
+};
+
+export function ClientHeader({
+  quantidadeCarrinho = 0,
+}: ClientHeaderProps) {
 
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -73,8 +79,16 @@ export function ClientHeader() {
             Perfil
           </Link>
 
-          <Link href="/carrinho">
+          <Link
+            href="/carrinho"
+            className={styles.cartLink}
+          >
             Carrinho
+            {quantidadeCarrinho > 0 && (
+              <span className={styles.cartBadge}>
+                {quantidadeCarrinho}
+              </span>
+            )}
           </Link>
         </>
       }
@@ -92,8 +106,16 @@ export function ClientHeader() {
             Perfil
           </Link>
 
-          <Link href="/carrinho">
+          <Link
+            href="/carrinho"
+            className={styles.cartLink}
+          >
             Carrinho
+            {quantidadeCarrinho > 0 && (
+              <span className={styles.cartBadge}>
+                {quantidadeCarrinho}
+              </span>
+            )}
           </Link>
         </>
       }

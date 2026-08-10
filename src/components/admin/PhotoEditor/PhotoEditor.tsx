@@ -10,6 +10,8 @@ import type {
 
 import { salvarEnquadramentoFotos } from "@/modules/produto/actions";
 
+import { formatarPreco } from "@/lib/formatarPreco";
+
 import styles from "./PhotoEditor.module.css";
 
 type PhotoEditorProps = {
@@ -90,10 +92,7 @@ export function PhotoEditor({
   }
 
   const precoFormatado =
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(produtoPreco);
+    formatarPreco(produtoPreco);
 
   return (
     <div className={styles.wrapper}>

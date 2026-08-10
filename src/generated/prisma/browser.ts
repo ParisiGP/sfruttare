@@ -63,6 +63,16 @@ export type VitrineAba = Prisma.VitrineAbaModel
  */
 export type VitrineAbaProduto = Prisma.VitrineAbaProdutoModel
 /**
+ * Model Carrinho
+ * 
+ */
+export type Carrinho = Prisma.CarrinhoModel
+/**
+ * Model CarrinhoItem
+ * 
+ */
+export type CarrinhoItem = Prisma.CarrinhoItemModel
+/**
  * Model InspiracaoSemana
  * 
  */

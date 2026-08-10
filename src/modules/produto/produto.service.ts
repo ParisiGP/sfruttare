@@ -15,6 +15,7 @@ import {
 import type {
   ProdutoImagem,
   ProdutoAdminItem,
+  ProdutoDetalhePublico,
   ProdutoImportAdjustment,
   ProdutoImportPreview,
   ProdutoImportPreviewRow,
@@ -298,6 +299,43 @@ export class ProdutoService {
 
   async listarTodosProdutos() {
     return this.produtoRepository.findAll();
+  }
+
+  async obterDetalhePublico(
+    slug: string
+  ): Promise<ProdutoDetalhePublico | null> {
+    const produto =
+      await this.produtoRepository.findBySlugPublico(
+        slug
+      );
+
+    if (!produto) {
+      return null;
+    }
+
+    return {
+      id: produto.id,
+      nome: produto.nome,
+      slug: produto.slug,
+      descricao: produto.descricao ?? "",
+      marca: produto.marca ?? "",
+      cor: produto.cor ?? "",
+      tamanho: produto.tamanho ?? "",
+      referencia: produto.referencia ?? "",
+      preco: Number(produto.preco),
+      estoque: produto.estoque,
+      status: produto.status,
+      categoria: {
+        nome: produto.categoria.nome,
+      },
+      imagens: produto.imagens.map((imagem) => ({
+        id: imagem.id,
+        url: imagem.url,
+        zoom: imagem.zoom,
+        offsetX: imagem.offsetX,
+        offsetY: imagem.offsetY,
+      })),
+    };
   }
 
   async salvarEnquadramentoFotos(

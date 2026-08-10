@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
+import { CarrinhoService } from "@/modules/carrinho/carrinho.service";
 import {
   ClientHeader,
 } from "@/components/layout/Header/ClientHeader/ClientHeader";
@@ -33,6 +34,12 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
+  const quantidadeCarrinho = session?.user
+    ? await new CarrinhoService().contarItens(
+        session.user.id
+      )
+    : 0;
+
   return (
     <html
       lang="pt-BR"
@@ -41,7 +48,9 @@ export default async function RootLayout({
       <body>
         <SessionProvider session={session}>
           <div className="app-shell">
-            <ClientHeader />
+            <ClientHeader
+              quantidadeCarrinho={quantidadeCarrinho}
+            />
             <div className="app-content">
               {children}
             </div>

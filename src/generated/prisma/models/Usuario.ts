@@ -192,6 +192,7 @@ export type UsuarioWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   enderecos?: Prisma.EnderecoListRelationFilter
   pedidos?: Prisma.PedidoListRelationFilter
+  carrinho?: Prisma.XOR<Prisma.CarrinhoNullableScalarRelationFilter, Prisma.CarrinhoWhereInput> | null
 }
 
 export type UsuarioOrderByWithRelationInput = {
@@ -203,6 +204,7 @@ export type UsuarioOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   enderecos?: Prisma.EnderecoOrderByRelationAggregateInput
   pedidos?: Prisma.PedidoOrderByRelationAggregateInput
+  carrinho?: Prisma.CarrinhoOrderByWithRelationInput
 }
 
 export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
@@ -217,6 +219,7 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   enderecos?: Prisma.EnderecoListRelationFilter
   pedidos?: Prisma.PedidoListRelationFilter
+  carrinho?: Prisma.XOR<Prisma.CarrinhoNullableScalarRelationFilter, Prisma.CarrinhoWhereInput> | null
 }, "id" | "email">
 
 export type UsuarioOrderByWithAggregationInput = {
@@ -252,6 +255,7 @@ export type UsuarioCreateInput = {
   createdAt?: Date | string
   enderecos?: Prisma.EnderecoCreateNestedManyWithoutUsuarioInput
   pedidos?: Prisma.PedidoCreateNestedManyWithoutUsuarioInput
+  carrinho?: Prisma.CarrinhoCreateNestedOneWithoutUsuarioInput
 }
 
 export type UsuarioUncheckedCreateInput = {
@@ -263,6 +267,7 @@ export type UsuarioUncheckedCreateInput = {
   createdAt?: Date | string
   enderecos?: Prisma.EnderecoUncheckedCreateNestedManyWithoutUsuarioInput
   pedidos?: Prisma.PedidoUncheckedCreateNestedManyWithoutUsuarioInput
+  carrinho?: Prisma.CarrinhoUncheckedCreateNestedOneWithoutUsuarioInput
 }
 
 export type UsuarioUpdateInput = {
@@ -274,6 +279,7 @@ export type UsuarioUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enderecos?: Prisma.EnderecoUpdateManyWithoutUsuarioNestedInput
   pedidos?: Prisma.PedidoUpdateManyWithoutUsuarioNestedInput
+  carrinho?: Prisma.CarrinhoUpdateOneWithoutUsuarioNestedInput
 }
 
 export type UsuarioUncheckedUpdateInput = {
@@ -285,6 +291,7 @@ export type UsuarioUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enderecos?: Prisma.EnderecoUncheckedUpdateManyWithoutUsuarioNestedInput
   pedidos?: Prisma.PedidoUncheckedUpdateManyWithoutUsuarioNestedInput
+  carrinho?: Prisma.CarrinhoUncheckedUpdateOneWithoutUsuarioNestedInput
 }
 
 export type UsuarioCreateManyInput = {
@@ -378,6 +385,20 @@ export type UsuarioUpdateOneRequiredWithoutPedidosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutPedidosInput, Prisma.UsuarioUpdateWithoutPedidosInput>, Prisma.UsuarioUncheckedUpdateWithoutPedidosInput>
 }
 
+export type UsuarioCreateNestedOneWithoutCarrinhoInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutCarrinhoInput, Prisma.UsuarioUncheckedCreateWithoutCarrinhoInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutCarrinhoInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutCarrinhoNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutCarrinhoInput, Prisma.UsuarioUncheckedCreateWithoutCarrinhoInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutCarrinhoInput
+  upsert?: Prisma.UsuarioUpsertWithoutCarrinhoInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutCarrinhoInput, Prisma.UsuarioUpdateWithoutCarrinhoInput>, Prisma.UsuarioUncheckedUpdateWithoutCarrinhoInput>
+}
+
 export type UsuarioCreateWithoutEnderecosInput = {
   id?: string
   nome: string
@@ -386,6 +407,7 @@ export type UsuarioCreateWithoutEnderecosInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   pedidos?: Prisma.PedidoCreateNestedManyWithoutUsuarioInput
+  carrinho?: Prisma.CarrinhoCreateNestedOneWithoutUsuarioInput
 }
 
 export type UsuarioUncheckedCreateWithoutEnderecosInput = {
@@ -396,6 +418,7 @@ export type UsuarioUncheckedCreateWithoutEnderecosInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   pedidos?: Prisma.PedidoUncheckedCreateNestedManyWithoutUsuarioInput
+  carrinho?: Prisma.CarrinhoUncheckedCreateNestedOneWithoutUsuarioInput
 }
 
 export type UsuarioCreateOrConnectWithoutEnderecosInput = {
@@ -422,6 +445,7 @@ export type UsuarioUpdateWithoutEnderecosInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pedidos?: Prisma.PedidoUpdateManyWithoutUsuarioNestedInput
+  carrinho?: Prisma.CarrinhoUpdateOneWithoutUsuarioNestedInput
 }
 
 export type UsuarioUncheckedUpdateWithoutEnderecosInput = {
@@ -432,6 +456,7 @@ export type UsuarioUncheckedUpdateWithoutEnderecosInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pedidos?: Prisma.PedidoUncheckedUpdateManyWithoutUsuarioNestedInput
+  carrinho?: Prisma.CarrinhoUncheckedUpdateOneWithoutUsuarioNestedInput
 }
 
 export type UsuarioCreateWithoutPedidosInput = {
@@ -442,6 +467,7 @@ export type UsuarioCreateWithoutPedidosInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   enderecos?: Prisma.EnderecoCreateNestedManyWithoutUsuarioInput
+  carrinho?: Prisma.CarrinhoCreateNestedOneWithoutUsuarioInput
 }
 
 export type UsuarioUncheckedCreateWithoutPedidosInput = {
@@ -452,6 +478,7 @@ export type UsuarioUncheckedCreateWithoutPedidosInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   enderecos?: Prisma.EnderecoUncheckedCreateNestedManyWithoutUsuarioInput
+  carrinho?: Prisma.CarrinhoUncheckedCreateNestedOneWithoutUsuarioInput
 }
 
 export type UsuarioCreateOrConnectWithoutPedidosInput = {
@@ -478,6 +505,7 @@ export type UsuarioUpdateWithoutPedidosInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enderecos?: Prisma.EnderecoUpdateManyWithoutUsuarioNestedInput
+  carrinho?: Prisma.CarrinhoUpdateOneWithoutUsuarioNestedInput
 }
 
 export type UsuarioUncheckedUpdateWithoutPedidosInput = {
@@ -488,6 +516,67 @@ export type UsuarioUncheckedUpdateWithoutPedidosInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enderecos?: Prisma.EnderecoUncheckedUpdateManyWithoutUsuarioNestedInput
+  carrinho?: Prisma.CarrinhoUncheckedUpdateOneWithoutUsuarioNestedInput
+}
+
+export type UsuarioCreateWithoutCarrinhoInput = {
+  id?: string
+  nome: string
+  email: string
+  senha: string
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  enderecos?: Prisma.EnderecoCreateNestedManyWithoutUsuarioInput
+  pedidos?: Prisma.PedidoCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioUncheckedCreateWithoutCarrinhoInput = {
+  id?: string
+  nome: string
+  email: string
+  senha: string
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  enderecos?: Prisma.EnderecoUncheckedCreateNestedManyWithoutUsuarioInput
+  pedidos?: Prisma.PedidoUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioCreateOrConnectWithoutCarrinhoInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutCarrinhoInput, Prisma.UsuarioUncheckedCreateWithoutCarrinhoInput>
+}
+
+export type UsuarioUpsertWithoutCarrinhoInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutCarrinhoInput, Prisma.UsuarioUncheckedUpdateWithoutCarrinhoInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutCarrinhoInput, Prisma.UsuarioUncheckedCreateWithoutCarrinhoInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutCarrinhoInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutCarrinhoInput, Prisma.UsuarioUncheckedUpdateWithoutCarrinhoInput>
+}
+
+export type UsuarioUpdateWithoutCarrinhoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enderecos?: Prisma.EnderecoUpdateManyWithoutUsuarioNestedInput
+  pedidos?: Prisma.PedidoUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutCarrinhoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enderecos?: Prisma.EnderecoUncheckedUpdateManyWithoutUsuarioNestedInput
+  pedidos?: Prisma.PedidoUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 
@@ -539,6 +628,7 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   enderecos?: boolean | Prisma.Usuario$enderecosArgs<ExtArgs>
   pedidos?: boolean | Prisma.Usuario$pedidosArgs<ExtArgs>
+  carrinho?: boolean | Prisma.Usuario$carrinhoArgs<ExtArgs>
   _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
@@ -573,6 +663,7 @@ export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enderecos?: boolean | Prisma.Usuario$enderecosArgs<ExtArgs>
   pedidos?: boolean | Prisma.Usuario$pedidosArgs<ExtArgs>
+  carrinho?: boolean | Prisma.Usuario$carrinhoArgs<ExtArgs>
   _count?: boolean | Prisma.UsuarioCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -583,6 +674,7 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     enderecos: Prisma.$EnderecoPayload<ExtArgs>[]
     pedidos: Prisma.$PedidoPayload<ExtArgs>[]
+    carrinho: Prisma.$CarrinhoPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -987,6 +1079,7 @@ export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   enderecos<T extends Prisma.Usuario$enderecosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$enderecosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnderecoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pedidos<T extends Prisma.Usuario$pedidosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$pedidosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  carrinho<T extends Prisma.Usuario$carrinhoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$carrinhoArgs<ExtArgs>>): Prisma.Prisma__CarrinhoClient<runtime.Types.Result.GetResult<Prisma.$CarrinhoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1460,6 +1553,25 @@ export type Usuario$pedidosArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.PedidoScalarFieldEnum | Prisma.PedidoScalarFieldEnum[]
+}
+
+/**
+ * Usuario.carrinho
+ */
+export type Usuario$carrinhoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Carrinho
+   */
+  select?: Prisma.CarrinhoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Carrinho
+   */
+  omit?: Prisma.CarrinhoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CarrinhoInclude<ExtArgs> | null
+  where?: Prisma.CarrinhoWhereInput
 }
 
 /**

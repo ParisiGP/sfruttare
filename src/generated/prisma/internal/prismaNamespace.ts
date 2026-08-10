@@ -393,6 +393,8 @@ export const ModelName = {
   PedidoItem: 'PedidoItem',
   VitrineAba: 'VitrineAba',
   VitrineAbaProduto: 'VitrineAbaProduto',
+  Carrinho: 'Carrinho',
+  CarrinhoItem: 'CarrinhoItem',
   InspiracaoSemana: 'InspiracaoSemana'
 } as const
 
@@ -409,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "inspiracaoSemana"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "carrinho" | "carrinhoItem" | "inspiracaoSemana"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1079,6 +1081,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Carrinho: {
+      payload: Prisma.$CarrinhoPayload<ExtArgs>
+      fields: Prisma.CarrinhoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CarrinhoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CarrinhoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>
+        }
+        findFirst: {
+          args: Prisma.CarrinhoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CarrinhoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>
+        }
+        findMany: {
+          args: Prisma.CarrinhoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>[]
+        }
+        create: {
+          args: Prisma.CarrinhoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>
+        }
+        createMany: {
+          args: Prisma.CarrinhoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CarrinhoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>[]
+        }
+        delete: {
+          args: Prisma.CarrinhoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>
+        }
+        update: {
+          args: Prisma.CarrinhoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>
+        }
+        deleteMany: {
+          args: Prisma.CarrinhoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CarrinhoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CarrinhoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>[]
+        }
+        upsert: {
+          args: Prisma.CarrinhoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoPayload>
+        }
+        aggregate: {
+          args: Prisma.CarrinhoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCarrinho>
+        }
+        groupBy: {
+          args: Prisma.CarrinhoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CarrinhoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CarrinhoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CarrinhoCountAggregateOutputType> | number
+        }
+      }
+    }
+    CarrinhoItem: {
+      payload: Prisma.$CarrinhoItemPayload<ExtArgs>
+      fields: Prisma.CarrinhoItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CarrinhoItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CarrinhoItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>
+        }
+        findFirst: {
+          args: Prisma.CarrinhoItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CarrinhoItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>
+        }
+        findMany: {
+          args: Prisma.CarrinhoItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>[]
+        }
+        create: {
+          args: Prisma.CarrinhoItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>
+        }
+        createMany: {
+          args: Prisma.CarrinhoItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CarrinhoItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>[]
+        }
+        delete: {
+          args: Prisma.CarrinhoItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>
+        }
+        update: {
+          args: Prisma.CarrinhoItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.CarrinhoItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CarrinhoItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CarrinhoItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.CarrinhoItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CarrinhoItemPayload>
+        }
+        aggregate: {
+          args: Prisma.CarrinhoItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCarrinhoItem>
+        }
+        groupBy: {
+          args: Prisma.CarrinhoItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CarrinhoItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CarrinhoItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CarrinhoItemCountAggregateOutputType> | number
+        }
+      }
+    }
     InspiracaoSemana: {
       payload: Prisma.$InspiracaoSemanaPayload<ExtArgs>
       fields: Prisma.InspiracaoSemanaFieldRefs
@@ -1311,6 +1461,28 @@ export const VitrineAbaProdutoScalarFieldEnum = {
 } as const
 
 export type VitrineAbaProdutoScalarFieldEnum = (typeof VitrineAbaProdutoScalarFieldEnum)[keyof typeof VitrineAbaProdutoScalarFieldEnum]
+
+
+export const CarrinhoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CarrinhoScalarFieldEnum = (typeof CarrinhoScalarFieldEnum)[keyof typeof CarrinhoScalarFieldEnum]
+
+
+export const CarrinhoItemScalarFieldEnum = {
+  id: 'id',
+  carrinhoId: 'carrinhoId',
+  produtoId: 'produtoId',
+  quantidade: 'quantidade',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CarrinhoItemScalarFieldEnum = (typeof CarrinhoItemScalarFieldEnum)[keyof typeof CarrinhoItemScalarFieldEnum]
 
 
 export const InspiracaoSemanaScalarFieldEnum = {
@@ -1606,6 +1778,8 @@ export type GlobalOmitConfig = {
   pedidoItem?: Prisma.PedidoItemOmit
   vitrineAba?: Prisma.VitrineAbaOmit
   vitrineAbaProduto?: Prisma.VitrineAbaProdutoOmit
+  carrinho?: Prisma.CarrinhoOmit
+  carrinhoItem?: Prisma.CarrinhoItemOmit
   inspiracaoSemana?: Prisma.InspiracaoSemanaOmit
 }
 

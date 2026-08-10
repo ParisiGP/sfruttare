@@ -39,9 +39,10 @@ model Produto {
   categoriaId String
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
 
-  imagens     ProdutoImagem[]
-  pedidoItens PedidoItem[]
-  abas        VitrineAbaProduto[]
+  imagens       ProdutoImagem[]
+  pedidoItens   PedidoItem[]
+  abas          VitrineAbaProduto[]
+  carrinhoItens CarrinhoItem[]
 
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
@@ -91,6 +92,7 @@ model Usuario {
 
   enderecos Endereco[]
   pedidos   Pedido[]
+  carrinho  Carrinho?
 
   createdAt DateTime @default(now())
 }
@@ -190,6 +192,28 @@ model VitrineAbaProduto {
   createdAt DateTime @default(now())
 
   @@unique([abaId, produtoId])
+}
+
+model Carrinho {
+  id        String   @id @default(cuid())
+  usuarioId String   @unique
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  itens     CarrinhoItem[]
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model CarrinhoItem {
+  id         String   @id @default(cuid())
+  carrinhoId String
+  carrinho   Carrinho @relation(fields: [carrinhoId], references: [id], onDelete: Cascade)
+  produtoId  String
+  produto    Produto  @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+  quantidade Int      @default(1)
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+
+  @@unique([carrinhoId, produtoId])
 }
 
 model InspiracaoSemana {

@@ -46,6 +46,32 @@ export type ProdutoAdminItem = {
   updatedAt: string;
 };
 
+export type ProdutoImagemPublica = {
+  id: string;
+  url: string;
+  zoom: number;
+  offsetX: number;
+  offsetY: number;
+};
+
+export type ProdutoDetalhePublico = {
+  id: string;
+  nome: string;
+  slug: string;
+  descricao: string;
+  marca: string;
+  cor: string;
+  tamanho: string;
+  referencia: string;
+  preco: number;
+  estoque: number;
+  status: ProdutoStatus;
+  categoria: {
+    nome: string;
+  };
+  imagens: ProdutoImagemPublica[];
+};
+
 export type ProdutoMetrics = {
   total: number;
   disponiveis: number;

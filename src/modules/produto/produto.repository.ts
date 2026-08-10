@@ -210,6 +210,15 @@ export class ProdutoRepository {
     });
   }
 
+  async findBySlugPublico(slug: string) {
+    return prisma.produto.findUnique({
+      where: {
+        slug,
+      },
+      include: this.includeRelations(),
+    });
+  }
+
   async findExistingReferences(
     referencias: string[]
   ) {

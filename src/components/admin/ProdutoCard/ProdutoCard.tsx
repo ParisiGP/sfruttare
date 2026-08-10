@@ -14,6 +14,8 @@ import { Modal } from "@/components/ui/Modal/Modal";
 
 import { PhotoEditor } from "@/components/admin/PhotoEditor/PhotoEditor"
 
+import { formatarPreco } from "@/lib/formatarPreco";
+
 import styles from "./ProdutoCard.module.css";
 
 type ProdutoCardProps = {
@@ -34,10 +36,7 @@ export function ProdutoCard({
   onExcluir,
 }: ProdutoCardProps) {
   const precoFormatado =
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(produto.preco);
+    formatarPreco(produto.preco);
 
   const [imagemAtual, setImagemAtual] =
     useState(0);
