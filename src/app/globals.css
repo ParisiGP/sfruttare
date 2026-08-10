@@ -118,6 +118,13 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(139, 107, 63, 0.13);
 }
 
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;

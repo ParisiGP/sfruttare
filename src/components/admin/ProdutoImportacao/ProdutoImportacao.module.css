@@ -28,7 +28,7 @@
 
 .eyebrow::before,
 .eyebrow::after {
-  content: "*";
+  content: "✦";
   color: var(--color-primary);
   font-size: 11px;
 }
@@ -195,15 +195,15 @@
 }
 
 .success {
-  border: 1px solid rgba(40, 120, 78, 0.28);
-  background: rgba(40, 120, 78, 0.08);
-  color: #286f49;
+  border: 1px solid rgba(122, 155, 118, 0.26);
+  background: rgba(122, 155, 118, 0.1);
+  color: var(--color-success);
 }
 
 .error {
-  border: 1px solid rgba(170, 58, 58, 0.28);
-  background: rgba(170, 58, 58, 0.08);
-  color: #9c3030;
+  border: 1px solid rgba(168, 92, 74, 0.24);
+  background: rgba(168, 92, 74, 0.08);
+  color: var(--color-danger);
 }
 
 .emptyState {
@@ -327,16 +327,16 @@
 }
 
 .invalidField {
-  border-color: #b94a48 !important;
-  background: rgba(170, 58, 58, 0.08) !important;
+  border-color: var(--color-danger) !important;
+  background: rgba(168, 92, 74, 0.08) !important;
 }
 
 .rowVALIDO {
-  background: rgba(40, 120, 78, 0.035);
+  background: rgba(122, 155, 118, 0.06);
 }
 
 .rowINVALIDO {
-  background: rgba(170, 58, 58, 0.05);
+  background: rgba(168, 92, 74, 0.05);
 }
 
 .rowDUPLICADO,
@@ -371,19 +371,57 @@
 }
 
 .valido {
-  background: rgba(40, 120, 78, 0.1);
-  color: #286f49;
+  background: rgba(122, 155, 118, 0.14);
+  color: var(--color-success);
 }
 
 .invalido {
-  background: rgba(170, 58, 58, 0.1);
-  color: #9c3030;
+  background: rgba(168, 92, 74, 0.14);
+  color: var(--color-danger);
 }
 
 .duplicado,
 .ignorado {
   background: rgba(139, 107, 63, 0.12);
   color: #7d5b32;
+}
+
+.confirmModal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--color-text);
+}
+
+.confirmTitle {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.confirmMessage {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .confirmActions {
+    flex-direction: column;
+  }
+
+  .confirmActions button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 900px) {

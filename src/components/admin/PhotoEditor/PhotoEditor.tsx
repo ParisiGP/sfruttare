@@ -147,7 +147,7 @@ export function PhotoEditor({
         className={styles.gallery}
       >
         {imagensEditadas.map(
-          (imagem) => (
+          (imagem, index) => (
             <button
               key={imagem.id}
               type="button"
@@ -155,6 +155,10 @@ export function PhotoEditor({
                 setImagemSelecionadaId(
                   imagem.id
                 )
+              }
+              aria-label={`Selecionar imagem ${index + 1} para editar`}
+              aria-pressed={
+                imagem.id === imagemSelecionadaId
               }
               className={`${styles.thumbnail} ${imagem.id ===
                   imagemSelecionadaId

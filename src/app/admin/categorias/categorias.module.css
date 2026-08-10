@@ -90,3 +90,21 @@
 
   gap: 2rem;
 }
+
+@media (max-width: 720px) {
+  .wrapper {
+    width: min(100% - 24px, 1180px);
+    padding-top: 24px;
+    gap: 20px;
+  }
+
+  .header,
+  .pageHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .header button {
+    width: 100%;
+  }
+}

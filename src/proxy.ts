@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
+  const isAdmin = req.auth?.user?.role === "ADMIN";
   const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
   const isLoginRoute = req.nextUrl.pathname === "/admin/login";
 
@@ -10,8 +10,8 @@ export default auth((req) => {
     return;
   }
 
-  // Bloqueia qualquer outra rota /admin
-  if (isAdminRoute && !isLoggedIn) {
+  // Bloqueia qualquer outra rota /admin para quem não for ADMIN
+  if (isAdminRoute && !isAdmin) {
     return Response.redirect(new URL("/admin/login", req.nextUrl));
   }
 });

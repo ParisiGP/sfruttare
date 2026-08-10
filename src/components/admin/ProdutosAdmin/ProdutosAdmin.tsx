@@ -8,7 +8,10 @@ import { Modal } from "@/components/ui/Modal/Modal";
 import { ProdutoDeleteModal } from "@/components/admin/ProdutoDeleteModal/ProdutoDeleteModal";
 import { ProdutoGrid } from "@/components/admin/ProdutoGrid/ProdutoGrid";
 import { ProdutoTable } from "@/components/admin/ProdutoTable/ProdutoTable"
-import { reordenarProdutos, } from "@/modules/produto/actions"
+import {
+  listarProdutosParaOrdenacao,
+  reordenarProdutos,
+} from "@/modules/produto/actions"
 import type {
   ProdutoAdminItem,
   ProdutoListFilters,
@@ -87,6 +90,9 @@ export function ProdutosAdmin({
 
   const [modoOrdenacao, setModoOrdenacao] = useState(false);
 
+  const [carregandoOrdenacao, setCarregandoOrdenacao] =
+    useState(false);
+
   const [produtosOrdenados,
     setProdutosOrdenados] =
     useState(produtos);
@@ -108,9 +114,22 @@ export function ProdutosAdmin({
     setProdutoEmEdicao(null);
   }
 
-  function abrirOrdenacao() {
-    setProdutosOrdenados(produtos);
+  async function abrirOrdenacao() {
     setModoOrdenacao(true);
+    setCarregandoOrdenacao(true);
+
+    const resultado =
+      await listarProdutosParaOrdenacao();
+
+    if (!resultado.ok) {
+      alert(resultado.message);
+      setModoOrdenacao(false);
+      setCarregandoOrdenacao(false);
+      return;
+    }
+
+    setProdutosOrdenados(resultado.produtos);
+    setCarregandoOrdenacao(false);
   }
 
   async function salvarOrdenacao() {
@@ -172,6 +191,7 @@ export function ProdutosAdmin({
               <button
                 type="button"
                 className={styles.newButton}
+                disabled={carregandoOrdenacao}
                 onClick={
                   salvarOrdenacao
                 }
@@ -369,13 +389,19 @@ export function ProdutosAdmin({
         </>
       )}
       {modoOrdenacao ? (
-        <ProdutoTable
-          produtos={produtosOrdenados}
-          modoOrdenacao
-          onOrderChange={
-            setProdutosOrdenados
-          }
-        />
+        carregandoOrdenacao ? (
+          <p className={styles.description}>
+            Carregando todos os produtos...
+          </p>
+        ) : (
+          <ProdutoTable
+            produtos={produtosOrdenados}
+            modoOrdenacao
+            onOrderChange={
+              setProdutosOrdenados
+            }
+          />
+        )
       ) : (
         <ProdutoGrid
           produtos={produtos}
@@ -383,41 +409,43 @@ export function ProdutosAdmin({
           onExcluir={setProdutoParaExcluir}
         />
       )}
-      <footer className={styles.pagination}>
-        <span>
-          {paginacao.total} produtos encontrados
-        </span>
+      {!modoOrdenacao && (
+        <footer className={styles.pagination}>
+          <span>
+            {paginacao.total} produtos encontrados
+          </span>
 
-        <div className={styles.pageActions}>
-          {paginacao.pagina > 1 && (
-            <Link
-              href={buildPageHref(
-                paginacao.pagina - 1,
-                filtros
-              )}
-            >
-              Anterior
-            </Link>
-          )}
-
-          <strong>
-            Pagina {paginacao.pagina} de{" "}
-            {paginacao.totalPaginas}
-          </strong>
-
-          {paginacao.pagina <
-            paginacao.totalPaginas && (
+          <div className={styles.pageActions}>
+            {paginacao.pagina > 1 && (
               <Link
                 href={buildPageHref(
-                  paginacao.pagina + 1,
+                  paginacao.pagina - 1,
                   filtros
                 )}
               >
-                Proxima
+                Anterior
               </Link>
             )}
-        </div>
-      </footer>
+
+            <strong>
+              Pagina {paginacao.pagina} de{" "}
+              {paginacao.totalPaginas}
+            </strong>
+
+            {paginacao.pagina <
+              paginacao.totalPaginas && (
+                <Link
+                  href={buildPageHref(
+                    paginacao.pagina + 1,
+                    filtros
+                  )}
+                >
+                  Proxima
+                </Link>
+              )}
+          </div>
+        </footer>
+      )}
 
       <Modal
         aberto={modalProdutoAberto}

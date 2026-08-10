@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import Link from "next/link";
 
@@ -23,7 +24,7 @@ const navItems = [
   },
   {
     id: "pecas",
-    href: "/admin/produtos",
+    href: "/",
     label: "Pecas",
   },
   {
@@ -36,6 +37,9 @@ const navItems = [
 export function ClientHeader() {
 
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "ADMIN";
+
   if (pathname.startsWith("/admin")) {
     return null;
   }
@@ -74,6 +78,12 @@ export function ClientHeader() {
       }
       actions={
         <>
+          {isAdmin && (
+            <Link href="/admin/produtos">
+              Admin
+            </Link>
+          )}
+
           <Link href="/perfil">
             Perfil
           </Link>
@@ -87,6 +97,12 @@ export function ClientHeader() {
       mobileTitle="Minha Conta"
       mobileExtra={
         <>
+          {isAdmin && (
+            <Link href="/admin/produtos">
+              Admin
+            </Link>
+          )}
+
           <Link href="/perfil">
             Perfil
           </Link>

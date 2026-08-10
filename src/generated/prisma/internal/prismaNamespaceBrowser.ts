@@ -58,6 +58,8 @@ export const ModelName = {
   Endereco: 'Endereco',
   Pedido: 'Pedido',
   PedidoItem: 'PedidoItem',
+  VitrineAba: 'VitrineAba',
+  VitrineAbaProduto: 'VitrineAbaProduto',
   InspiracaoSemana: 'InspiracaoSemana'
 } as const
 
@@ -172,6 +174,30 @@ export const PedidoItemScalarFieldEnum = {
 } as const
 
 export type PedidoItemScalarFieldEnum = (typeof PedidoItemScalarFieldEnum)[keyof typeof PedidoItemScalarFieldEnum]
+
+
+export const VitrineAbaScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  slug: 'slug',
+  ordem: 'ordem',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VitrineAbaScalarFieldEnum = (typeof VitrineAbaScalarFieldEnum)[keyof typeof VitrineAbaScalarFieldEnum]
+
+
+export const VitrineAbaProdutoScalarFieldEnum = {
+  id: 'id',
+  abaId: 'abaId',
+  produtoId: 'produtoId',
+  ordem: 'ordem',
+  createdAt: 'createdAt'
+} as const
+
+export type VitrineAbaProdutoScalarFieldEnum = (typeof VitrineAbaProdutoScalarFieldEnum)[keyof typeof VitrineAbaProdutoScalarFieldEnum]
 
 
 export const InspiracaoSemanaScalarFieldEnum = {

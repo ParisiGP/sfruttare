@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { CategoriaService } from "./categoria.service";
 
 import { ZodError } from "zod";
@@ -19,6 +20,8 @@ export async function criarCategoria(
   formData: FormData
 ): Promise<CategoriaActionState> {
   try {
+    await requireAdmin();
+
     const nome = formData.get("nome");
 
     await categoriaService.criarCategoria({
@@ -56,6 +59,8 @@ export async function editarCategoria(
   formData: FormData
 ): Promise<CategoriaActionState> {
   try {
+    await requireAdmin();
+
     const id = formData.get("id");
     const nome = formData.get("nome");
 
@@ -89,6 +94,8 @@ export async function excluirCategoria(
   formData: FormData
 ): Promise<CategoriaActionState> {
   try {
+    await requireAdmin();
+
     const id = formData.get("id");
 
     await categoriaService.excluirCategoria(

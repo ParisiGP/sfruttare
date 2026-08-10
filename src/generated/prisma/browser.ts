@@ -53,6 +53,16 @@ export type Pedido = Prisma.PedidoModel
  */
 export type PedidoItem = Prisma.PedidoItemModel
 /**
+ * Model VitrineAba
+ * 
+ */
+export type VitrineAba = Prisma.VitrineAbaModel
+/**
+ * Model VitrineAbaProduto
+ * 
+ */
+export type VitrineAbaProduto = Prisma.VitrineAbaProdutoModel
+/**
  * Model InspiracaoSemana
  * 
  */

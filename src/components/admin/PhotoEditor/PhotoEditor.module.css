@@ -28,17 +28,17 @@
 
   border-radius: 22px;
 
-  background: #f7f3ef;
+  background: var(--color-background);
 
-  border: 1px solid #ece6df;
+  border: 1px solid var(--color-border);
 }
 
 .productCard {
-  width: 290px;
+  width: min(290px, 100%);
 
-  background: white;
+  background: var(--color-surface);
 
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
 
   overflow: hidden;
 
@@ -55,7 +55,7 @@
 
   overflow: hidden;
 
-  background: #efebe7;
+  background: var(--color-background);
 }
 
 .imageArea img {
@@ -221,4 +221,24 @@
 
 .save:hover {
   filter: brightness(.95);
-} 
+}
+
+@media (max-width: 640px) {
+  .previewArea {
+    padding: 1.5rem 1rem;
+  }
+
+  .zoom label,
+  .zoom span {
+    width: 44px;
+  }
+
+  .footer {
+    flex-direction: column;
+  }
+
+  .cancel,
+  .save {
+    width: 100%;
+  }
+}

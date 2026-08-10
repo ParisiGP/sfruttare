@@ -18,6 +18,9 @@ import type {
   ProdutoStatus,
 } from "@/modules/produto/produto.types";
 
+import { Modal } from "@/components/ui/Modal/Modal";
+import { Button } from "@/components/ui/Button/Button";
+
 import styles from "./ProdutoImportacao.module.css";
 
 type Categoria = {
@@ -170,6 +173,9 @@ export function ProdutoImportacao({
 
   const [bulkCategoriaId, setBulkCategoriaId] =
     useState("");
+
+  const [confirmandoImportacao, setConfirmandoImportacao] =
+    useState(false);
 
   const duplicateReferences =
     useMemo(() => {
@@ -335,14 +341,15 @@ export function ProdutoImportacao({
       return;
     }
 
-    const confirmed =
-      window.confirm(
-        `Confirmar importacao de ${resumo.validos} produto(s)?`
-      );
+    setConfirmandoImportacao(true);
+  }
 
-    if (!confirmed) {
+  async function executarImportacao() {
+    if (!formRef.current) {
       return;
     }
+
+    setConfirmandoImportacao(false);
 
     const formData =
       new FormData(formRef.current);
@@ -806,6 +813,43 @@ export function ProdutoImportacao({
           </section>
         </>
       )}
+
+      <Modal
+        aberto={confirmandoImportacao}
+        onClose={() =>
+          setConfirmandoImportacao(false)
+        }
+      >
+        <div className={styles.confirmModal}>
+          <h2 className={styles.confirmTitle}>
+            Confirmar importação
+          </h2>
+
+          <p className={styles.confirmMessage}>
+            Confirmar importação de {resumo.validos}{" "}
+            produto(s)?
+          </p>
+
+          <div className={styles.confirmActions}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                setConfirmandoImportacao(false)
+              }
+            >
+              Cancelar
+            </Button>
+
+            <Button
+              type="button"
+              onClick={executarImportacao}
+            >
+              Confirmar importação
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -1,8 +1,11 @@
+import { auth } from "@/auth";
+
 export async function requireAdmin() {
-  // Auth is not wired yet. Keep every admin entrypoint going through this
-  // helper so NextAuth role checks can be enabled in one place later.
-  return {
-    id: "temporary-admin",
-    role: "ADMIN" as const,
-  };
+  const session = await auth();
+
+  if (!session?.user || session.user.role !== "ADMIN") {
+    throw new Error("Acesso restrito a administradores.");
+  }
+
+  return session.user;
 }

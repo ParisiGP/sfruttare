@@ -11,22 +11,19 @@ import {
 
 const navItems = [
   {
+    id: "produtos",
+    href: "/admin/produtos",
+    label: "Produtos",
+  },
+  {
+    id: "vitrine",
+    href: "/admin/vitrine",
+    label: "Vitrine",
+  },
+  {
     id: "categorias",
     href: "/admin/categorias",
     label: "Categorias",
-  },
-];
-
-const produtoItems = [
-  {
-    id: "listar-produtos",
-    href: "/admin/produtos",
-    label: "Listar Produtos",
-  },
-  {
-    id: "importar-produtos",
-    href: "/admin/produtos/importar",
-    label: "Importar Produtos",
   },
 ];
 
@@ -62,28 +59,6 @@ export function AdminHeader() {
       }
       navContent={
         <>
-          <details className={styles.navGroup}>
-            <summary>
-              Produtos
-            </summary>
-
-            <div className={styles.subNav}>
-              {produtoItems.map(
-                (item) => (
-                  <Link
-                    key={item.id}
-                    href={
-                      item.href
-                    }
-                    className={styles.navLink}
-                  >
-                    {item.label}
-                  </Link>
-                )
-              )}
-            </div>
-          </details>
-
           {navItems.map(
             (item) => (
               <Link

@@ -67,3 +67,13 @@
 
   margin-top: 0.5rem;
 }
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

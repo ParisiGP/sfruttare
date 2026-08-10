@@ -1,18 +1,16 @@
-import Link from "next/link";
-import styles from "./page.module.css";
+import { VitrineAbaService } from "@/modules/vitrineAba/vitrineAba.service";
+import { VitrineTabs } from "@/components/store/VitrineTabs/VitrineTabs";
 
-export default function Home() {
+export default async function Home() {
+  const vitrineAbaService =
+    new VitrineAbaService();
+
+  const abas =
+    await vitrineAbaService.listarAbasPublicas();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h1>
-          Bem-vindo ao Sfruttare!
-        </h1>
-
-        <Link href="/admin/produtos">
-          Ir para Produtos
-        </Link>
-      </main>
-    </div>
+    <main>
+      <VitrineTabs abas={abas} />
+    </main>
   );
 }

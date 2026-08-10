@@ -4,6 +4,9 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+import { Input } from "@/components/ui/Input/Input";
+import { Button } from "@/components/ui/Button/Button";
+
 import styles from "./LoginForm.module.css";
 
 export function LoginForm() {
@@ -48,10 +51,10 @@ export function LoginForm() {
 
       <form className={styles.form}
         onSubmit={handleSubmit}>
-        <label>
+        <label className={styles.field}>
           <span>E-mail</span>
 
-          <input
+          <Input
             type="email"
             placeholder="Digite seu e-mail"
             value={email}
@@ -62,10 +65,10 @@ export function LoginForm() {
           />
         </label>
 
-        <label>
+        <label className={styles.field}>
           <span>Senha</span>
 
-          <input
+          <Input
             type="password"
             placeholder="Digite sua senha"
             value={senha}
@@ -81,12 +84,13 @@ export function LoginForm() {
             {erro}
           </p>
         )}
-        <button
+
+        <Button
           type="submit"
           disabled={carregando}
         >
           {carregando ? "Entrando..." : "Entrar"}
-        </button>
+        </Button>
       </form>
     </section>
   );

@@ -1,0 +1,58 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--color-text);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.message {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.abaName {
+  padding: 13px 14px;
+  border: 1px solid rgba(139, 107, 63, 0.18);
+  border-radius: var(--radius-sm);
+  background: rgba(248, 244, 237, 0.72);
+  color: var(--color-primary);
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.error {
+  margin: 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(168, 92, 74, 0.24);
+  border-radius: var(--radius-sm);
+  background: rgba(168, 92, 74, 0.08);
+  color: var(--color-danger);
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

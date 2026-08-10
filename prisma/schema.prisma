@@ -41,6 +41,7 @@ model Produto {
 
   imagens     ProdutoImagem[]
   pedidoItens PedidoItem[]
+  abas        VitrineAbaProduto[]
 
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
@@ -158,6 +159,37 @@ model PedidoItem {
   precoUnitario  Decimal @db.Decimal(10,2)
 
   createdAt      DateTime @default(now())
+}
+
+model VitrineAba {
+  id        String   @id @default(cuid())
+
+  nome      String
+  slug      String   @unique
+
+  ordem     Int      @default(0)
+  ativo     Boolean  @default(true)
+
+  produtos  VitrineAbaProduto[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VitrineAbaProduto {
+  id        String @id @default(cuid())
+
+  abaId     String
+  aba       VitrineAba @relation(fields: [abaId], references: [id], onDelete: Cascade)
+
+  produtoId String
+  produto   Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  ordem     Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@unique([abaId, produtoId])
 }
 
 model InspiracaoSemana {

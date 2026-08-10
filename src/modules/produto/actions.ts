@@ -7,6 +7,7 @@ import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { uploadProdutoImage } from "@/lib/cloudinary";
 import { ProdutoService } from "./produto.service";
 import type {
+  ProdutoAdminItem,
   ProdutoImagem,
   ProdutoImagemInput,
   ProdutoImportAdjustment,
@@ -453,6 +454,32 @@ export async function salvarEnquadramentoFotos(
       "salvarEnquadramentoFotos",
       error
     );
+  }
+}
+
+export async function listarProdutosParaOrdenacao(): Promise<
+  ProdutoActionState & { produtos: ProdutoAdminItem[] }
+> {
+  try {
+    await requireAdmin();
+
+    const produtos =
+      await produtoService.listarTodosProdutos();
+
+    return {
+      ...initialSuccess,
+      produtos: produtos.map((produto) =>
+        produtoService.serializeProduto(produto)
+      ),
+    };
+  } catch (error) {
+    return {
+      ...handleError(
+        "listarProdutosParaOrdenacao",
+        error
+      ),
+      produtos: [],
+    };
   }
 }
 

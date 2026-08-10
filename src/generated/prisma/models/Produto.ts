@@ -315,6 +315,7 @@ export type ProdutoWhereInput = {
   categoria?: Prisma.XOR<Prisma.CategoriaScalarRelationFilter, Prisma.CategoriaWhereInput>
   imagens?: Prisma.ProdutoImagemListRelationFilter
   pedidoItens?: Prisma.PedidoItemListRelationFilter
+  abas?: Prisma.VitrineAbaProdutoListRelationFilter
 }
 
 export type ProdutoOrderByWithRelationInput = {
@@ -337,6 +338,7 @@ export type ProdutoOrderByWithRelationInput = {
   categoria?: Prisma.CategoriaOrderByWithRelationInput
   imagens?: Prisma.ProdutoImagemOrderByRelationAggregateInput
   pedidoItens?: Prisma.PedidoItemOrderByRelationAggregateInput
+  abas?: Prisma.VitrineAbaProdutoOrderByRelationAggregateInput
 }
 
 export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
@@ -362,6 +364,7 @@ export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
   categoria?: Prisma.XOR<Prisma.CategoriaScalarRelationFilter, Prisma.CategoriaWhereInput>
   imagens?: Prisma.ProdutoImagemListRelationFilter
   pedidoItens?: Prisma.PedidoItemListRelationFilter
+  abas?: Prisma.VitrineAbaProdutoListRelationFilter
 }, "id" | "slug">
 
 export type ProdutoOrderByWithAggregationInput = {
@@ -429,6 +432,7 @@ export type ProdutoCreateInput = {
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
   imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
   pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateInput = {
@@ -450,6 +454,7 @@ export type ProdutoUncheckedCreateInput = {
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
   pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUpdateInput = {
@@ -471,6 +476,7 @@ export type ProdutoUpdateInput = {
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
   imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
   pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateInput = {
@@ -492,6 +498,7 @@ export type ProdutoUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
   pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateManyInput = {
@@ -732,6 +739,20 @@ export type ProdutoUpdateOneRequiredWithoutPedidoItensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProdutoUpdateToOneWithWhereWithoutPedidoItensInput, Prisma.ProdutoUpdateWithoutPedidoItensInput>, Prisma.ProdutoUncheckedUpdateWithoutPedidoItensInput>
 }
 
+export type ProdutoCreateNestedOneWithoutAbasInput = {
+  create?: Prisma.XOR<Prisma.ProdutoCreateWithoutAbasInput, Prisma.ProdutoUncheckedCreateWithoutAbasInput>
+  connectOrCreate?: Prisma.ProdutoCreateOrConnectWithoutAbasInput
+  connect?: Prisma.ProdutoWhereUniqueInput
+}
+
+export type ProdutoUpdateOneRequiredWithoutAbasNestedInput = {
+  create?: Prisma.XOR<Prisma.ProdutoCreateWithoutAbasInput, Prisma.ProdutoUncheckedCreateWithoutAbasInput>
+  connectOrCreate?: Prisma.ProdutoCreateOrConnectWithoutAbasInput
+  upsert?: Prisma.ProdutoUpsertWithoutAbasInput
+  connect?: Prisma.ProdutoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProdutoUpdateToOneWithWhereWithoutAbasInput, Prisma.ProdutoUpdateWithoutAbasInput>, Prisma.ProdutoUncheckedUpdateWithoutAbasInput>
+}
+
 export type ProdutoCreateWithoutCategoriaInput = {
   id?: string
   nome: string
@@ -750,6 +771,7 @@ export type ProdutoCreateWithoutCategoriaInput = {
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
   pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutCategoriaInput = {
@@ -770,6 +792,7 @@ export type ProdutoUncheckedCreateWithoutCategoriaInput = {
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
   pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutCategoriaInput = {
@@ -838,6 +861,7 @@ export type ProdutoCreateWithoutImagensInput = {
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
   pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutImagensInput = {
@@ -858,6 +882,7 @@ export type ProdutoUncheckedCreateWithoutImagensInput = {
   updatedAt?: Date | string
   createdAt?: Date | string
   pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutImagensInput = {
@@ -894,6 +919,7 @@ export type ProdutoUpdateWithoutImagensInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
   pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutImagensInput = {
@@ -914,6 +940,7 @@ export type ProdutoUncheckedUpdateWithoutImagensInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateWithoutPedidoItensInput = {
@@ -934,6 +961,7 @@ export type ProdutoCreateWithoutPedidoItensInput = {
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
   imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
@@ -954,6 +982,7 @@ export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
   updatedAt?: Date | string
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutPedidoItensInput = {
@@ -990,6 +1019,7 @@ export type ProdutoUpdateWithoutPedidoItensInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
   imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
@@ -1010,6 +1040,107 @@ export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
+}
+
+export type ProdutoCreateWithoutAbasInput = {
+  id?: string
+  nome: string
+  slug: string
+  tamanho?: string | null
+  descricao?: string | null
+  cor?: string | null
+  referencia?: string | null
+  marca?: string | null
+  preco: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: $Enums.ProdutoTipo
+  status?: $Enums.ProdutoStatus
+  estoque?: number
+  ordem?: number
+  updatedAt?: Date | string
+  createdAt?: Date | string
+  categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
+  imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
+  pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
+}
+
+export type ProdutoUncheckedCreateWithoutAbasInput = {
+  id?: string
+  nome: string
+  slug: string
+  tamanho?: string | null
+  descricao?: string | null
+  cor?: string | null
+  referencia?: string | null
+  marca?: string | null
+  preco: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: $Enums.ProdutoTipo
+  status?: $Enums.ProdutoStatus
+  estoque?: number
+  ordem?: number
+  categoriaId: string
+  updatedAt?: Date | string
+  createdAt?: Date | string
+  imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
+  pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
+}
+
+export type ProdutoCreateOrConnectWithoutAbasInput = {
+  where: Prisma.ProdutoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProdutoCreateWithoutAbasInput, Prisma.ProdutoUncheckedCreateWithoutAbasInput>
+}
+
+export type ProdutoUpsertWithoutAbasInput = {
+  update: Prisma.XOR<Prisma.ProdutoUpdateWithoutAbasInput, Prisma.ProdutoUncheckedUpdateWithoutAbasInput>
+  create: Prisma.XOR<Prisma.ProdutoCreateWithoutAbasInput, Prisma.ProdutoUncheckedCreateWithoutAbasInput>
+  where?: Prisma.ProdutoWhereInput
+}
+
+export type ProdutoUpdateToOneWithWhereWithoutAbasInput = {
+  where?: Prisma.ProdutoWhereInput
+  data: Prisma.XOR<Prisma.ProdutoUpdateWithoutAbasInput, Prisma.ProdutoUncheckedUpdateWithoutAbasInput>
+}
+
+export type ProdutoUpdateWithoutAbasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  tamanho?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referencia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marca?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preco?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
+  status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
+  estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
+  imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
+  pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
+}
+
+export type ProdutoUncheckedUpdateWithoutAbasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  tamanho?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referencia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marca?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preco?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
+  status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
+  estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
+  pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateManyCategoriaInput = {
@@ -1048,6 +1179,7 @@ export type ProdutoUpdateWithoutCategoriaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
   pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
@@ -1068,6 +1200,7 @@ export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
   pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateManyWithoutCategoriaInput = {
@@ -1096,11 +1229,13 @@ export type ProdutoUncheckedUpdateManyWithoutCategoriaInput = {
 export type ProdutoCountOutputType = {
   imagens: number
   pedidoItens: number
+  abas: number
 }
 
 export type ProdutoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   imagens?: boolean | ProdutoCountOutputTypeCountImagensArgs
   pedidoItens?: boolean | ProdutoCountOutputTypeCountPedidoItensArgs
+  abas?: boolean | ProdutoCountOutputTypeCountAbasArgs
 }
 
 /**
@@ -1127,6 +1262,13 @@ export type ProdutoCountOutputTypeCountPedidoItensArgs<ExtArgs extends runtime.T
   where?: Prisma.PedidoItemWhereInput
 }
 
+/**
+ * ProdutoCountOutputType without action
+ */
+export type ProdutoCountOutputTypeCountAbasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VitrineAbaProdutoWhereInput
+}
+
 
 export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1148,6 +1290,7 @@ export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   categoria?: boolean | Prisma.CategoriaDefaultArgs<ExtArgs>
   imagens?: boolean | Prisma.Produto$imagensArgs<ExtArgs>
   pedidoItens?: boolean | Prisma.Produto$pedidoItensArgs<ExtArgs>
+  abas?: boolean | Prisma.Produto$abasArgs<ExtArgs>
   _count?: boolean | Prisma.ProdutoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["produto"]>
 
@@ -1215,6 +1358,7 @@ export type ProdutoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   categoria?: boolean | Prisma.CategoriaDefaultArgs<ExtArgs>
   imagens?: boolean | Prisma.Produto$imagensArgs<ExtArgs>
   pedidoItens?: boolean | Prisma.Produto$pedidoItensArgs<ExtArgs>
+  abas?: boolean | Prisma.Produto$abasArgs<ExtArgs>
   _count?: boolean | Prisma.ProdutoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProdutoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1230,6 +1374,7 @@ export type $ProdutoPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     categoria: Prisma.$CategoriaPayload<ExtArgs>
     imagens: Prisma.$ProdutoImagemPayload<ExtArgs>[]
     pedidoItens: Prisma.$PedidoItemPayload<ExtArgs>[]
+    abas: Prisma.$VitrineAbaProdutoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1645,6 +1790,7 @@ export interface Prisma__ProdutoClient<T, Null = never, ExtArgs extends runtime.
   categoria<T extends Prisma.CategoriaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategoriaDefaultArgs<ExtArgs>>): Prisma.Prisma__CategoriaClient<runtime.Types.Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   imagens<T extends Prisma.Produto$imagensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$imagensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProdutoImagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pedidoItens<T extends Prisma.Produto$pedidoItensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$pedidoItensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PedidoItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  abas<T extends Prisma.Produto$abasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$abasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VitrineAbaProdutoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2136,6 +2282,30 @@ export type Produto$pedidoItensArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.PedidoItemScalarFieldEnum | Prisma.PedidoItemScalarFieldEnum[]
+}
+
+/**
+ * Produto.abas
+ */
+export type Produto$abasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VitrineAbaProduto
+   */
+  select?: Prisma.VitrineAbaProdutoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VitrineAbaProduto
+   */
+  omit?: Prisma.VitrineAbaProdutoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VitrineAbaProdutoInclude<ExtArgs> | null
+  where?: Prisma.VitrineAbaProdutoWhereInput
+  orderBy?: Prisma.VitrineAbaProdutoOrderByWithRelationInput | Prisma.VitrineAbaProdutoOrderByWithRelationInput[]
+  cursor?: Prisma.VitrineAbaProdutoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VitrineAbaProdutoScalarFieldEnum | Prisma.VitrineAbaProdutoScalarFieldEnum[]
 }
 
 /**

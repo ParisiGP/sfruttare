@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
@@ -15,6 +15,8 @@ export function Modal({
   onClose,
   children,
 }: ModalProps) {
+  const closeButtonRef =
+    useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!aberto) {
@@ -24,11 +26,21 @@ export function Modal({
     }
 
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    window.addEventListener("keydown", handleEscape);
 
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleEscape);
     };
-  }, [aberto]);
+  }, [aberto, onClose]);
 
   if (!aberto) {
     return null;
@@ -44,6 +56,7 @@ export function Modal({
       >
         <div className={styles.content}>
          <button
+          ref={closeButtonRef}
           type="button"
           className={styles.closeButton}
           onClick={onClose}
@@ -52,7 +65,7 @@ export function Modal({
           ×
         </button>
           {children}
-          
+
         </div>
       </div>
     </div>

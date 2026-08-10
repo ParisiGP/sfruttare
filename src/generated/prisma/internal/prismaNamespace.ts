@@ -391,6 +391,8 @@ export const ModelName = {
   Endereco: 'Endereco',
   Pedido: 'Pedido',
   PedidoItem: 'PedidoItem',
+  VitrineAba: 'VitrineAba',
+  VitrineAbaProduto: 'VitrineAbaProduto',
   InspiracaoSemana: 'InspiracaoSemana'
 } as const
 
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "inspiracaoSemana"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "inspiracaoSemana"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -929,6 +931,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    VitrineAba: {
+      payload: Prisma.$VitrineAbaPayload<ExtArgs>
+      fields: Prisma.VitrineAbaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VitrineAbaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VitrineAbaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>
+        }
+        findFirst: {
+          args: Prisma.VitrineAbaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VitrineAbaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>
+        }
+        findMany: {
+          args: Prisma.VitrineAbaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>[]
+        }
+        create: {
+          args: Prisma.VitrineAbaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>
+        }
+        createMany: {
+          args: Prisma.VitrineAbaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VitrineAbaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>[]
+        }
+        delete: {
+          args: Prisma.VitrineAbaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>
+        }
+        update: {
+          args: Prisma.VitrineAbaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>
+        }
+        deleteMany: {
+          args: Prisma.VitrineAbaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VitrineAbaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VitrineAbaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>[]
+        }
+        upsert: {
+          args: Prisma.VitrineAbaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaPayload>
+        }
+        aggregate: {
+          args: Prisma.VitrineAbaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVitrineAba>
+        }
+        groupBy: {
+          args: Prisma.VitrineAbaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VitrineAbaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VitrineAbaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VitrineAbaCountAggregateOutputType> | number
+        }
+      }
+    }
+    VitrineAbaProduto: {
+      payload: Prisma.$VitrineAbaProdutoPayload<ExtArgs>
+      fields: Prisma.VitrineAbaProdutoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VitrineAbaProdutoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VitrineAbaProdutoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>
+        }
+        findFirst: {
+          args: Prisma.VitrineAbaProdutoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VitrineAbaProdutoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>
+        }
+        findMany: {
+          args: Prisma.VitrineAbaProdutoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>[]
+        }
+        create: {
+          args: Prisma.VitrineAbaProdutoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>
+        }
+        createMany: {
+          args: Prisma.VitrineAbaProdutoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VitrineAbaProdutoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>[]
+        }
+        delete: {
+          args: Prisma.VitrineAbaProdutoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>
+        }
+        update: {
+          args: Prisma.VitrineAbaProdutoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>
+        }
+        deleteMany: {
+          args: Prisma.VitrineAbaProdutoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VitrineAbaProdutoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VitrineAbaProdutoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>[]
+        }
+        upsert: {
+          args: Prisma.VitrineAbaProdutoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VitrineAbaProdutoPayload>
+        }
+        aggregate: {
+          args: Prisma.VitrineAbaProdutoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVitrineAbaProduto>
+        }
+        groupBy: {
+          args: Prisma.VitrineAbaProdutoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VitrineAbaProdutoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VitrineAbaProdutoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VitrineAbaProdutoCountAggregateOutputType> | number
+        }
+      }
+    }
     InspiracaoSemana: {
       payload: Prisma.$InspiracaoSemanaPayload<ExtArgs>
       fields: Prisma.InspiracaoSemanaFieldRefs
@@ -1137,6 +1287,30 @@ export const PedidoItemScalarFieldEnum = {
 } as const
 
 export type PedidoItemScalarFieldEnum = (typeof PedidoItemScalarFieldEnum)[keyof typeof PedidoItemScalarFieldEnum]
+
+
+export const VitrineAbaScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  slug: 'slug',
+  ordem: 'ordem',
+  ativo: 'ativo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VitrineAbaScalarFieldEnum = (typeof VitrineAbaScalarFieldEnum)[keyof typeof VitrineAbaScalarFieldEnum]
+
+
+export const VitrineAbaProdutoScalarFieldEnum = {
+  id: 'id',
+  abaId: 'abaId',
+  produtoId: 'produtoId',
+  ordem: 'ordem',
+  createdAt: 'createdAt'
+} as const
+
+export type VitrineAbaProdutoScalarFieldEnum = (typeof VitrineAbaProdutoScalarFieldEnum)[keyof typeof VitrineAbaProdutoScalarFieldEnum]
 
 
 export const InspiracaoSemanaScalarFieldEnum = {
@@ -1430,6 +1604,8 @@ export type GlobalOmitConfig = {
   endereco?: Prisma.EnderecoOmit
   pedido?: Prisma.PedidoOmit
   pedidoItem?: Prisma.PedidoItemOmit
+  vitrineAba?: Prisma.VitrineAbaOmit
+  vitrineAbaProduto?: Prisma.VitrineAbaProdutoOmit
   inspiracaoSemana?: Prisma.InspiracaoSemanaOmit
 }
 
