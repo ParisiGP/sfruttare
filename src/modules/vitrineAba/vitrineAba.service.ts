@@ -53,8 +53,15 @@ export class VitrineAbaService {
             categoria: {
               nome: vinculo.produto.categoria.nome,
             },
-            imagemUrl:
-              vinculo.produto.imagens[0]?.url ?? null,
+            imagens: vinculo.produto.imagens.map(
+              (imagem) => ({
+                id: imagem.id,
+                url: imagem.url,
+                zoom: imagem.zoom,
+                offsetX: imagem.offsetX,
+                offsetY: imagem.offsetY,
+              })
+            ),
           })
         ),
       }));

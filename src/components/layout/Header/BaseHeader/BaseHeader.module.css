@@ -188,6 +188,12 @@
 
 /* OVERLAY */
 
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
 .overlay {
   position: fixed;
   inset: 0;
@@ -198,9 +204,17 @@
   backdrop-filter: blur(3px);
 
   z-index: 110;
+
+  animation: overlayFadeIn 160ms ease;
 }
 
 /* SIDEBAR */
+
+@keyframes navSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+}
 
 .nav {
   position: fixed;
@@ -231,6 +245,8 @@
   -webkit-overflow-scrolling: touch;
 
   z-index: 120;
+
+  animation: navSlideIn 220ms ease;
 }
 
 .closeMenuButton {

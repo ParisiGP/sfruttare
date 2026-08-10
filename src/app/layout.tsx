@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import {
   ClientHeader,
 } from "@/components/layout/Header/ClientHeader/ClientHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
 import "@/styles/globals.scss";
 import "./globals.css";
 
@@ -44,19 +45,7 @@ export default async function RootLayout({
             <div className="app-content">
               {children}
             </div>
-            <footer className="site-footer">
-              <div>
-                <strong>sfruttare</strong>
-                <span>
-                  Pecas unicas, selecionadas com
-                  carinho para contar novas historias.
-                </span>
-              </div>
-              <small>
-                © 2026 Sfruttare Brecho. Todos os
-                direitos reservados.
-              </small>
-            </footer>
+            <SiteFooter />
           </div>
         </SessionProvider>
       </body>

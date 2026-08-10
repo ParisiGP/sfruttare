@@ -14,6 +14,9 @@ import styles from "./PhotoEditor.module.css";
 
 type PhotoEditorProps = {
   imagens: ProdutoImagem[];
+  produtoNome: string;
+  produtoPreco: number;
+  categoriaNome: string;
   onClose: () => void;
   onSave: (
     imagens: ProdutoImagem[]
@@ -22,6 +25,9 @@ type PhotoEditorProps = {
 
 export function PhotoEditor({
   imagens,
+  produtoNome,
+  produtoPreco,
+  categoriaNome,
   onClose,
   onSave,
 }: PhotoEditorProps) {
@@ -42,20 +48,20 @@ export function PhotoEditor({
         imagem.id === imagemSelecionadaId
     ) ?? imagensEditadas[0];
 
-  if (!imagemSelecionada) {
-    return null;
-  }
-
   const [crop, setCrop] =
     useState({
-      x: imagemSelecionada.offsetX,
-      y: imagemSelecionada.offsetY,
+      x: imagemSelecionada?.offsetX ?? 0,
+      y: imagemSelecionada?.offsetY ?? 0,
     });
 
   const [zoom, setZoom] =
-    useState(imagemSelecionada.zoom);
+    useState(imagemSelecionada?.zoom ?? 1);
 
   useEffect(() => {
+    if (!imagemSelecionada) {
+      return;
+    }
+
     setCrop({
       x: imagemSelecionada.offsetX,
       y: imagemSelecionada.offsetY,
@@ -78,6 +84,16 @@ export function PhotoEditor({
       )
     );
   }
+
+  if (!imagemSelecionada) {
+    return null;
+  }
+
+  const precoFormatado =
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(produtoPreco);
 
   return (
     <div className={styles.wrapper}>
@@ -129,15 +145,15 @@ export function PhotoEditor({
                 styles.category
               }
             >
-              Categoria
+              {categoriaNome}
             </span>
 
             <h3>
-              Vestido Midi Floral
+              {produtoNome}
             </h3>
 
             <strong>
-              R$ 189,90
+              {precoFormatado}
             </strong>
           </div>
         </div>
@@ -228,7 +244,6 @@ export function PhotoEditor({
           className={styles.save}
           
           onClick={async () => {
-            console.log(imagensEditadas);
             const resultado =
               await salvarEnquadramentoFotos(
                 imagensEditadas

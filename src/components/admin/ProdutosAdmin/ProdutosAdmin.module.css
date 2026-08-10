@@ -234,7 +234,8 @@
   }
 
   .newButton,
-  .filters button {
+  .filters button,
+  .secondaryButton {
     width: 100%;
   }
 

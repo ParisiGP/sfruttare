@@ -1,9 +1,13 @@
 .content {
-  /* width: min(460px, calc(100vw - 84px)); */
-  /* display: flex;
-  flex-direction: column; */
+  width: min(100%, 89vw);
   gap: 16px;
   color: var(--color-text);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .title {

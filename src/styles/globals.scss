@@ -1,0 +1,6 @@
+// Fundação de estilos globais em SCSS. Os estilos globais "vivos"
+// do projeto ficam em src/app/globals.css (CSS puro); este arquivo
+// existe para expor breakpoints/mixins compartilhados a outros
+// arquivos .scss do projeto via `@use "@/styles/globals" as *;`.
+@forward "./variables";
+@forward "./mixins";

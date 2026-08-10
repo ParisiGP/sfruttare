@@ -50,7 +50,7 @@ export function HeaderSidebar({
       />
 
       <nav
-        className={`${styles.nav} ${styles.navOpen}`}
+        className={styles.nav}
         aria-label={navLabel}
         onClick={handleNavClick}
       >

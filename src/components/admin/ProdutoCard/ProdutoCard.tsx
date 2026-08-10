@@ -374,6 +374,9 @@ export function ProdutoCard({
       >
         <PhotoEditor
           imagens={produto.imagens}
+          produtoNome={produto.nome}
+          produtoPreco={produto.preco}
+          categoriaNome={produto.categoria.nome}
           onClose={() =>
             setEditorAberto(false)
           }

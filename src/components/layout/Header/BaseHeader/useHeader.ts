@@ -14,7 +14,6 @@ export function useHeader() {
         useState(false);
 
     const closeMenu = useCallback(() => {
-        console.log("Close Menu");
         setMenuAberto(false);
     }, []);
 
@@ -23,7 +22,6 @@ export function useHeader() {
     }, []);
 
     const toggleMenu = useCallback(() => {
-        console.log("toggle menu");
         setMenuAberto((aberto) => !aberto);
     }, []);
 
@@ -72,26 +70,17 @@ export function useHeader() {
     }, [menuAberto]);
 
     useEffect(() => {
-  document.documentElement.classList.toggle(
-    "menu-open",
-    menuAberto
-  );
+        if (!menuAberto) {
+            document.body.style.overflow = "";
+            return;
+        }
 
-  document.body.classList.toggle(
-    "menu-open",
-    menuAberto
-  );
+        document.body.style.overflow = "hidden";
 
-  return () => {
-    document.documentElement.classList.remove(
-      "menu-open"
-    );
-
-    document.body.classList.remove(
-      "menu-open"
-    );
-  };
-}, [menuAberto]);
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [menuAberto]);
 
     useEffect(() => {
         const handleEscape = (

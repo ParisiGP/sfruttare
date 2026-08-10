@@ -7,6 +7,14 @@ export type VitrineAbaAdminItem = {
   totalProdutos: number;
 };
 
+export type VitrineAbaProdutoImagem = {
+  id: string;
+  url: string;
+  zoom: number;
+  offsetX: number;
+  offsetY: number;
+};
+
 export type VitrineAbaProdutoResumo = {
   id: string;
   nome: string;
@@ -16,7 +24,7 @@ export type VitrineAbaProdutoResumo = {
   categoria: {
     nome: string;
   };
-  imagemUrl: string | null;
+  imagens: VitrineAbaProdutoImagem[];
 };
 
 export type VitrineAbaPublica = {

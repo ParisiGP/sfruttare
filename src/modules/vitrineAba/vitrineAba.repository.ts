@@ -48,7 +48,6 @@ export class VitrineAbaRepository {
                   orderBy: {
                     ordem: "asc",
                   },
-                  take: 1,
                 },
               },
             },

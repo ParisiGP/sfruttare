@@ -49,6 +49,7 @@
 
 .tab {
   flex: 0 0 auto;
+  width: auto;
   min-height: 44px;
   padding: 0 18px;
   border: none;

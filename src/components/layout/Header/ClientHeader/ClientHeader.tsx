@@ -17,21 +17,6 @@ const navItems = [
     href: "/",
     label: "Inicio",
   },
-  {
-    id: "sobre",
-    href: "/sobre",
-    label: "Sobre",
-  },
-  {
-    id: "pecas",
-    href: "/",
-    label: "Pecas",
-  },
-  {
-    id: "contato",
-    href: "/contato",
-    label: "Contato",
-  },
 ];
 
 export function ClientHeader() {
