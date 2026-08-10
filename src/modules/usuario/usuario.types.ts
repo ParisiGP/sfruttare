@@ -9,3 +9,10 @@ export type UsuarioAuth = {
   senha: string;
   role: UsuarioRole;
 };
+
+export type UsuarioPerfil = {
+  id: string;
+  nome: string;
+  email: string;
+  role: UsuarioRole;
+};

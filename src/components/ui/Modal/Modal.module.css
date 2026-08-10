@@ -16,10 +16,8 @@
   width: min(100%, 80vw);
   max-width: calc(800px);
   max-height: calc(100vh - 24px);
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center; */
   gap: 16px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -33,6 +31,10 @@
 }
 
 .content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 8px;
 }
 

@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --color-background: #f8f4ed;
+  --color-surface: #ffffff;
+  --color-primary: #8b6b3f;
+  --color-primary-hover: #725632;
+  --color-text: #3b3124;
+  --color-text-muted: #7a6a57;
+  --color-border: #e8ded1;
+  --color-success: #7a9b76;
+  --color-warning: #c89b3c;
+  --color-danger: #a85c4a;
+  --shadow-soft: 0 22px 60px rgba(59, 49, 36, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --font-serif: Georgia, serif;
+}
+body { font-family: sans-serif; background: #ddd; }
+
+/* ===== CURRENT Modal.module.css (bug reproduction) ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(35, 28, 20, 0.62);
+}
+.modal {
+  position: relative;
+  width: min(100%, 80vw);
+  max-width: 800px;
+  max-height: calc(100vh - 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 24px 20px;
+  border: 1px solid rgba(232, 222, 209, 0.9);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  outline: 3px dashed red;
+}
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+  outline: 2px dashed blue;
+}
+.closeButton {
+  position: absolute; top: 0; left: 10px;
+  width: 44px; height: 44px;
+}
+
+/* ===== VitrineAbaModal.module.css ===== */
+.abaContent {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--color-text);
+  outline: 2px dashed green;
+}
+.field input { width: 100%; min-height: 42px; padding: 10px 12px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+
+<p>Vermelho = .modal | Azul = .content (wrapper interno do Modal.tsx) | Verde = .content do VitrineAbaModal (width: min(100%,420px))</p>
+
+<div class="overlay">
+  <div class="modal">
+    <button class="closeButton">x</button>
+    <div class="content">
+      <div class="abaContent">
+        <h2>Nova aba</h2>
+        <label><span>Nome</span><input placeholder="Ex: Novidades" /></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

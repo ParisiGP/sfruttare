@@ -27,4 +27,19 @@ export class UsuarioRepository {
     data,
   });
 }
+
+  async update(
+    id: string,
+    data: {
+      nome: string;
+      email: string;
+    }
+  ) {
+    return prisma.usuario.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }
