@@ -120,6 +120,8 @@ model Endereco {
 
   usuario     Usuario @relation(fields: [usuarioId], references: [id])
 
+  pedidos     Pedido[]
+
   createdAt   DateTime @default(now())
 }
 
@@ -129,6 +131,10 @@ model Pedido {
   usuarioId  String
 
   usuario    Usuario @relation(fields: [usuarioId], references: [id])
+
+  enderecoId String?
+
+  endereco   Endereco? @relation(fields: [enderecoId], references: [id])
 
   status     PedidoStatus @default(PIX_PENDENTE)
 
@@ -157,6 +163,8 @@ model PedidoItem {
 
   pedido         Pedido  @relation(fields: [pedidoId], references: [id])
   produto        Produto @relation(fields: [produtoId], references: [id])
+
+  quantidade     Int @default(1)
 
   precoUnitario  Decimal @db.Decimal(10,2)
 

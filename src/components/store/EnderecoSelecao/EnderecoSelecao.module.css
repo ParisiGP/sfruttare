@@ -1,0 +1,238 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.addButton {
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  text-decoration: underline;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 20px;
+  border: 1px dashed rgba(139, 107, 63, 0.38);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.42);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.empty strong {
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.itemLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.itemLabel input {
+  width: auto;
+  margin-top: 4px;
+  accent-color: var(--color-primary);
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.itemLinha {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.itemAcoes {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.itemAcoes button {
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: right;
+}
+
+.itemAcoes button:hover {
+  text-decoration: underline;
+}
+
+.excluirButton {
+  color: var(--color-danger) !important;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 520px);
+  color: var(--color-text);
+}
+
+.formTitle {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.field {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field span {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.field .cepStatus {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.field .cepStatusErro {
+  color: var(--color-danger);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.fieldWide {
+  grid-column: span 2;
+}
+
+.error {
+  margin: 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(168, 92, 74, 0.24);
+  border-radius: var(--radius-sm);
+  background: rgba(168, 92, 74, 0.08);
+  color: var(--color-danger);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.deleteContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .item {
+    flex-direction: column;
+  }
+
+  .itemAcoes {
+    flex-direction: row;
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldWide {
+    grid-column: span 1;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+}

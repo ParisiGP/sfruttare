@@ -158,6 +158,7 @@ export type EnderecoScalarFieldEnum = (typeof EnderecoScalarFieldEnum)[keyof typ
 export const PedidoScalarFieldEnum = {
   id: 'id',
   usuarioId: 'usuarioId',
+  enderecoId: 'enderecoId',
   status: 'status',
   frete: 'frete',
   total: 'total',
@@ -171,6 +172,7 @@ export const PedidoItemScalarFieldEnum = {
   id: 'id',
   pedidoId: 'pedidoId',
   produtoId: 'produtoId',
+  quantidade: 'quantidade',
   precoUnitario: 'precoUnitario',
   createdAt: 'createdAt'
 } as const

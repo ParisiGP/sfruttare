@@ -7,7 +7,8 @@ export default auth((req) => {
   const isLoginRoute = req.nextUrl.pathname === "/admin/login";
   const isRotaAutenticada =
     req.nextUrl.pathname === "/perfil" ||
-    req.nextUrl.pathname === "/carrinho";
+    req.nextUrl.pathname === "/carrinho" ||
+    req.nextUrl.pathname === "/checkout";
 
   // Permite acessar a tela de login sem estar autenticado
   if (isLoginRoute) {
@@ -26,5 +27,10 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/perfil", "/carrinho"],
+  matcher: [
+    "/admin/:path*",
+    "/perfil",
+    "/carrinho",
+    "/checkout",
+  ],
 };
