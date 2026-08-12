@@ -32,3 +32,11 @@ export const perfilSchema = z.object({
 });
 
 export type PerfilInput = z.infer<typeof perfilSchema>;
+
+export const alterarRoleSchema = z.object({
+  id: z.string().cuid(),
+  role: z.enum(["ADMIN", "CLIENTE"]),
+});
+
+export type AlterarRoleInput =
+  z.infer<typeof alterarRoleSchema>;

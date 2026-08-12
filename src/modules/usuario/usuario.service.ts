@@ -4,6 +4,7 @@ import {
   perfilSchema,
   type PerfilInput,
 } from "./usuario.schema";
+import type { UsuarioRole } from "./usuario.types";
 
 import bcrypt from "bcrypt";
 
@@ -86,6 +87,65 @@ export class UsuarioService {
     return this.usuarioRepository.update(
       id,
       dadosValidados
+    );
+  }
+
+  async listarUsuarios(busca?: string) {
+    const usuarios =
+      await this.usuarioRepository.findAll(
+        busca
+      );
+
+    return usuarios.map((usuario) => ({
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      role: usuario.role,
+      createdAt: usuario.createdAt,
+    }));
+  }
+
+  async alterarRole(
+    idAlvo: string,
+    novoRole: UsuarioRole,
+    idSolicitante: string
+  ) {
+    if (idAlvo === idSolicitante) {
+      throw new Error(
+        "Você não pode alterar seu próprio nível de acesso."
+      );
+    }
+
+    const usuarioAlvo =
+      await this.usuarioRepository.findById(
+        idAlvo
+      );
+
+    if (!usuarioAlvo) {
+      throw new Error(
+        "Usuário não encontrado."
+      );
+    }
+
+    if (
+      usuarioAlvo.role === "ADMIN" &&
+      novoRole === "CLIENTE"
+    ) {
+      const totalAdmins =
+        await this.usuarioRepository.countByRole(
+          "ADMIN"
+        );
+
+      if (totalAdmins <= 1) {
+        throw new Error(
+          "Não é possível remover o último administrador do sistema."
+        );
+      }
+    }
+
+    return this.usuarioRepository.updateRole(
+      idAlvo,
+      novoRole
     );
   }
 }

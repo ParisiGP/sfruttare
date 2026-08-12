@@ -59,3 +59,19 @@
   font-size: 14px;
   line-height: 1.5;
 }
+
+.loginLink {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.loginLink a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.loginLink a:hover {
+  text-decoration: underline;
+}

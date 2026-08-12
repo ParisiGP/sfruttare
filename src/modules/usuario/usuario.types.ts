@@ -16,3 +16,11 @@ export type UsuarioPerfil = {
   email: string;
   role: UsuarioRole;
 };
+
+export type UsuarioAdminItem = {
+  id: string;
+  nome: string;
+  email: string;
+  role: UsuarioRole;
+  createdAt: Date;
+};

@@ -1,9 +1,12 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
 
 import { requireAuth } from "@/lib/auth/requireAuth";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { UsuarioService } from "./usuario.service";
+import { alterarRoleSchema } from "./usuario.schema";
 
 const usuarioService =
   new UsuarioService();
@@ -88,5 +91,39 @@ export async function atualizarPerfil(
     };
   } catch (error) {
     return handleError("atualizarPerfil", error);
+  }
+}
+
+export async function alterarRoleUsuario(
+  prevState: UsuarioActionState,
+  formData: FormData
+): Promise<UsuarioActionState> {
+  try {
+    const admin = await requireAdmin();
+
+    const dadosValidados =
+      alterarRoleSchema.parse({
+        id: formData.get("id"),
+        role: formData.get("role"),
+      });
+
+    await usuarioService.alterarRole(
+      dadosValidados.id,
+      dadosValidados.role,
+      admin.id
+    );
+
+    revalidatePath("/admin/usuarios");
+
+    return {
+      ok: true,
+      message:
+        "Nível de acesso atualizado com sucesso.",
+    };
+  } catch (error) {
+    return handleError(
+      "alterarRoleUsuario",
+      error
+    );
   }
 }

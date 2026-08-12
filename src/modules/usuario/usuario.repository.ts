@@ -42,4 +42,54 @@ export class UsuarioRepository {
       data,
     });
   }
+
+  async findAll(busca?: string) {
+    return prisma.usuario.findMany({
+      where: busca
+        ? {
+          OR: [
+            {
+              nome: {
+                contains: busca,
+                mode: "insensitive",
+              },
+            },
+            {
+              email: {
+                contains: busca,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }
+        : undefined,
+      orderBy: {
+        nome: "asc",
+      },
+    });
+  }
+
+  async countByRole(
+    role: "ADMIN" | "CLIENTE"
+  ) {
+    return prisma.usuario.count({
+      where: {
+        role,
+      },
+    });
+  }
+
+  async updateRole(
+    id: string,
+    role: "ADMIN" | "CLIENTE"
+  ) {
+    return prisma.usuario.update({
+      where: {
+        id,
+      },
+      data: {
+        role,
+      },
+    });
+  }
 }

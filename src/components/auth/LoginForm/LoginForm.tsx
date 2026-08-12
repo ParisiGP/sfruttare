@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { Input } from "@/components/ui/Input/Input";
 import { Button } from "@/components/ui/Button/Button";
@@ -11,13 +11,13 @@ import styles from "./LoginForm.module.css";
 
 type LoginFormProps = {
   subtitle?: string;
+  exibirLinkCadastro?: boolean;
 };
 
 export function LoginForm({
   subtitle = "Entrar",
+  exibirLinkCadastro = false,
 }: LoginFormProps) {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
@@ -50,8 +50,7 @@ export function LoginForm({
         ? "/admin/produtos"
         : "/perfil";
 
-    router.push(destino);
-    router.refresh();
+    window.location.href = destino;
   }
 
   return (
@@ -107,6 +106,13 @@ export function LoginForm({
           {carregando ? "Entrando..." : "Entrar"}
         </Button>
       </form>
+
+      {exibirLinkCadastro && (
+        <p className={styles.loginLink}>
+          Ainda não possui conta?{" "}
+          <Link href="/cadastro">Criar conta</Link>
+        </p>
+      )}
     </section>
   );
 }

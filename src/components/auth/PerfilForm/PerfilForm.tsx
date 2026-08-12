@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useActionState, useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/Input/Input";
@@ -32,6 +32,8 @@ export function PerfilForm({
   const [state, formAction, pending] =
     useActionState(atualizarPerfil, initialState);
 
+  const [saindo, setSaindo] = useState(false);
+
   useEffect(() => {
     if (state.ok && state.nome && state.email) {
       update({
@@ -40,6 +42,11 @@ export function PerfilForm({
       });
     }
   }, [state, update]);
+
+  async function handleSair() {
+    setSaindo(true);
+    await signOut({ callbackUrl: "/" });
+  }
 
   return (
     <section className={styles.wrapper}>
@@ -110,6 +117,17 @@ export function PerfilForm({
           </Link>
         </div>
       )}
+
+      <div className={styles.logoutSection}>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={saindo}
+          onClick={handleSair}
+        >
+          {saindo ? "Saindo..." : "Sair da conta"}
+        </Button>
+      </div>
     </section>
   );
 }
