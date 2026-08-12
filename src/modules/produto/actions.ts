@@ -50,6 +50,18 @@ function getText(
     : "";
 }
 
+function getOptionalNumber(
+  formData: FormData,
+  key: string
+) {
+  const value =
+    getText(formData, key);
+
+  return value === ""
+    ? undefined
+    : Number(value);
+}
+
 function getTipo(formData: FormData): ProdutoTipo {
   return getText(formData, "tipo") === "NA_ETIQUETA"
     ? "NA_ETIQUETA"
@@ -230,6 +242,22 @@ async function buildProdutoPayload(
         formData,
         "estoque"
       )
+    ),
+    pesoGramas: getOptionalNumber(
+      formData,
+      "pesoGramas"
+    ),
+    alturaCm: getOptionalNumber(
+      formData,
+      "alturaCm"
+    ),
+    larguraCm: getOptionalNumber(
+      formData,
+      "larguraCm"
+    ),
+    comprimentoCm: getOptionalNumber(
+      formData,
+      "comprimentoCm"
     ),
     categoriaId:
       getText(

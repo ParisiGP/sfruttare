@@ -68,6 +68,10 @@ export class CarrinhoService {
           categoria: {
             nome: item.produto.categoria.nome,
           },
+          pesoGramas: item.produto.pesoGramas,
+          alturaCm: item.produto.alturaCm,
+          larguraCm: item.produto.larguraCm,
+          comprimentoCm: item.produto.comprimentoCm,
         },
         precoUnitario,
         quantidade: item.quantidade,

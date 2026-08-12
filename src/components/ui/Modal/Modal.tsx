@@ -18,6 +18,9 @@ export function Modal({
   const closeButtonRef =
     useRef<HTMLButtonElement>(null);
 
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
   useEffect(() => {
     if (!aberto) {
       document.body.style.overflow = "";
@@ -30,7 +33,7 @@ export function Modal({
 
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
       }
     }
 
@@ -40,7 +43,7 @@ export function Modal({
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleEscape);
     };
-  }, [aberto, onClose]);
+  }, [aberto]);
 
   if (!aberto) {
     return null;

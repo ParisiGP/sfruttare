@@ -99,6 +99,18 @@ export function ProdutoForm({
         String(
           produto?.estoque ?? 1
         ),
+      pesoGramas:
+        produto?.pesoGramas?.toString() ??
+        "",
+      alturaCm:
+        produto?.alturaCm?.toString() ??
+        "",
+      larguraCm:
+        produto?.larguraCm?.toString() ??
+        "",
+      comprimentoCm:
+        produto?.comprimentoCm?.toString() ??
+        "",
       tipo:
         produto?.tipo ??
         "BRECHO",
@@ -466,7 +478,83 @@ export function ProdutoForm({
               </option>
             </select>
           </Field>
+
+          <Field label="Peso (gramas)">
+            <input
+              name="pesoGramas"
+              type="number"
+              min="1"
+              step="1"
+              value={formValues.pesoGramas}
+              onChange={(event) =>
+                updateField(
+                  "pesoGramas",
+                  event.target.value
+                )
+              }
+            />
+          </Field>
+
+          <Field label="Altura (cm)">
+            <input
+              name="alturaCm"
+              type="number"
+              min="1"
+              step="1"
+              value={formValues.alturaCm}
+              onChange={(event) =>
+                updateField(
+                  "alturaCm",
+                  event.target.value
+                )
+              }
+            />
+          </Field>
+
+          <Field label="Largura (cm)">
+            <input
+              name="larguraCm"
+              type="number"
+              min="1"
+              step="1"
+              value={formValues.larguraCm}
+              onChange={(event) =>
+                updateField(
+                  "larguraCm",
+                  event.target.value
+                )
+              }
+            />
+          </Field>
+
+          <Field label="Comprimento (cm)">
+            <input
+              name="comprimentoCm"
+              type="number"
+              min="1"
+              step="1"
+              value={formValues.comprimentoCm}
+              onChange={(event) =>
+                updateField(
+                  "comprimentoCm",
+                  event.target.value
+                )
+              }
+            />
+          </Field>
         </div>
+
+        {(!formValues.pesoGramas ||
+          !formValues.alturaCm ||
+          !formValues.larguraCm ||
+          !formValues.comprimentoCm) && (
+          <p className={styles.fieldHint}>
+            Preencha peso e dimensões para que o
+            frete seja calculado automaticamente no
+            checkout. Sem esses dados, um pacote
+            padrão será usado como estimativa.
+          </p>
+        )}
       </section>
 
       <section className={styles.section}>

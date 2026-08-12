@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Modal } from "@/components/ui/Modal/Modal";
@@ -20,6 +20,9 @@ import styles from "./EnderecoSelecao.module.css";
 
 type EnderecoSelecaoProps = {
   enderecos: EnderecoResumo[];
+  onEnderecoSelecionado?: (
+    endereco: EnderecoResumo | null
+  ) => void;
 };
 
 const formVazio: EnderecoInput = {
@@ -34,6 +37,7 @@ const formVazio: EnderecoInput = {
 
 export function EnderecoSelecao({
   enderecos,
+  onEnderecoSelecionado,
 }: EnderecoSelecaoProps) {
   const router = useRouter();
 
@@ -41,6 +45,31 @@ export function EnderecoSelecao({
     useState<string | null>(
       enderecos[0]?.id ?? null
     );
+
+  const onEnderecoSelecionadoRef = useRef(
+    onEnderecoSelecionado
+  );
+  onEnderecoSelecionadoRef.current =
+    onEnderecoSelecionado;
+
+  useEffect(() => {
+    const aindaExiste = enderecos.some(
+      (endereco) => endereco.id === selecionadoId
+    );
+
+    if (!aindaExiste) {
+      setSelecionadoId(enderecos[0]?.id ?? null);
+    }
+  }, [enderecos, selecionadoId]);
+
+  useEffect(() => {
+    const selecionado =
+      enderecos.find(
+        (endereco) => endereco.id === selecionadoId
+      ) ?? null;
+
+    onEnderecoSelecionadoRef.current?.(selecionado);
+  }, [selecionadoId, enderecos]);
 
   const [formAberto, setFormAberto] =
     useState(false);

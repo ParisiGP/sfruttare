@@ -35,6 +35,10 @@ export type ProdutoAdminItem = {
   tamanho: string;
   preco: number;
   estoque: number;
+  pesoGramas: number | null;
+  alturaCm: number | null;
+  larguraCm: number | null;
+  comprimentoCm: number | null;
   categoriaId: string;
   categoria: {
     nome: string;

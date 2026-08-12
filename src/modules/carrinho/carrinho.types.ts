@@ -14,6 +14,10 @@ export type CarrinhoItemResumo = {
     categoria: {
       nome: string;
     };
+    pesoGramas: number | null;
+    alturaCm: number | null;
+    larguraCm: number | null;
+    comprimentoCm: number | null;
   };
   precoUnitario: number;
   quantidade: number;

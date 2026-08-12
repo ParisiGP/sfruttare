@@ -17,6 +17,10 @@ export type ProdutoWriteData = {
   tamanho?: string;
   preco: number;
   estoque: number;
+  pesoGramas?: number;
+  alturaCm?: number;
+  larguraCm?: number;
+  comprimentoCm?: number;
   categoriaId: string;
   tipo: ProdutoTipo;
   status: ProdutoStatus;

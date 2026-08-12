@@ -34,6 +34,11 @@ model Produto {
   status      ProdutoStatus @default(DISPONIVEL)
   estoque     Int @default(1)
 
+  pesoGramas    Int?
+  alturaCm      Int?
+  larguraCm     Int?
+  comprimentoCm Int?
+
   ordem       Int @default(0)
 
   categoriaId String

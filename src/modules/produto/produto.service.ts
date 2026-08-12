@@ -731,6 +731,10 @@ export class ProdutoService {
     tamanho?: string | null;
     preco: unknown;
     estoque: number;
+    pesoGramas?: number | null;
+    alturaCm?: number | null;
+    larguraCm?: number | null;
+    comprimentoCm?: number | null;
     categoriaId: string;
     categoria: {
       nome: string;
@@ -760,6 +764,10 @@ export class ProdutoService {
       tamanho: produto.tamanho ?? "",
       preco: Number(produto.preco),
       estoque: produto.estoque,
+      pesoGramas: produto.pesoGramas ?? null,
+      alturaCm: produto.alturaCm ?? null,
+      larguraCm: produto.larguraCm ?? null,
+      comprimentoCm: produto.comprimentoCm ?? null,
       categoriaId: produto.categoriaId,
       categoria: {
         nome: produto.categoria.nome,

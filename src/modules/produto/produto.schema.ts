@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+function campoNumericoOpcional(mensagem: string) {
+  return z.preprocess(
+    (valor) =>
+      valor === "" || valor === null || valor === undefined
+        ? undefined
+        : valor,
+    z.coerce.number().int().positive(mensagem).optional()
+  );
+}
+
 const imagemSchema = z.object({
   id: z.string().optional(),
 
@@ -69,6 +79,22 @@ export const produtoSchema = z.object({
     .number()
     .int()
     .min(0, "Estoque nao pode ser negativo"),
+
+  pesoGramas: campoNumericoOpcional(
+    "Peso deve ser maior que zero"
+  ),
+
+  alturaCm: campoNumericoOpcional(
+    "Altura deve ser maior que zero"
+  ),
+
+  larguraCm: campoNumericoOpcional(
+    "Largura deve ser maior que zero"
+  ),
+
+  comprimentoCm: campoNumericoOpcional(
+    "Comprimento deve ser maior que zero"
+  ),
 
   categoriaId: z.string().cuid(),
 

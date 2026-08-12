@@ -29,12 +29,20 @@ export type AggregateProduto = {
 export type ProdutoAvgAggregateOutputType = {
   preco: runtime.Decimal | null
   estoque: number | null
+  pesoGramas: number | null
+  alturaCm: number | null
+  larguraCm: number | null
+  comprimentoCm: number | null
   ordem: number | null
 }
 
 export type ProdutoSumAggregateOutputType = {
   preco: runtime.Decimal | null
   estoque: number | null
+  pesoGramas: number | null
+  alturaCm: number | null
+  larguraCm: number | null
+  comprimentoCm: number | null
   ordem: number | null
 }
 
@@ -51,6 +59,10 @@ export type ProdutoMinAggregateOutputType = {
   tipo: $Enums.ProdutoTipo | null
   status: $Enums.ProdutoStatus | null
   estoque: number | null
+  pesoGramas: number | null
+  alturaCm: number | null
+  larguraCm: number | null
+  comprimentoCm: number | null
   ordem: number | null
   categoriaId: string | null
   updatedAt: Date | null
@@ -70,6 +82,10 @@ export type ProdutoMaxAggregateOutputType = {
   tipo: $Enums.ProdutoTipo | null
   status: $Enums.ProdutoStatus | null
   estoque: number | null
+  pesoGramas: number | null
+  alturaCm: number | null
+  larguraCm: number | null
+  comprimentoCm: number | null
   ordem: number | null
   categoriaId: string | null
   updatedAt: Date | null
@@ -89,6 +105,10 @@ export type ProdutoCountAggregateOutputType = {
   tipo: number
   status: number
   estoque: number
+  pesoGramas: number
+  alturaCm: number
+  larguraCm: number
+  comprimentoCm: number
   ordem: number
   categoriaId: number
   updatedAt: number
@@ -100,12 +120,20 @@ export type ProdutoCountAggregateOutputType = {
 export type ProdutoAvgAggregateInputType = {
   preco?: true
   estoque?: true
+  pesoGramas?: true
+  alturaCm?: true
+  larguraCm?: true
+  comprimentoCm?: true
   ordem?: true
 }
 
 export type ProdutoSumAggregateInputType = {
   preco?: true
   estoque?: true
+  pesoGramas?: true
+  alturaCm?: true
+  larguraCm?: true
+  comprimentoCm?: true
   ordem?: true
 }
 
@@ -122,6 +150,10 @@ export type ProdutoMinAggregateInputType = {
   tipo?: true
   status?: true
   estoque?: true
+  pesoGramas?: true
+  alturaCm?: true
+  larguraCm?: true
+  comprimentoCm?: true
   ordem?: true
   categoriaId?: true
   updatedAt?: true
@@ -141,6 +173,10 @@ export type ProdutoMaxAggregateInputType = {
   tipo?: true
   status?: true
   estoque?: true
+  pesoGramas?: true
+  alturaCm?: true
+  larguraCm?: true
+  comprimentoCm?: true
   ordem?: true
   categoriaId?: true
   updatedAt?: true
@@ -160,6 +196,10 @@ export type ProdutoCountAggregateInputType = {
   tipo?: true
   status?: true
   estoque?: true
+  pesoGramas?: true
+  alturaCm?: true
+  larguraCm?: true
+  comprimentoCm?: true
   ordem?: true
   categoriaId?: true
   updatedAt?: true
@@ -266,6 +306,10 @@ export type ProdutoGroupByOutputType = {
   tipo: $Enums.ProdutoTipo
   status: $Enums.ProdutoStatus
   estoque: number
+  pesoGramas: number | null
+  alturaCm: number | null
+  larguraCm: number | null
+  comprimentoCm: number | null
   ordem: number
   categoriaId: string
   updatedAt: Date
@@ -308,6 +352,10 @@ export type ProdutoWhereInput = {
   tipo?: Prisma.EnumProdutoTipoFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntFilter<"Produto"> | number
+  pesoGramas?: Prisma.IntNullableFilter<"Produto"> | number | null
+  alturaCm?: Prisma.IntNullableFilter<"Produto"> | number | null
+  larguraCm?: Prisma.IntNullableFilter<"Produto"> | number | null
+  comprimentoCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   ordem?: Prisma.IntFilter<"Produto"> | number
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -332,6 +380,10 @@ export type ProdutoOrderByWithRelationInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrderInput | Prisma.SortOrder
+  alturaCm?: Prisma.SortOrderInput | Prisma.SortOrder
+  larguraCm?: Prisma.SortOrderInput | Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrderInput | Prisma.SortOrder
   ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -359,6 +411,10 @@ export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
   tipo?: Prisma.EnumProdutoTipoFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntFilter<"Produto"> | number
+  pesoGramas?: Prisma.IntNullableFilter<"Produto"> | number | null
+  alturaCm?: Prisma.IntNullableFilter<"Produto"> | number | null
+  larguraCm?: Prisma.IntNullableFilter<"Produto"> | number | null
+  comprimentoCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   ordem?: Prisma.IntFilter<"Produto"> | number
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -383,6 +439,10 @@ export type ProdutoOrderByWithAggregationInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrderInput | Prisma.SortOrder
+  alturaCm?: Prisma.SortOrderInput | Prisma.SortOrder
+  larguraCm?: Prisma.SortOrderInput | Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrderInput | Prisma.SortOrder
   ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -410,6 +470,10 @@ export type ProdutoScalarWhereWithAggregatesInput = {
   tipo?: Prisma.EnumProdutoTipoWithAggregatesFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusWithAggregatesFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntWithAggregatesFilter<"Produto"> | number
+  pesoGramas?: Prisma.IntNullableWithAggregatesFilter<"Produto"> | number | null
+  alturaCm?: Prisma.IntNullableWithAggregatesFilter<"Produto"> | number | null
+  larguraCm?: Prisma.IntNullableWithAggregatesFilter<"Produto"> | number | null
+  comprimentoCm?: Prisma.IntNullableWithAggregatesFilter<"Produto"> | number | null
   ordem?: Prisma.IntWithAggregatesFilter<"Produto"> | number
   categoriaId?: Prisma.StringWithAggregatesFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Produto"> | Date | string
@@ -429,6 +493,10 @@ export type ProdutoCreateInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -452,6 +520,10 @@ export type ProdutoUncheckedCreateInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   categoriaId: string
   updatedAt?: Date | string
@@ -475,6 +547,10 @@ export type ProdutoUpdateInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -498,6 +574,10 @@ export type ProdutoUncheckedUpdateInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -521,6 +601,10 @@ export type ProdutoCreateManyInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   categoriaId: string
   updatedAt?: Date | string
@@ -540,6 +624,10 @@ export type ProdutoUpdateManyMutationInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -558,6 +646,10 @@ export type ProdutoUncheckedUpdateManyInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -587,6 +679,10 @@ export type ProdutoCountOrderByAggregateInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrder
+  alturaCm?: Prisma.SortOrder
+  larguraCm?: Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -596,6 +692,10 @@ export type ProdutoCountOrderByAggregateInput = {
 export type ProdutoAvgOrderByAggregateInput = {
   preco?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrder
+  alturaCm?: Prisma.SortOrder
+  larguraCm?: Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
 }
 
@@ -612,6 +712,10 @@ export type ProdutoMaxOrderByAggregateInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrder
+  alturaCm?: Prisma.SortOrder
+  larguraCm?: Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -631,6 +735,10 @@ export type ProdutoMinOrderByAggregateInput = {
   tipo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrder
+  alturaCm?: Prisma.SortOrder
+  larguraCm?: Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -640,6 +748,10 @@ export type ProdutoMinOrderByAggregateInput = {
 export type ProdutoSumOrderByAggregateInput = {
   preco?: Prisma.SortOrder
   estoque?: Prisma.SortOrder
+  pesoGramas?: Prisma.SortOrder
+  alturaCm?: Prisma.SortOrder
+  larguraCm?: Prisma.SortOrder
+  comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
 }
 
@@ -718,6 +830,14 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type ProdutoCreateNestedOneWithoutImagensInput = {
   create?: Prisma.XOR<Prisma.ProdutoCreateWithoutImagensInput, Prisma.ProdutoUncheckedCreateWithoutImagensInput>
   connectOrCreate?: Prisma.ProdutoCreateOrConnectWithoutImagensInput
@@ -787,6 +907,10 @@ export type ProdutoCreateWithoutCategoriaInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -809,6 +933,10 @@ export type ProdutoUncheckedCreateWithoutCategoriaInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -860,6 +988,10 @@ export type ProdutoScalarWhereInput = {
   tipo?: Prisma.EnumProdutoTipoFilter<"Produto"> | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFilter<"Produto"> | $Enums.ProdutoStatus
   estoque?: Prisma.IntFilter<"Produto"> | number
+  pesoGramas?: Prisma.IntNullableFilter<"Produto"> | number | null
+  alturaCm?: Prisma.IntNullableFilter<"Produto"> | number | null
+  larguraCm?: Prisma.IntNullableFilter<"Produto"> | number | null
+  comprimentoCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   ordem?: Prisma.IntFilter<"Produto"> | number
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -879,6 +1011,10 @@ export type ProdutoCreateWithoutImagensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -901,6 +1037,10 @@ export type ProdutoUncheckedCreateWithoutImagensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   categoriaId: string
   updatedAt?: Date | string
@@ -939,6 +1079,10 @@ export type ProdutoUpdateWithoutImagensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -961,6 +1105,10 @@ export type ProdutoUncheckedUpdateWithoutImagensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -983,6 +1131,10 @@ export type ProdutoCreateWithoutPedidoItensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1005,6 +1157,10 @@ export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   categoriaId: string
   updatedAt?: Date | string
@@ -1043,6 +1199,10 @@ export type ProdutoUpdateWithoutPedidoItensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1065,6 +1225,10 @@ export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1087,6 +1251,10 @@ export type ProdutoCreateWithoutAbasInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1109,6 +1277,10 @@ export type ProdutoUncheckedCreateWithoutAbasInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   categoriaId: string
   updatedAt?: Date | string
@@ -1147,6 +1319,10 @@ export type ProdutoUpdateWithoutAbasInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1169,6 +1345,10 @@ export type ProdutoUncheckedUpdateWithoutAbasInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1191,6 +1371,10 @@ export type ProdutoCreateWithoutCarrinhoItensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1213,6 +1397,10 @@ export type ProdutoUncheckedCreateWithoutCarrinhoItensInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   categoriaId: string
   updatedAt?: Date | string
@@ -1251,6 +1439,10 @@ export type ProdutoUpdateWithoutCarrinhoItensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1273,6 +1465,10 @@ export type ProdutoUncheckedUpdateWithoutCarrinhoItensInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1295,6 +1491,10 @@ export type ProdutoCreateManyCategoriaInput = {
   tipo?: $Enums.ProdutoTipo
   status?: $Enums.ProdutoStatus
   estoque?: number
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
   ordem?: number
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1313,6 +1513,10 @@ export type ProdutoUpdateWithoutCategoriaInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1335,6 +1539,10 @@ export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1357,6 +1565,10 @@ export type ProdutoUncheckedUpdateManyWithoutCategoriaInput = {
   tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
   status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
   estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1433,6 +1645,10 @@ export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  pesoGramas?: boolean
+  alturaCm?: boolean
+  larguraCm?: boolean
+  comprimentoCm?: boolean
   ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
@@ -1458,6 +1674,10 @@ export type ProdutoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  pesoGramas?: boolean
+  alturaCm?: boolean
+  larguraCm?: boolean
+  comprimentoCm?: boolean
   ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
@@ -1478,6 +1698,10 @@ export type ProdutoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  pesoGramas?: boolean
+  alturaCm?: boolean
+  larguraCm?: boolean
+  comprimentoCm?: boolean
   ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
@@ -1498,13 +1722,17 @@ export type ProdutoSelectScalar = {
   tipo?: boolean
   status?: boolean
   estoque?: boolean
+  pesoGramas?: boolean
+  alturaCm?: boolean
+  larguraCm?: boolean
+  comprimentoCm?: boolean
   ordem?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
 }
 
-export type ProdutoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "tamanho" | "descricao" | "cor" | "referencia" | "marca" | "preco" | "tipo" | "status" | "estoque" | "ordem" | "categoriaId" | "updatedAt" | "createdAt", ExtArgs["result"]["produto"]>
+export type ProdutoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "tamanho" | "descricao" | "cor" | "referencia" | "marca" | "preco" | "tipo" | "status" | "estoque" | "pesoGramas" | "alturaCm" | "larguraCm" | "comprimentoCm" | "ordem" | "categoriaId" | "updatedAt" | "createdAt", ExtArgs["result"]["produto"]>
 export type ProdutoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categoria?: boolean | Prisma.CategoriaDefaultArgs<ExtArgs>
   imagens?: boolean | Prisma.Produto$imagensArgs<ExtArgs>
@@ -1542,6 +1770,10 @@ export type $ProdutoPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tipo: $Enums.ProdutoTipo
     status: $Enums.ProdutoStatus
     estoque: number
+    pesoGramas: number | null
+    alturaCm: number | null
+    larguraCm: number | null
+    comprimentoCm: number | null
     ordem: number
     categoriaId: string
     updatedAt: Date
@@ -1986,6 +2218,10 @@ export interface ProdutoFieldRefs {
   readonly tipo: Prisma.FieldRef<"Produto", 'ProdutoTipo'>
   readonly status: Prisma.FieldRef<"Produto", 'ProdutoStatus'>
   readonly estoque: Prisma.FieldRef<"Produto", 'Int'>
+  readonly pesoGramas: Prisma.FieldRef<"Produto", 'Int'>
+  readonly alturaCm: Prisma.FieldRef<"Produto", 'Int'>
+  readonly larguraCm: Prisma.FieldRef<"Produto", 'Int'>
+  readonly comprimentoCm: Prisma.FieldRef<"Produto", 'Int'>
   readonly ordem: Prisma.FieldRef<"Produto", 'Int'>
   readonly categoriaId: Prisma.FieldRef<"Produto", 'String'>
   readonly updatedAt: Prisma.FieldRef<"Produto", 'DateTime'>
