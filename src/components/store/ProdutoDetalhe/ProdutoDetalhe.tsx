@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 import type { ProdutoDetalhePublico } from "@/modules/produto/produto.types";
@@ -27,6 +27,7 @@ export function ProdutoDetalhe({
   produto,
 }: ProdutoDetalheProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const precoFormatado =
     formatarPreco(produto.preco);
@@ -48,8 +49,9 @@ export function ProdutoDetalhe({
   const [quantidade, setQuantidade] =
     useState(1);
 
-  const [enviando, setEnviando] =
-    useState(false);
+  const [enviando, setEnviando] = useState<
+    "carrinho" | "comprar" | null
+  >(null);
 
   const [mensagem, setMensagem] = useState<{
     tipo: "erro" | "sucesso";
@@ -72,8 +74,10 @@ export function ProdutoDetalhe({
     );
   }
 
-  async function handleAdicionar() {
-    setEnviando(true);
+  async function handleAdicionar(
+    modo: "carrinho" | "comprar"
+  ) {
+    setEnviando(modo);
     setMensagem(null);
 
     const resultado = await adicionarAoCarrinho(
@@ -81,13 +85,18 @@ export function ProdutoDetalhe({
       quantidade
     );
 
-    setEnviando(false);
+    setEnviando(null);
 
     if (!resultado.ok) {
       setMensagem({
         tipo: "erro",
         texto: resultado.message,
       });
+      return;
+    }
+
+    if (modo === "comprar") {
+      router.push("/checkout");
       return;
     }
 
@@ -207,40 +216,52 @@ export function ProdutoDetalhe({
         </strong>
 
         {produto.descricao && (
-          <p className={styles.descricao}>
-            {produto.descricao}
-          </p>
+          <div>
+            <h2 className={styles.secaoTitulo}>
+              Descrição
+            </h2>
+
+            <p className={styles.descricao}>
+              {produto.descricao}
+            </p>
+          </div>
         )}
 
-        <dl className={styles.detalhes}>
-          {produto.marca && (
-            <div>
-              <dt>Marca</dt>
-              <dd>{produto.marca}</dd>
-            </div>
-          )}
+        <div>
+          <h2 className={styles.secaoTitulo}>
+            Detalhes
+          </h2>
 
-          {produto.cor && (
-            <div>
-              <dt>Cor</dt>
-              <dd>{produto.cor}</dd>
-            </div>
-          )}
+          <dl className={styles.detalhes}>
+            {produto.marca && (
+              <div>
+                <dt>Marca</dt>
+                <dd>{produto.marca}</dd>
+              </div>
+            )}
 
-          {produto.tamanho && (
-            <div>
-              <dt>Tamanho</dt>
-              <dd>{produto.tamanho}</dd>
-            </div>
-          )}
+            {produto.cor && (
+              <div>
+                <dt>Cor</dt>
+                <dd>{produto.cor}</dd>
+              </div>
+            )}
 
-          {produto.referencia && (
-            <div>
-              <dt>Referência</dt>
-              <dd>{produto.referencia}</dd>
-            </div>
-          )}
-        </dl>
+            {produto.tamanho && (
+              <div>
+                <dt>Tamanho</dt>
+                <dd>{produto.tamanho}</dd>
+              </div>
+            )}
+
+            {produto.referencia && (
+              <div>
+                <dt>Referência</dt>
+                <dd>{produto.referencia}</dd>
+              </div>
+            )}
+          </dl>
+        </div>
 
         {disponivel && (
           <div className={styles.quantidade}>
@@ -280,23 +301,42 @@ export function ProdutoDetalhe({
             {precisaLogar && (
               <>
                 {" "}
-                <Link href="/login">Entrar</Link>
+                <Link
+                  href={`/login?callbackUrl=${encodeURIComponent(pathname)}`}
+                >
+                  Entrar
+                </Link>
               </>
             )}
           </p>
         )}
 
-        <Button
-          type="button"
-          disabled={!disponivel || enviando}
-          onClick={handleAdicionar}
-        >
-          {!disponivel
-            ? "Indisponível"
-            : enviando
-            ? "Adicionando..."
-            : "Adicionar ao carrinho"}
-        </Button>
+        <div className={styles.acoes}>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={!disponivel || enviando !== null}
+            onClick={() => handleAdicionar("carrinho")}
+          >
+            {!disponivel
+              ? "Indisponível"
+              : enviando === "carrinho"
+              ? "Adicionando..."
+              : "Adicionar ao carrinho"}
+          </Button>
+
+          {disponivel && (
+            <Button
+              type="button"
+              disabled={enviando !== null}
+              onClick={() => handleAdicionar("comprar")}
+            >
+              {enviando === "comprar"
+                ? "Processando..."
+                : "Comprar agora"}
+            </Button>
+          )}
+        </div>
       </section>
     </div>
   );

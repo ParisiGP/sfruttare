@@ -14,8 +14,8 @@ export function SiteFooter() {
       <div>
         <strong>sfruttare</strong>
         <span>
-          Peças unicas, selecionadas com
-          carinho para contar novas historias.
+          Peças únicas, selecionadas com
+          carinho para contar novas histórias.
         </span>
       </div>
       <small>

@@ -959,12 +959,12 @@ export class ProdutoService {
       }
 
       if (!produtoStatus) {
-        erros.push("Status da peca invalido.");
+        erros.push("Status da peça inválido.");
       }
 
       const descricao =
         estado
-          ? `${descricaoBase}\n\nEstado da peca:\n${estado}`
+          ? `${descricaoBase}\n\nEstado da peça:\n${estado}`
           : descricaoBase;
 
       candidatos.push({

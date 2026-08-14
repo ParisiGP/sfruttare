@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sfruttare Brecho",
   description:
-    "Brecho premium de pecas unicas, moda consciente e estilo vintage sofisticado.",
+    "Brecho premium de peças únicas, moda consciente e estilo vintage sofisticado.",
 };
 
 export default async function RootLayout({

@@ -38,7 +38,7 @@ export function ClientHeader({
   return (
     <BaseHeader
       navLabel="Navegação principal"
-      topBar="Brecho com estilo, historia e autenticidade"
+      topBar="Brecho com estilo, história e autenticidade"
       logo={
         <>
           <span

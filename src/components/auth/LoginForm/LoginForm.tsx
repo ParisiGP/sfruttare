@@ -12,11 +12,23 @@ import styles from "./LoginForm.module.css";
 type LoginFormProps = {
   subtitle?: string;
   exibirLinkCadastro?: boolean;
+  callbackUrl?: string;
 };
+
+function isCallbackUrlSegura(
+  callbackUrl: string | undefined
+): callbackUrl is string {
+  return (
+    !!callbackUrl &&
+    callbackUrl.startsWith("/") &&
+    !callbackUrl.startsWith("//")
+  );
+}
 
 export function LoginForm({
   subtitle = "Entrar",
   exibirLinkCadastro = false,
+  callbackUrl,
 }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -45,10 +57,11 @@ export function LoginForm({
 
     const session = await getSession();
 
-    const destino =
-      session?.user?.role === "ADMIN"
-        ? "/admin/produtos"
-        : "/perfil";
+    const destino = isCallbackUrlSegura(callbackUrl)
+      ? callbackUrl
+      : session?.user?.role === "ADMIN"
+      ? "/admin/produtos"
+      : "/perfil";
 
     window.location.href = destino;
   }
