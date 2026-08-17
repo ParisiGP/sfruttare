@@ -229,6 +229,15 @@ model CarrinhoItem {
   @@unique([carrinhoId, produtoId])
 }
 
+model IntegracaoFrete {
+  id           String   @id @default(cuid())
+  provedor     String   @default("melhor_envio")
+  accessToken  String
+  refreshToken String
+  expiraEm     DateTime
+  updatedAt    DateTime @updatedAt
+}
+
 model InspiracaoSemana {
   id          String   @id @default(cuid())
 

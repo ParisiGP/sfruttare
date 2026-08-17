@@ -62,6 +62,7 @@ export const ModelName = {
   VitrineAbaProduto: 'VitrineAbaProduto',
   Carrinho: 'Carrinho',
   CarrinhoItem: 'CarrinhoItem',
+  IntegracaoFrete: 'IntegracaoFrete',
   InspiracaoSemana: 'InspiracaoSemana'
 } as const
 
@@ -228,6 +229,18 @@ export const CarrinhoItemScalarFieldEnum = {
 } as const
 
 export type CarrinhoItemScalarFieldEnum = (typeof CarrinhoItemScalarFieldEnum)[keyof typeof CarrinhoItemScalarFieldEnum]
+
+
+export const IntegracaoFreteScalarFieldEnum = {
+  id: 'id',
+  provedor: 'provedor',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiraEm: 'expiraEm',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IntegracaoFreteScalarFieldEnum = (typeof IntegracaoFreteScalarFieldEnum)[keyof typeof IntegracaoFreteScalarFieldEnum]
 
 
 export const InspiracaoSemanaScalarFieldEnum = {

@@ -395,6 +395,7 @@ export const ModelName = {
   VitrineAbaProduto: 'VitrineAbaProduto',
   Carrinho: 'Carrinho',
   CarrinhoItem: 'CarrinhoItem',
+  IntegracaoFrete: 'IntegracaoFrete',
   InspiracaoSemana: 'InspiracaoSemana'
 } as const
 
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "carrinho" | "carrinhoItem" | "inspiracaoSemana"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1229,6 +1230,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IntegracaoFrete: {
+      payload: Prisma.$IntegracaoFretePayload<ExtArgs>
+      fields: Prisma.IntegracaoFreteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IntegracaoFreteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IntegracaoFreteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>
+        }
+        findFirst: {
+          args: Prisma.IntegracaoFreteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IntegracaoFreteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>
+        }
+        findMany: {
+          args: Prisma.IntegracaoFreteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>[]
+        }
+        create: {
+          args: Prisma.IntegracaoFreteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>
+        }
+        createMany: {
+          args: Prisma.IntegracaoFreteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IntegracaoFreteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>[]
+        }
+        delete: {
+          args: Prisma.IntegracaoFreteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>
+        }
+        update: {
+          args: Prisma.IntegracaoFreteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>
+        }
+        deleteMany: {
+          args: Prisma.IntegracaoFreteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IntegracaoFreteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IntegracaoFreteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>[]
+        }
+        upsert: {
+          args: Prisma.IntegracaoFreteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntegracaoFretePayload>
+        }
+        aggregate: {
+          args: Prisma.IntegracaoFreteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIntegracaoFrete>
+        }
+        groupBy: {
+          args: Prisma.IntegracaoFreteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IntegracaoFreteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IntegracaoFreteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IntegracaoFreteCountAggregateOutputType> | number
+        }
+      }
+    }
     InspiracaoSemana: {
       payload: Prisma.$InspiracaoSemanaPayload<ExtArgs>
       fields: Prisma.InspiracaoSemanaFieldRefs
@@ -1489,6 +1564,18 @@ export const CarrinhoItemScalarFieldEnum = {
 } as const
 
 export type CarrinhoItemScalarFieldEnum = (typeof CarrinhoItemScalarFieldEnum)[keyof typeof CarrinhoItemScalarFieldEnum]
+
+
+export const IntegracaoFreteScalarFieldEnum = {
+  id: 'id',
+  provedor: 'provedor',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiraEm: 'expiraEm',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IntegracaoFreteScalarFieldEnum = (typeof IntegracaoFreteScalarFieldEnum)[keyof typeof IntegracaoFreteScalarFieldEnum]
 
 
 export const InspiracaoSemanaScalarFieldEnum = {
@@ -1786,6 +1873,7 @@ export type GlobalOmitConfig = {
   vitrineAbaProduto?: Prisma.VitrineAbaProdutoOmit
   carrinho?: Prisma.CarrinhoOmit
   carrinhoItem?: Prisma.CarrinhoItemOmit
+  integracaoFrete?: Prisma.IntegracaoFreteOmit
   inspiracaoSemana?: Prisma.InspiracaoSemanaOmit
 }
 

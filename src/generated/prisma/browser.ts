@@ -73,6 +73,11 @@ export type Carrinho = Prisma.CarrinhoModel
  */
 export type CarrinhoItem = Prisma.CarrinhoItemModel
 /**
+ * Model IntegracaoFrete
+ * 
+ */
+export type IntegracaoFrete = Prisma.IntegracaoFreteModel
+/**
  * Model InspiracaoSemana
  * 
  */
