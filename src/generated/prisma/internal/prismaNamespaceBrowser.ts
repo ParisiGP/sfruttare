@@ -60,6 +60,7 @@ export const ModelName = {
   PedidoItem: 'PedidoItem',
   VitrineAba: 'VitrineAba',
   VitrineAbaProduto: 'VitrineAbaProduto',
+  NewsletterInscricao: 'NewsletterInscricao',
   Carrinho: 'Carrinho',
   CarrinhoItem: 'CarrinhoItem',
   IntegracaoFrete: 'IntegracaoFrete',
@@ -207,6 +208,15 @@ export const VitrineAbaProdutoScalarFieldEnum = {
 } as const
 
 export type VitrineAbaProdutoScalarFieldEnum = (typeof VitrineAbaProdutoScalarFieldEnum)[keyof typeof VitrineAbaProdutoScalarFieldEnum]
+
+
+export const NewsletterInscricaoScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  createdAt: 'createdAt'
+} as const
+
+export type NewsletterInscricaoScalarFieldEnum = (typeof NewsletterInscricaoScalarFieldEnum)[keyof typeof NewsletterInscricaoScalarFieldEnum]
 
 
 export const CarrinhoScalarFieldEnum = {

@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/Input/Input";
@@ -55,9 +56,14 @@ export function CadastroForm() {
 
   return (
     <section className={styles.card}>
-      <h1 className={styles.title}>
-        Sfruttare
-      </h1>
+      <Image
+        src="/logo-sfruttare-completo.png"
+        alt="Sfruttare"
+        width={1619}
+        height={971}
+        priority
+        className={styles.logo}
+      />
 
       <p className={styles.subtitle}>
         Criar conta

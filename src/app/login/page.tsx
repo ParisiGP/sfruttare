@@ -23,6 +23,7 @@ export default async function LoginPage({
       <LoginForm
         subtitle="Entrar na sua conta"
         exibirLinkCadastro
+        exibirLogo
         callbackUrl={callbackUrl}
       />
     </AuthLayout>

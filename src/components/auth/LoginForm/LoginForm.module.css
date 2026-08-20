@@ -11,6 +11,14 @@
   box-shadow: var(--shadow-soft);
 }
 
+.logo {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 0 auto;
+}
+
 .title {
   margin: 0;
 

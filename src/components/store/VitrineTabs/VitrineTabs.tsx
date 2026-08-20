@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { VitrineAbaPublica } from "@/modules/vitrineAba/vitrineAba.types";
 import { ProdutoVitrineCard } from "@/components/store/ProdutoVitrineCard/ProdutoVitrineCard";
+import { Ornamento } from "@/components/store/Ornamento/Ornamento";
 
 import styles from "./VitrineTabs.module.css";
 
@@ -23,6 +24,7 @@ export function VitrineTabs({
       <div className={styles.empty}>
         <p className={styles.eyebrow}>Sfruttare</p>
         <h1>Novidades a caminho</h1>
+        <Ornamento className={styles.divider} />
         <p className={styles.emptyMessage}>
           Estamos preparando as próximas peças da
           vitrine. Volte em breve.
@@ -39,6 +41,7 @@ export function VitrineTabs({
       <header className={styles.header}>
         <p className={styles.eyebrow}>Sfruttare</p>
         <h1>Vitrine</h1>
+        <Ornamento className={styles.divider} />
         <p className={styles.description}>
           Peças únicas, selecionadas com carinho para
           contar novas histórias.

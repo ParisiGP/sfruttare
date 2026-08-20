@@ -3,7 +3,13 @@
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+import Image from "next/image";
 import Link from "next/link";
+import {
+  Search,
+  User,
+  ShoppingBag,
+} from "lucide-react";
 
 import styles from "./ClientHeader.module.css";
 
@@ -15,7 +21,22 @@ const navItems = [
   {
     id: "inicio",
     href: "/",
-    label: "Inicio",
+    label: "Início",
+  },
+  {
+    id: "sobre",
+    href: "/sobre",
+    label: "Sobre",
+  },
+  {
+    id: "pecas",
+    href: "/pecas",
+    label: "Peças",
+  },
+  {
+    id: "contato",
+    href: "/contato",
+    label: "Contato",
   },
 ];
 
@@ -38,21 +59,47 @@ export function ClientHeader({
   return (
     <BaseHeader
       navLabel="Navegação principal"
-      topBar="Brecho com estilo, história e autenticidade"
+      topBar={
+        <span className={styles.topBarText}>
+          <span
+            className={styles.topBarOrnament}
+            aria-hidden="true"
+          >
+            ✛
+          </span>
+          Brechó com estilo, história e autenticidade
+          <span
+            className={styles.topBarOrnament}
+            aria-hidden="true"
+          >
+            ✛
+          </span>
+        </span>
+      }
       logo={
-        <>
-          <span
-            className={styles.brandMark}
-          >
-            sfruttare
-          </span>
+        <Link
+          href="/"
+          className={styles.brandLink}
+          aria-label="Sfruttare"
+        >
+          <Image
+            src="/logo-sfruttare-completo.png"
+            alt="Sfruttare"
+            width={1619}
+            height={971}
+            priority
+            className={styles.brandFull}
+          />
 
-          <span
-            className={styles.brandSubline}
-          >
-            brecho
-          </span>
-        </>
+          <Image
+            src="/logo-sfruttare-medalhao.png"
+            alt="Sfruttare"
+            width={1536}
+            height={1024}
+            priority
+            className={styles.brandCompact}
+          />
+        </Link>
       }
       navContent={
         <>
@@ -75,15 +122,28 @@ export function ClientHeader({
             </Link>
           )}
 
-          <Link href="/perfil">
-            Perfil
+          <button
+            type="button"
+            className={styles.iconButton}
+            aria-label="Buscar"
+          >
+            <Search size={20} strokeWidth={1.6} />
+          </button>
+
+          <Link
+            href="/perfil"
+            className={styles.iconButton}
+            aria-label="Minha conta"
+          >
+            <User size={20} strokeWidth={1.6} />
           </Link>
 
           <Link
             href="/carrinho"
-            className={styles.cartLink}
+            className={styles.iconButton}
+            aria-label="Carrinho"
           >
-            Carrinho
+            <ShoppingBag size={20} strokeWidth={1.6} />
             {quantidadeCarrinho > 0 && (
               <span className={styles.cartBadge}>
                 {quantidadeCarrinho}
@@ -102,7 +162,11 @@ export function ClientHeader({
             </Link>
           )}
 
-          <Link href="/perfil">
+          <Link
+            href="/perfil"
+            className={styles.cartLink}
+          >
+            <User size={18} strokeWidth={1.6} />
             Perfil
           </Link>
 
@@ -110,6 +174,7 @@ export function ClientHeader({
             href="/carrinho"
             className={styles.cartLink}
           >
+            <ShoppingBag size={18} strokeWidth={1.6} />
             Carrinho
             {quantidadeCarrinho > 0 && (
               <span className={styles.cartBadge}>

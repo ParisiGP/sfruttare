@@ -1,0 +1,81 @@
+.newsletter {
+  width: min(1280px, calc(100% - 40px));
+  margin: 40px auto 64px;
+  padding: 48px 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-subtle);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.medalhao {
+  width: 56px;
+  height: auto;
+}
+
+.text {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+}
+
+.form > :first-child {
+  flex: 1;
+}
+
+.success {
+  margin: 0;
+  color: var(--color-success);
+  font-size: 14px;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: 14px;
+}
+
+.ilustracao {
+  flex-shrink: 0;
+  transform: rotate(90deg);
+  opacity: 0.4;
+}
+
+@media (max-width: 720px) {
+  .newsletter {
+    width: min(100% - 24px, 1280px);
+    padding: 36px 24px;
+    justify-content: center;
+  }
+
+  .ilustracao {
+    display: none;
+  }
+
+  .form {
+    flex-direction: column;
+  }
+}

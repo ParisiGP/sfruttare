@@ -1,0 +1,7 @@
+.ornamento {
+  width: 120px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  opacity: 0.55;
+}

@@ -207,6 +207,12 @@ model VitrineAbaProduto {
   @@unique([abaId, produtoId])
 }
 
+model NewsletterInscricao {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
 model Carrinho {
   id        String   @id @default(cuid())
   usuarioId String   @unique

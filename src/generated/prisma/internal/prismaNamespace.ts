@@ -393,6 +393,7 @@ export const ModelName = {
   PedidoItem: 'PedidoItem',
   VitrineAba: 'VitrineAba',
   VitrineAbaProduto: 'VitrineAbaProduto',
+  NewsletterInscricao: 'NewsletterInscricao',
   Carrinho: 'Carrinho',
   CarrinhoItem: 'CarrinhoItem',
   IntegracaoFrete: 'IntegracaoFrete',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1082,6 +1083,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NewsletterInscricao: {
+      payload: Prisma.$NewsletterInscricaoPayload<ExtArgs>
+      fields: Prisma.NewsletterInscricaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NewsletterInscricaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NewsletterInscricaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>
+        }
+        findFirst: {
+          args: Prisma.NewsletterInscricaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NewsletterInscricaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>
+        }
+        findMany: {
+          args: Prisma.NewsletterInscricaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>[]
+        }
+        create: {
+          args: Prisma.NewsletterInscricaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>
+        }
+        createMany: {
+          args: Prisma.NewsletterInscricaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NewsletterInscricaoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>[]
+        }
+        delete: {
+          args: Prisma.NewsletterInscricaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>
+        }
+        update: {
+          args: Prisma.NewsletterInscricaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.NewsletterInscricaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NewsletterInscricaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NewsletterInscricaoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>[]
+        }
+        upsert: {
+          args: Prisma.NewsletterInscricaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NewsletterInscricaoPayload>
+        }
+        aggregate: {
+          args: Prisma.NewsletterInscricaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNewsletterInscricao>
+        }
+        groupBy: {
+          args: Prisma.NewsletterInscricaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterInscricaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NewsletterInscricaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NewsletterInscricaoCountAggregateOutputType> | number
+        }
+      }
+    }
     Carrinho: {
       payload: Prisma.$CarrinhoPayload<ExtArgs>
       fields: Prisma.CarrinhoFieldRefs
@@ -1544,6 +1619,15 @@ export const VitrineAbaProdutoScalarFieldEnum = {
 export type VitrineAbaProdutoScalarFieldEnum = (typeof VitrineAbaProdutoScalarFieldEnum)[keyof typeof VitrineAbaProdutoScalarFieldEnum]
 
 
+export const NewsletterInscricaoScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  createdAt: 'createdAt'
+} as const
+
+export type NewsletterInscricaoScalarFieldEnum = (typeof NewsletterInscricaoScalarFieldEnum)[keyof typeof NewsletterInscricaoScalarFieldEnum]
+
+
 export const CarrinhoScalarFieldEnum = {
   id: 'id',
   usuarioId: 'usuarioId',
@@ -1871,6 +1955,7 @@ export type GlobalOmitConfig = {
   pedidoItem?: Prisma.PedidoItemOmit
   vitrineAba?: Prisma.VitrineAbaOmit
   vitrineAbaProduto?: Prisma.VitrineAbaProdutoOmit
+  newsletterInscricao?: Prisma.NewsletterInscricaoOmit
   carrinho?: Prisma.CarrinhoOmit
   carrinhoItem?: Prisma.CarrinhoItemOmit
   integracaoFrete?: Prisma.IntegracaoFreteOmit

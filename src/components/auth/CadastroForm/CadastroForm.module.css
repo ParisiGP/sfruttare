@@ -11,14 +11,12 @@
   box-shadow: var(--shadow-soft);
 }
 
-.title {
-  margin: 0;
-
-  font-size: 2rem;
-
-  text-align: center;
-
-  color: var(--color-primary);
+.logo {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 0 auto;
 }
 
 .subtitle {

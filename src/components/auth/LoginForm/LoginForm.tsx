@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/Input/Input";
@@ -12,6 +13,7 @@ import styles from "./LoginForm.module.css";
 type LoginFormProps = {
   subtitle?: string;
   exibirLinkCadastro?: boolean;
+  exibirLogo?: boolean;
   callbackUrl?: string;
 };
 
@@ -28,6 +30,7 @@ function isCallbackUrlSegura(
 export function LoginForm({
   subtitle = "Entrar",
   exibirLinkCadastro = false,
+  exibirLogo = false,
   callbackUrl,
 }: LoginFormProps) {
   const [email, setEmail] = useState("");
@@ -68,9 +71,20 @@ export function LoginForm({
 
   return (
     <section className={styles.card}>
-      <h1 className={styles.title}>
-        Sfruttare
-      </h1>
+      {exibirLogo ? (
+        <Image
+          src="/logo-sfruttare-completo.png"
+          alt="Sfruttare"
+          width={1619}
+          height={971}
+          priority
+          className={styles.logo}
+        />
+      ) : (
+        <h1 className={styles.title}>
+          Sfruttare
+        </h1>
+      )}
 
       <p className={styles.subtitle}>
         {subtitle}
