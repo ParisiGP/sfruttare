@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { Input } from "@/components/ui/Input/Input";
 import { Button } from "@/components/ui/Button/Button";
+import { isCallbackUrlSegura } from "@/lib/auth/isCallbackUrlSegura";
 
 import styles from "./LoginForm.module.css";
 
@@ -16,16 +17,6 @@ type LoginFormProps = {
   exibirLogo?: boolean;
   callbackUrl?: string;
 };
-
-function isCallbackUrlSegura(
-  callbackUrl: string | undefined
-): callbackUrl is string {
-  return (
-    !!callbackUrl &&
-    callbackUrl.startsWith("/") &&
-    !callbackUrl.startsWith("//")
-  );
-}
 
 export function LoginForm({
   subtitle = "Entrar",
@@ -64,7 +55,7 @@ export function LoginForm({
       ? callbackUrl
       : session?.user?.role === "ADMIN"
       ? "/admin/produtos"
-      : "/perfil";
+      : "/";
 
     window.location.href = destino;
   }

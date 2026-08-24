@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { Input } from "@/components/ui/Input/Input";
 import { Button } from "@/components/ui/Button/Button";
+import { isCallbackUrlSegura } from "@/lib/auth/isCallbackUrlSegura";
 
 import {
   cadastrarUsuario,
@@ -20,7 +21,13 @@ const initialState: UsuarioActionState = {
   message: "",
 };
 
-export function CadastroForm() {
+type CadastroFormProps = {
+  callbackUrl?: string;
+};
+
+export function CadastroForm({
+  callbackUrl,
+}: CadastroFormProps) {
   const [state, formAction, pending] =
     useActionState(cadastrarUsuario, initialState);
 
@@ -46,13 +53,17 @@ export function CadastroForm() {
         return;
       }
 
-      window.location.href = "/perfil";
+      window.location.href = isCallbackUrlSegura(
+        callbackUrl
+      )
+        ? callbackUrl
+        : "/";
     });
 
     return () => {
       cancelado = true;
     };
-  }, [state.ok, email, senha]);
+  }, [state.ok, email, senha, callbackUrl]);
 
   return (
     <section className={styles.card}>

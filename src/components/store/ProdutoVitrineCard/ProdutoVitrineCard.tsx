@@ -2,18 +2,20 @@
 
 import Link from "next/link";
 
-import type { VitrineAbaPublica } from "@/modules/vitrineAba/vitrineAba.types";
+import type { ProdutoVitrineResumo } from "@/modules/produto/produto.types";
 import { useImageCarousel } from "@/hooks/useImageCarousel";
 import { formatarPreco } from "@/lib/formatarPreco";
 
 import styles from "./ProdutoVitrineCard.module.css";
 
 type ProdutoVitrineCardProps = {
-  produto: VitrineAbaPublica["produtos"][number];
+  produto: ProdutoVitrineResumo;
+  onClick?: () => void;
 };
 
 export function ProdutoVitrineCard({
   produto,
+  onClick,
 }: ProdutoVitrineCardProps) {
   const precoFormatado =
     formatarPreco(produto.preco);
@@ -45,6 +47,7 @@ export function ProdutoVitrineCard({
     <Link
       href={`/produto/${produto.slug}`}
       className={styles.card}
+      onClick={onClick}
     >
       <article>
         {imagemPrincipal ? (

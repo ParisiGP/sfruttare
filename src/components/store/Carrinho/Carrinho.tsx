@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import type { CarrinhoResumo } from "@/modules/carrinho/carrinho.types";
+import type { OpcaoFrete } from "@/modules/frete/frete.types";
 import {
   atualizarQuantidadeCarrinho,
   removerDoCarrinho,
@@ -15,10 +16,12 @@ import styles from "./Carrinho.module.css";
 
 type CarrinhoProps = {
   resumo: CarrinhoResumo;
+  freteEstimado?: OpcaoFrete | null;
 };
 
 export function Carrinho({
   resumo,
+  freteEstimado,
 }: CarrinhoProps) {
   const router = useRouter();
 
@@ -93,7 +96,7 @@ export function Carrinho({
         </p>
 
         <Link
-          href="/"
+          href="/pecas"
           className={styles.emptyCta}
         >
           Voltar à vitrine
@@ -289,7 +292,11 @@ export function Carrinho({
 
           <div className={styles.resumoLinha}>
             <span>Frete</span>
-            <span>A calcular no checkout</span>
+            <span>
+              {freteEstimado
+                ? `${freteEstimado.nome} · ${formatarPreco(freteEstimado.preco)}`
+                : "A calcular no checkout"}
+            </span>
           </div>
 
           <div className={styles.resumoTotal}>

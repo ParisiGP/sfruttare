@@ -302,6 +302,63 @@ export class ProdutoRepository {
     };
   }
 
+  async findPublicoPorBusca(
+    busca: string,
+    limite?: number
+  ) {
+    return prisma.produto.findMany({
+      where: {
+        status: "DISPONIVEL",
+        OR: [
+          {
+            nome: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            marca: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            descricao: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            referencia: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            categoria: {
+              nome: {
+                contains: busca,
+                mode: "insensitive",
+              },
+            },
+          },
+        ],
+      },
+      include: this.includeRelations(),
+      orderBy: [
+        {
+          ordem: "asc",
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
+      ...(limite !== undefined
+        ? { take: limite }
+        : {}),
+    });
+  }
+
   async count(filters: ProdutoListFilters = {}) {
     return prisma.produto.count({
       where: buildWhere(filters),

@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Search,
   User,
   ShoppingBag,
 } from "lucide-react";
@@ -16,6 +15,8 @@ import styles from "./ClientHeader.module.css";
 import {
   BaseHeader,
 } from "../BaseHeader/BaseHeader";
+import { ContaMenu } from "./ContaMenu";
+import { BuscaOverlay } from "@/components/store/Busca/BuscaOverlay";
 
 const navItems = [
   {
@@ -117,26 +118,27 @@ export function ClientHeader({
       actions={
         <>
           {isAdmin && (
-            <Link href="/admin/produtos">
+            <Link
+              href="/admin/produtos"
+              className={styles.adminLink}
+            >
               Admin
             </Link>
           )}
 
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Buscar"
-          >
-            <Search size={20} strokeWidth={1.6} />
-          </button>
+          <BuscaOverlay />
 
-          <Link
-            href="/perfil"
-            className={styles.iconButton}
-            aria-label="Minha conta"
-          >
-            <User size={20} strokeWidth={1.6} />
-          </Link>
+          {session?.user ? (
+            <ContaMenu nome={session.user.name} />
+          ) : (
+            <Link
+              href="/login"
+              className={styles.iconButton}
+              aria-label="Entrar"
+            >
+              <User size={20} strokeWidth={1.6} />
+            </Link>
+          )}
 
           <Link
             href="/carrinho"
@@ -153,36 +155,15 @@ export function ClientHeader({
         </>
       }
 
-      mobileTitle="Minha Conta"
+      mobileTitle={
+        isAdmin ? "Administração" : undefined
+      }
       mobileExtra={
-        <>
-          {isAdmin && (
-            <Link href="/admin/produtos">
-              Admin
-            </Link>
-          )}
-
-          <Link
-            href="/perfil"
-            className={styles.cartLink}
-          >
-            <User size={18} strokeWidth={1.6} />
-            Perfil
+        isAdmin ? (
+          <Link href="/admin/produtos">
+            Admin
           </Link>
-
-          <Link
-            href="/carrinho"
-            className={styles.cartLink}
-          >
-            <ShoppingBag size={18} strokeWidth={1.6} />
-            Carrinho
-            {quantidadeCarrinho > 0 && (
-              <span className={styles.cartBadge}>
-                {quantidadeCarrinho}
-              </span>
-            )}
-          </Link>
-        </>
+        ) : undefined
       }
     />
   );

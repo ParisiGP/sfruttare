@@ -282,7 +282,7 @@
   }
 
   .actions {
-    display: none;
+    gap: 0.25rem;
   }
 
   .closeMenuButton {

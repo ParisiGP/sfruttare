@@ -21,7 +21,10 @@ import type {
   ProdutoImportPreviewRow,
   ProdutoListFilters,
   ProdutoStatus,
+  ProdutoVitrineResumo,
 } from "./produto.types";
+
+const TAMANHO_MINIMO_BUSCA = 2;
 
 type ProdutoImportavel = ProdutoImportCreateData & {
   linha: number;
@@ -299,6 +302,41 @@ export class ProdutoService {
 
   async listarTodosProdutos() {
     return this.produtoRepository.findAll();
+  }
+
+  async buscarPublico(
+    query: string,
+    limite?: number
+  ): Promise<ProdutoVitrineResumo[]> {
+    const busca = query.trim();
+
+    if (busca.length < TAMANHO_MINIMO_BUSCA) {
+      return [];
+    }
+
+    const produtos =
+      await this.produtoRepository.findPublicoPorBusca(
+        busca,
+        limite
+      );
+
+    return produtos.map((produto) => ({
+      id: produto.id,
+      nome: produto.nome,
+      slug: produto.slug,
+      referencia: produto.referencia ?? "",
+      preco: Number(produto.preco),
+      categoria: {
+        nome: produto.categoria.nome,
+      },
+      imagens: produto.imagens.map((imagem) => ({
+        id: imagem.id,
+        url: imagem.url,
+        zoom: imagem.zoom,
+        offsetX: imagem.offsetX,
+        offsetY: imagem.offsetY,
+      })),
+    }));
   }
 
   async obterDetalhePublico(

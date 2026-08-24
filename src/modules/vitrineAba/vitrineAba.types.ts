@@ -1,3 +1,5 @@
+import type { ProdutoVitrineResumo } from "@/modules/produto/produto.types";
+
 export type VitrineAbaAdminItem = {
   id: string;
   nome: string;
@@ -7,31 +9,11 @@ export type VitrineAbaAdminItem = {
   totalProdutos: number;
 };
 
-export type VitrineAbaProdutoImagem = {
-  id: string;
-  url: string;
-  zoom: number;
-  offsetX: number;
-  offsetY: number;
-};
-
-export type VitrineAbaProdutoResumo = {
-  id: string;
-  nome: string;
-  slug: string;
-  referencia: string;
-  preco: number;
-  categoria: {
-    nome: string;
-  };
-  imagens: VitrineAbaProdutoImagem[];
-};
-
 export type VitrineAbaPublica = {
   id: string;
   nome: string;
   slug: string;
-  produtos: VitrineAbaProdutoResumo[];
+  produtos: ProdutoVitrineResumo[];
 };
 
 export type VitrineAbaProdutoSelecionavel = {

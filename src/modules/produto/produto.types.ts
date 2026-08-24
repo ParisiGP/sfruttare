@@ -76,6 +76,26 @@ export type ProdutoDetalhePublico = {
   imagens: ProdutoImagemPublica[];
 };
 
+export type ProdutoVitrineImagem = {
+  id: string;
+  url: string;
+  zoom: number;
+  offsetX: number;
+  offsetY: number;
+};
+
+export type ProdutoVitrineResumo = {
+  id: string;
+  nome: string;
+  slug: string;
+  referencia: string;
+  preco: number;
+  categoria: {
+    nome: string;
+  };
+  imagens: ProdutoVitrineImagem[];
+};
+
 export type ProdutoMetrics = {
   total: number;
   disponiveis: number;
