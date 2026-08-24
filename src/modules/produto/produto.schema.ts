@@ -59,9 +59,9 @@ export const produtoSchema = z.object({
     z
       .string()
       .trim()
-      .regex(
-        /^[A-Z]{3}-\d{4}$/,
-        "Referencia invalida."
+      .max(
+        15,
+        "Referência deve ter no máximo 15 caracteres."
       )
       .optional()
       .or(z.literal("")),
@@ -79,6 +79,24 @@ export const produtoSchema = z.object({
     .number()
     .int()
     .min(0, "Estoque nao pode ser negativo"),
+
+  condicao: z
+    .enum(["NOVO", "SEMINOVO", "USADO"])
+    .optional()
+    .or(z.literal(""))
+    .transform((valor) =>
+      valor === "" ? undefined : valor
+    ),
+
+  avarias: z
+    .string()
+    .trim()
+    .optional(),
+
+  composicao: z
+    .string()
+    .trim()
+    .optional(),
 
   pesoGramas: campoNumericoOpcional(
     "Peso deve ser maior que zero"

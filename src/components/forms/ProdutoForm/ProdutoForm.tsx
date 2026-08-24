@@ -117,6 +117,12 @@ export function ProdutoForm({
       status:
         produto?.status ??
         "DISPONIVEL",
+      condicao:
+        produto?.condicao ?? "",
+      avarias:
+        produto?.avarias ?? "",
+      composicao:
+        produto?.composicao ?? "",
     }));
 
   const [
@@ -149,20 +155,9 @@ export function ProdutoForm({
   function handleReferenciaChange(
     event: ChangeEvent<HTMLInputElement>
   ) {
-    let value =
-      event.target.value
-        .toUpperCase()
-        .replace(
-          /[^A-Z0-9]/g,
-          ""
-        );
-
-    if (value.length > 3) {
-      value =
-        `${value.slice(0, 3)}-${value.slice(3, 7)}`;
-    }
-
-    setReferencia(value);
+    setReferencia(
+      event.target.value.slice(0, 15)
+    );
   }
 
 
@@ -329,8 +324,8 @@ export function ProdutoForm({
               onChange={
                 handleReferenciaChange
               }
-              placeholder="AAA-0000"
-              maxLength={8}
+              placeholder="Código da peça"
+              maxLength={15}
             />
           </Field>
 
@@ -555,6 +550,72 @@ export function ProdutoForm({
             padrão será usado como estimativa.
           </p>
         )}
+      </section>
+
+      <section className={styles.section}>
+        <h3>Condição</h3>
+
+        <div className={styles.grid}>
+          <Field label="Condição">
+            <select
+              name="condicao"
+              value={formValues.condicao}
+              onChange={(event) =>
+                updateField(
+                  "condicao",
+                  event.target.value
+                )
+              }
+            >
+              <option value="">
+                Não informado
+              </option>
+              <option value="NOVO">
+                Novo
+              </option>
+              <option value="SEMINOVO">
+                Seminovo
+              </option>
+              <option value="USADO">
+                Usado
+              </option>
+            </select>
+          </Field>
+
+          <Field label="Composição">
+            <input
+              name="composicao"
+              type="text"
+              value={formValues.composicao}
+              onChange={(event) =>
+                updateField(
+                  "composicao",
+                  event.target.value
+                )
+              }
+              placeholder="Ex.: 100% algodão"
+            />
+          </Field>
+        </div>
+
+        <Field label="Avarias">
+          <textarea
+            name="avarias"
+            value={formValues.avarias}
+            onChange={(event) =>
+              updateField(
+                "avarias",
+                event.target.value
+              )
+            }
+            placeholder="Defeitos ou sinais de uso a informar ao cliente"
+          />
+        </Field>
+
+        <p className={styles.fieldHint}>
+          Avarias não descritas aqui dão direito a
+          devolução, conforme nossa política de trocas.
+        </p>
       </section>
 
       <section className={styles.section}>

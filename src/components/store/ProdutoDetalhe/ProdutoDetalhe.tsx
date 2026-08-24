@@ -4,7 +4,10 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
-import type { ProdutoDetalhePublico } from "@/modules/produto/produto.types";
+import type {
+  CondicaoProduto,
+  ProdutoDetalhePublico,
+} from "@/modules/produto/produto.types";
 import { adicionarAoCarrinho } from "@/modules/carrinho/actions";
 import { useImageCarousel } from "@/hooks/useImageCarousel";
 import { formatarPreco } from "@/lib/formatarPreco";
@@ -21,6 +24,15 @@ const statusLabel: Partial<
 > = {
   RESERVADO: "Reservado",
   VENDIDO: "Vendido",
+};
+
+const condicaoLabel: Record<
+  CondicaoProduto,
+  string
+> = {
+  NOVO: "Novo",
+  SEMINOVO: "Seminovo",
+  USADO: "Usado",
 };
 
 export function ProdutoDetalhe({
@@ -260,8 +272,29 @@ export function ProdutoDetalhe({
                 <dd>{produto.referencia}</dd>
               </div>
             )}
+
+            {produto.condicao && (
+              <div>
+                <dt>Condição</dt>
+                <dd>
+                  {condicaoLabel[produto.condicao]}
+                </dd>
+              </div>
+            )}
           </dl>
         </div>
+
+        {produto.avarias && (
+          <div>
+            <h2 className={styles.secaoTitulo}>
+              Avarias e sinais de uso
+            </h2>
+
+            <p className={styles.descricao}>
+              {produto.avarias}
+            </p>
+          </div>
+        )}
 
         {disponivel && (
           <div className={styles.quantidade}>

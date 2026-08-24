@@ -7,6 +7,7 @@ import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { uploadProdutoImage } from "@/lib/cloudinary";
 import { ProdutoService } from "./produto.service";
 import type {
+  CondicaoProduto,
   ProdutoAdminItem,
   ProdutoImagem,
   ProdutoImagemInput,
@@ -82,6 +83,23 @@ function getStatus(
   }
 
   return "DISPONIVEL";
+}
+
+function getCondicao(
+  formData: FormData
+): CondicaoProduto | undefined {
+  const condicao =
+    getText(formData, "condicao");
+
+  if (
+    condicao === "NOVO" ||
+    condicao === "SEMINOVO" ||
+    condicao === "USADO"
+  ) {
+    return condicao;
+  }
+
+  return undefined;
 }
 
 function getFile(
@@ -242,6 +260,15 @@ async function buildProdutoPayload(
         formData,
         "estoque"
       )
+    ),
+    condicao: getCondicao(formData),
+    avarias: getText(
+      formData,
+      "avarias"
+    ),
+    composicao: getText(
+      formData,
+      "composicao"
     ),
     pesoGramas: getOptionalNumber(
       formData,

@@ -7,6 +7,11 @@ export type ProdutoStatus =
   | "RESERVADO"
   | "VENDIDO";
 
+export type CondicaoProduto =
+  | "NOVO"
+  | "SEMINOVO"
+  | "USADO";
+
 export type ProdutoImagemInput = {
   url: string;
   publicId: string;
@@ -35,6 +40,9 @@ export type ProdutoAdminItem = {
   tamanho: string;
   preco: number;
   estoque: number;
+  condicao: CondicaoProduto | null;
+  avarias: string;
+  composicao: string;
   pesoGramas: number | null;
   alturaCm: number | null;
   larguraCm: number | null;
@@ -70,6 +78,8 @@ export type ProdutoDetalhePublico = {
   preco: number;
   estoque: number;
   status: ProdutoStatus;
+  condicao: CondicaoProduto | null;
+  avarias: string;
   categoria: {
     nome: string;
   };
@@ -102,6 +112,12 @@ export type ProdutoMetrics = {
   reservados: number;
   vendidos: number;
   semEstoque: number;
+  referenciasDuplicadas: number;
+};
+
+export type ProdutoReferenciaDuplicada = {
+  referencia: string;
+  total: number;
 };
 
 export type ProdutoListFilters = {
@@ -112,6 +128,7 @@ export type ProdutoListFilters = {
   tipo?: ProdutoTipo | "TODOS";
   estoque?: "TODOS" | "COM_ESTOQUE" | "SEM_ESTOQUE";
   ordem?: "vitrine" | "recentes" | "nome" | "preco" | "estoque";
+  apenasReferenciasDuplicadas?: boolean;
   pagina?: number;
   limite?: number;
 };
@@ -127,6 +144,7 @@ export type ProdutoImportPreviewRow = {
   referencia: string;
   descricao: string;
   modelo: string;
+  peca: string;
   nome: string;
   cor: string;
   tamanho: string;
@@ -134,6 +152,10 @@ export type ProdutoImportPreviewRow = {
   produtoStatus: ProdutoStatus | "";
   quantidade: number | null;
   categoriaId: string;
+  categoriaSugerida: string;
+  condicao: CondicaoProduto | null;
+  avarias: string;
+  composicao: string;
   status: ProdutoImportRowStatus;
   mensagem: string;
 };

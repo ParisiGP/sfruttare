@@ -5,6 +5,7 @@ import {
   ProdutoRepository,
   type ProdutoImportCreateData,
 } from "./produto.repository";
+import { CategoriaRepository } from "@/modules/categoria/categoria.repository";
 import {
   alterarStatusProdutoSchema,
   editarProdutoSchema,
@@ -13,6 +14,7 @@ import {
   type ProdutoInput,
 } from "./produto.schema";
 import type {
+  CondicaoProduto,
   ProdutoImagem,
   ProdutoAdminItem,
   ProdutoDetalhePublico,
@@ -25,6 +27,7 @@ import type {
 } from "./produto.types";
 
 const TAMANHO_MINIMO_BUSCA = 2;
+const TAMANHO_MAXIMO_REFERENCIA = 15;
 
 type ProdutoImportavel = ProdutoImportCreateData & {
   linha: number;
@@ -32,13 +35,7 @@ type ProdutoImportavel = ProdutoImportCreateData & {
 
 const requiredImportColumns = [
   "referencia",
-  "descricao",
-  "modelo",
-  "cor",
-  "tamanho",
   "preco",
-  "status",
-  "quantidade",
 ] as const;
 
 const columnAliases: Record<string, string[]> = {
@@ -46,13 +43,27 @@ const columnAliases: Record<string, string[]> = {
   descricao: [
     "descricao da peca",
     "descricao",
-    "peca",
     "produto",
+  ],
+  descricaoTag: ["descricao tag"],
+  descricaoInstagram: ["descricao instagram"],
+  peca: ["peca"],
+  composicao: [
+    "composicao tecido",
+    "composicao",
+    "tecido",
+  ],
+  avarias: [
+    "avarias sinais de uso",
+    "avarias",
+    "sinais de uso",
   ],
   modelo: ["modelo"],
   cor: ["cor"],
   tamanho: ["tamanho", "tam"],
   preco: [
+    "preco final sfruttare",
+    "preco final",
     "preco para venda",
     "preco venda",
     "preco",
@@ -75,7 +86,10 @@ const columnAliases: Record<string, string[]> = {
 const produtoImportAdjustmentSchema =
   z.object({
     linha: z.coerce.number().int().min(2),
-    referencia: z.string().trim(),
+    referencia: z
+      .string()
+      .trim()
+      .max(TAMANHO_MAXIMO_REFERENCIA),
     descricao: z.string().trim(),
     modelo: z.string().trim(),
     cor: z.string().trim(),
@@ -113,16 +127,10 @@ function normalizeLookup(value: unknown) {
 }
 
 function normalizeReferencia(value: unknown) {
-  const normalized =
-    normalizeText(value)
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, "");
-
-  if (!/^[A-Z]{3}\d{4}$/.test(normalized)) {
-    return "";
-  }
-
-  return `${normalized.slice(0, 3)}-${normalized.slice(3)}`;
+  return normalizeText(value).slice(
+    0,
+    TAMANHO_MAXIMO_REFERENCIA
+  );
 }
 
 function parsePreco(value: unknown) {
@@ -181,6 +189,50 @@ function parseStatus(value: unknown): ProdutoStatus | null {
 
   if (status === "vendido") {
     return "VENDIDO";
+  }
+
+  return null;
+}
+
+function parseCondicao(
+  value: unknown
+): CondicaoProduto | null {
+  const texto =
+    normalizeLookup(value);
+
+  if (!texto) {
+    return null;
+  }
+
+  if (
+    texto.includes("c def") ||
+    texto.includes("com defeito") ||
+    texto.includes("defeito")
+  ) {
+    return "USADO";
+  }
+
+  if (
+    texto.includes("seminovo") ||
+    texto.includes("seminova") ||
+    texto.includes("semi novo") ||
+    texto.includes("semi nova")
+  ) {
+    return "SEMINOVO";
+  }
+
+  if (
+    texto.includes("novo") ||
+    texto.includes("nova")
+  ) {
+    return "NOVO";
+  }
+
+  if (
+    texto.includes("usado") ||
+    texto.includes("usada")
+  ) {
+    return "USADO";
   }
 
   return null;
@@ -246,7 +298,9 @@ function buildResumo(
 export class ProdutoService {
   constructor(
     private produtoRepository =
-      new ProdutoRepository()
+      new ProdutoRepository(),
+    private categoriaRepository =
+      new CategoriaRepository()
   ) { }
 
   async criarProduto(data: ProdutoInput) {
@@ -363,6 +417,8 @@ export class ProdutoService {
       preco: Number(produto.preco),
       estoque: produto.estoque,
       status: produto.status,
+      condicao: produto.condicao,
+      avarias: produto.avarias ?? "",
       categoria: {
         nome: produto.categoria.nome,
       },
@@ -386,6 +442,10 @@ export class ProdutoService {
 
   async obterMetricas() {
     return this.produtoRepository.metrics();
+  }
+
+  async listarReferenciasDuplicadas() {
+    return this.produtoRepository.findReferenciasDuplicadas();
   }
 
   async preVisualizarImportacao(
@@ -452,29 +512,6 @@ export class ProdutoService {
       });
     });
 
-    const referenciasEditadas =
-      Array.from(ajustesPorLinha.values())
-        .map((ajuste) => ajuste.referenciaNormalizada)
-        .filter(Boolean);
-
-    const referenciasExistentes =
-      new Set(
-        await this.produtoRepository.findExistingReferences(
-          referenciasEditadas
-        )
-      );
-
-    const totalPorReferencia =
-      referenciasEditadas.reduce<Record<string, number>>(
-        (acc, referencia) => {
-          acc[referencia] =
-            (acc[referencia] ?? 0) + 1;
-
-          return acc;
-        },
-        {}
-      );
-
     const erros =
       ajustesValidados
         .map((ajusteOriginal) => {
@@ -488,25 +525,7 @@ export class ProdutoService {
           }
 
           if (!ajuste?.referenciaNormalizada) {
-            mensagens.push("referencia invalida");
-          }
-
-          if (
-            ajuste?.referenciaNormalizada &&
-            referenciasExistentes.has(
-              ajuste.referenciaNormalizada
-            )
-          ) {
-            mensagens.push("referencia ja cadastrada no banco");
-          }
-
-          if (
-            ajuste?.referenciaNormalizada &&
-            totalPorReferencia[
-              ajuste.referenciaNormalizada
-            ] > 1
-          ) {
-            mensagens.push("referencia duplicada na revisao");
+            mensagens.push("referencia obrigatoria");
           }
 
           if (!ajuste?.nome) {
@@ -603,6 +622,9 @@ export class ProdutoService {
         tamanho: ajuste.tamanho,
         preco: ajuste.preco,
         estoque: ajuste.quantidade,
+        condicao: linha.condicao ?? undefined,
+        avarias: linha.avarias || undefined,
+        composicao: linha.composicao || undefined,
         categoriaId: ajuste.categoriaId,
         tipo: "BRECHO",
         status: ajuste.status,
@@ -621,6 +643,9 @@ export class ProdutoService {
           tamanho: produto.tamanho,
           preco: produto.preco,
           estoque: produto.estoque,
+          condicao: produto.condicao,
+          avarias: produto.avarias,
+          composicao: produto.composicao,
           categoriaId: produto.categoriaId,
           tipo: produto.tipo,
           status: produto.status,
@@ -769,6 +794,9 @@ export class ProdutoService {
     tamanho?: string | null;
     preco: unknown;
     estoque: number;
+    condicao?: CondicaoProduto | null;
+    avarias?: string | null;
+    composicao?: string | null;
     pesoGramas?: number | null;
     alturaCm?: number | null;
     larguraCm?: number | null;
@@ -802,6 +830,9 @@ export class ProdutoService {
       tamanho: produto.tamanho ?? "",
       preco: Number(produto.preco),
       estoque: produto.estoque,
+      condicao: produto.condicao ?? null,
+      avarias: produto.avarias ?? "",
+      composicao: produto.composicao ?? "",
       pesoGramas: produto.pesoGramas ?? null,
       alturaCm: produto.alturaCm ?? null,
       larguraCm: produto.larguraCm ?? null,
@@ -931,6 +962,15 @@ export class ProdutoService {
     const linhas: ProdutoImportPreviewRow[] = [];
     const candidatos: ProdutoImportPreviewRow[] = [];
 
+    const categoriasExistentes =
+      await this.categoriaRepository.findAll();
+
+    const quantidadeColunaPresente =
+      indexes.quantidade !== undefined;
+
+    const statusColunaPresente =
+      indexes.status !== undefined;
+
     dataRows.forEach((row, index) => {
       const hasContent =
         row.some((cell) => normalizeText(cell));
@@ -947,13 +987,35 @@ export class ProdutoService {
           getCell(row, indexes, "referencia")
         );
 
-      const descricaoBase =
+      const pecaValor =
+        normalizeText(
+          getCell(row, indexes, "peca")
+        );
+
+      const descricaoTag =
+        normalizeText(
+          getCell(row, indexes, "descricaoTag")
+        );
+
+      const descricaoInstagram =
+        normalizeText(
+          getCell(row, indexes, "descricaoInstagram")
+        );
+
+      const descricaoAntiga =
         normalizeText(getCell(row, indexes, "descricao"));
+
+      const descricaoBase =
+        descricaoTag ||
+        descricaoInstagram ||
+        descricaoAntiga ||
+        pecaValor;
 
       const modelo =
         normalizeText(getCell(row, indexes, "modelo"));
 
       const nome =
+        pecaValor ||
         [descricaoBase, modelo]
           .filter(Boolean)
           .join(" - ");
@@ -968,20 +1030,50 @@ export class ProdutoService {
         parsePreco(getCell(row, indexes, "preco"));
 
       const quantidade =
-        parseQuantidade(
-          getCell(row, indexes, "quantidade")
-        );
+        quantidadeColunaPresente
+          ? parseQuantidade(
+              getCell(row, indexes, "quantidade")
+            )
+          : 1;
 
       const produtoStatus =
-        parseStatus(getCell(row, indexes, "status"));
+        statusColunaPresente
+          ? parseStatus(
+              getCell(row, indexes, "status")
+            )
+          : "DISPONIVEL";
 
-      const estado =
-        normalizeText(getCell(row, indexes, "estado"));
+      const condicao =
+        parseCondicao(
+          getCell(row, indexes, "estado")
+        );
+
+      const composicao =
+        normalizeText(
+          getCell(row, indexes, "composicao")
+        );
+
+      const avarias =
+        normalizeText(
+          getCell(row, indexes, "avarias")
+        );
+
+      const primeiraPalavraPeca =
+        pecaValor.split(/\s+/)[0] ?? "";
+
+      const categoriaCorrespondente =
+        primeiraPalavraPeca
+          ? categoriasExistentes.find(
+              (categoria) =>
+                categoria.nome.toLowerCase() ===
+                primeiraPalavraPeca.toLowerCase()
+            )
+          : undefined;
 
       const erros: string[] = [];
 
       if (!referencia) {
-        erros.push("Referencia invalida.");
+        erros.push("Referência obrigatória.");
       }
 
       if (nome.length < 2) {
@@ -1000,17 +1092,13 @@ export class ProdutoService {
         erros.push("Status da peça inválido.");
       }
 
-      const descricao =
-        estado
-          ? `${descricaoBase}\n\nEstado da peça:\n${estado}`
-          : descricaoBase;
-
       candidatos.push({
         linha,
         referencia,
         nome,
-        descricao,
+        descricao: descricaoBase,
         modelo,
+        peca: pecaValor,
         cor,
         tamanho,
         preco: Number.isFinite(preco)
@@ -1020,13 +1108,22 @@ export class ProdutoService {
         quantidade: Number.isFinite(quantidade)
           ? quantidade
           : null,
-        categoriaId: "",
+        categoriaId: categoriaCorrespondente?.id ?? "",
+        categoriaSugerida:
+          !categoriaCorrespondente && primeiraPalavraPeca
+            ? primeiraPalavraPeca
+            : "",
+        condicao,
+        avarias,
+        composicao,
         status:
           erros.length > 0 ? "INVALIDO" : "VALIDO",
         mensagem:
           erros.length > 0
             ? erros.join(" ")
-            : "Preencha a categoria antes de importar.",
+            : categoriaCorrespondente
+              ? "Produto pronto para importação."
+              : "Preencha a categoria antes de importar.",
       });
     });
 
@@ -1046,31 +1143,37 @@ export class ProdutoService {
       new Set<string>();
 
     for (const candidato of candidatos) {
-      if (referenciasExistentes.has(candidato.referencia)) {
-        linhas.push({
-          ...candidato,
-          status: "DUPLICADO",
-          mensagem:
-            "Produto duplicado: referencia ja cadastrada.",
-        });
-        continue;
-      }
+      const referenciaJaCadastrada =
+        referenciasExistentes.has(
+          candidato.referencia
+        );
 
-      if (
+      const referenciaDuplicadaNaPlanilha =
         candidato.referencia &&
-        referenciasVistas.has(candidato.referencia)
-      ) {
-        linhas.push({
-          ...candidato,
-          status: "DUPLICADO",
-          mensagem:
-            "Produto ignorado: referencia duplicada na planilha.",
-        });
-        continue;
-      }
+        referenciasVistas.has(candidato.referencia);
 
       if (candidato.referencia) {
         referenciasVistas.add(candidato.referencia);
+      }
+
+      if (referenciaJaCadastrada) {
+        linhas.push({
+          ...candidato,
+          status: "DUPLICADO",
+          mensagem:
+            "Referência já cadastrada no banco. Pode ser outro tamanho da mesma peça em consignação — o produto será importado normalmente.",
+        });
+        continue;
+      }
+
+      if (referenciaDuplicadaNaPlanilha) {
+        linhas.push({
+          ...candidato,
+          status: "DUPLICADO",
+          mensagem:
+            "Referência repetida nesta planilha. Pode ser outro tamanho da mesma peça em consignação — o produto será importado normalmente.",
+        });
+        continue;
       }
 
       linhas.push({

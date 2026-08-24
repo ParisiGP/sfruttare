@@ -53,6 +53,11 @@ function buildFilters(
       (getParam(params, "ordem") as
         | ProdutoListFilters["ordem"]
         | undefined) ?? "vitrine",
+    apenasReferenciasDuplicadas:
+      getParam(
+        params,
+        "apenasReferenciasDuplicadas"
+      ) === "true",
     pagina: Number(getParam(params, "pagina") ?? 1),
     limite: 12,
   };
@@ -107,6 +112,9 @@ export default async function ProdutosPage({
           tipo: filters.tipo ?? "TODOS",
           estoque: filters.estoque ?? "TODOS",
           ordem: filters.ordem ?? "vitrine",
+          apenasReferenciasDuplicadas:
+            filters.apenasReferenciasDuplicadas ??
+            false,
         }}
         paginacao={{
           pagina: produtosPaginados.pagina,

@@ -40,6 +40,7 @@ type ProdutosAdminProps = {
       | "tipo"
       | "estoque"
       | "ordem"
+      | "apenasReferenciasDuplicadas"
     >
   >;
   paginacao: {
@@ -253,6 +254,18 @@ export function ProdutosAdmin({
             <MetricCard
               label="Sem estoque"
               value={metricas.semEstoque}
+            />
+            <MetricCard
+              label="Referência duplicada"
+              value={metricas.referenciasDuplicadas}
+              href={
+                filtros.apenasReferenciasDuplicadas
+                  ? "/admin/produtos"
+                  : "/admin/produtos?apenasReferenciasDuplicadas=true"
+              }
+              active={
+                filtros.apenasReferenciasDuplicadas
+              }
             />
           </section>
 
@@ -473,14 +486,37 @@ export function ProdutosAdmin({
 function MetricCard({
   label,
   value,
+  href,
+  active,
 }: {
   label: string;
   value: number;
+  href?: string;
+  active?: boolean;
 }) {
-  return (
-    <article className={styles.metric}>
+  const conteudo = (
+    <>
       <strong>{value}</strong>
       <span>{label}</span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={`${styles.metric} ${styles.metricClicavel} ${
+          active ? styles.metricAtiva : ""
+        }`}
+      >
+        {conteudo}
+      </Link>
+    );
+  }
+
+  return (
+    <article className={styles.metric}>
+      {conteudo}
     </article>
   );
 }

@@ -63,47 +63,20 @@ function isProdutoStatus(
 }
 
 function normalizeReferenciaInput(value: string) {
-  const normalized =
-    value
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, "");
-
-  if (normalized.length <= 3) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, 3)}-${normalized.slice(3, 7)}`;
+  return value.trim().slice(0, 15);
 }
 
 function isReferenceValid(value: string) {
-  return /^[A-Z]{3}-\d{4}$/.test(value);
+  return value.length <= 15;
 }
 
-function getRowIssues(
-  row: EditableRow,
-  duplicateReferences: Set<string>,
-  existingReferences: Set<string>
-) {
+function getRowIssues(row: EditableRow) {
   const issues: string[] = [];
 
   if (!isReferenceValid(row.referencia)) {
-    issues.push("Referencia invalida.");
-  }
-
-  if (
-    row.referencia &&
-    duplicateReferences.has(row.referencia)
-  ) {
-    issues.push("Referencia duplicada na revisao.");
-  }
-
-  if (
-    row.referencia &&
-    existingReferences.has(row.referencia)
-  ) {
-    issues.push("Referencia ja cadastrada no banco.");
+    issues.push(
+      "Refer\u00eancia muito longa (m\u00e1x. 15 caracteres)."
+    );
   }
 
   if (!row.descricao && !row.modelo) {
@@ -133,17 +106,43 @@ function getRowIssues(
   return issues;
 }
 
-function getVisualStatus(
+function getRowWarnings(
   row: EditableRow,
   duplicateReferences: Set<string>,
   existingReferences: Set<string>
 ) {
-  const issues =
-    getRowIssues(
-      row,
-      duplicateReferences,
-      existingReferences
+  const warnings: string[] = [];
+
+  if (
+    row.referencia &&
+    duplicateReferences.has(row.referencia)
+  ) {
+    warnings.push(
+      "Refer\u00eancia j\u00e1 usada nesta planilha."
     );
+  }
+
+  if (
+    row.referencia &&
+    existingReferences.has(row.referencia)
+  ) {
+    warnings.push(
+      "Refer\u00eancia j\u00e1 cadastrada no banco."
+    );
+  }
+
+  if (row.categoriaSugerida) {
+    warnings.push(
+      `Sugest\u00e3o de categoria: "${row.categoriaSugerida}" (n\u00e3o cadastrada).`
+    );
+  }
+
+  return warnings;
+}
+
+function getVisualStatus(row: EditableRow) {
+  const issues =
+    getRowIssues(row);
 
   return issues.length > 0
     ? "INVALIDO"
@@ -177,6 +176,12 @@ export function ProdutoImportacao({
   const [confirmandoImportacao, setConfirmandoImportacao] =
     useState(false);
 
+  const hasModelo =
+    useMemo(
+      () => rows.some((row) => row.modelo),
+      [rows]
+    );
+
   const duplicateReferences =
     useMemo(() => {
       const counts =
@@ -204,13 +209,7 @@ export function ProdutoImportacao({
   const resumo =
     useMemo(() => {
       const statuses =
-        rows.map((row) =>
-          getVisualStatus(
-            row,
-            duplicateReferences,
-            existingReferences
-          )
-        );
+        rows.map((row) => getVisualStatus(row));
 
       return {
         total: rows.length,
@@ -218,8 +217,10 @@ export function ProdutoImportacao({
           (status) => status === "VALIDO"
         ).length,
         ignorados: 0,
-        duplicados: rows.filter((row) =>
-          duplicateReferences.has(row.referencia)
+        duplicados: rows.filter(
+          (row) =>
+            duplicateReferences.has(row.referencia) ||
+            existingReferences.has(row.referencia)
         ).length,
         invalidos: statuses.filter(
           (status) => status === "INVALIDO"
@@ -280,12 +281,14 @@ export function ProdutoImportacao({
 
               return {
                 ...updated,
-                nome: [
-                  updated.descricao,
-                  updated.modelo,
-                ]
-                  .filter(Boolean)
-                  .join(" - "),
+                nome:
+                  updated.peca ||
+                  [
+                    updated.descricao,
+                    updated.modelo,
+                  ]
+                    .filter(Boolean)
+                    .join(" - "),
               };
             })()
           : row
@@ -323,12 +326,7 @@ export function ProdutoImportacao({
 
     const rowsWithIssues =
       rows.filter(
-        (row) =>
-          getRowIssues(
-            row,
-            duplicateReferences,
-            existingReferences
-          ).length > 0
+        (row) => getRowIssues(row).length > 0
       );
 
     if (rowsWithIssues.length > 0) {
@@ -541,7 +539,7 @@ export function ProdutoImportacao({
 
           <section className={styles.tablePanel}>
             <div className={styles.tableHeader}>
-              <h2>Pre-visualizacao</h2>
+              <h2>Pré-visualização</h2>
               <span>
                 {resumo.validos} produto(s) prontos
               </span>
@@ -554,7 +552,7 @@ export function ProdutoImportacao({
                     <th>Linha</th>
                     <th>Referencia</th>
                     <th>Descricao</th>
-                    <th>Modelo</th>
+                    {hasModelo && <th>Modelo</th>}
                     <th>Cor</th>
                     <th>Tamanho</th>
                     <th>Categoria</th>
@@ -568,14 +566,13 @@ export function ProdutoImportacao({
                 <tbody>
                   {rows.map((row) => {
                     const visualStatus =
-                      getVisualStatus(
-                        row,
-                        duplicateReferences,
-                        existingReferences
-                      );
+                      getVisualStatus(row);
 
                     const issues =
-                      getRowIssues(
+                      getRowIssues(row);
+
+                    const warnings =
+                      getRowWarnings(
                         row,
                         duplicateReferences,
                         existingReferences
@@ -596,19 +593,20 @@ export function ProdutoImportacao({
                             className={
                               !isReferenceValid(
                                 row.referencia
-                              ) ||
-                              duplicateReferences.has(
-                                row.referencia
-                              ) ||
-                              existingReferences.has(
-                                row.referencia
                               )
                                 ? styles.invalidField
+                                : duplicateReferences.has(
+                                    row.referencia
+                                  ) ||
+                                  existingReferences.has(
+                                    row.referencia
+                                  )
+                                ? styles.warningField
                                 : ""
                             }
                             type="text"
                             value={row.referencia}
-                            maxLength={8}
+                            maxLength={15}
                             onChange={(event) =>
                               updateRow(row.linha, {
                                 referencia:
@@ -636,24 +634,26 @@ export function ProdutoImportacao({
                             }
                           />
                         </td>
-                        <td>
-                          <input
-                            className={
-                              !row.descricao &&
-                              !row.modelo
-                                ? styles.invalidField
-                                : ""
-                            }
-                            type="text"
-                            value={row.modelo}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                modelo:
-                                  event.target.value,
-                              })
-                            }
-                          />
-                        </td>
+                        {hasModelo && (
+                          <td>
+                            <input
+                              className={
+                                !row.descricao &&
+                                !row.modelo
+                                  ? styles.invalidField
+                                  : ""
+                              }
+                              type="text"
+                              value={row.modelo}
+                              onChange={(event) =>
+                                updateRow(row.linha, {
+                                  modelo:
+                                    event.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                        )}
                         <td>
                           <input
                             type="text"
@@ -681,7 +681,7 @@ export function ProdutoImportacao({
                           <select
                             className={
                               !row.categoriaId
-                                ? styles.invalidField
+                                ? styles.warningField
                                 : ""
                             }
                             value={row.categoriaId}
@@ -704,6 +704,19 @@ export function ProdutoImportacao({
                               </option>
                             ))}
                           </select>
+
+                          {row.categoriaSugerida &&
+                            !row.categoriaId && (
+                            <small
+                              className={
+                                styles.categoriaSugerida
+                              }
+                            >
+                              Sugestão: &ldquo;
+                              {row.categoriaSugerida}
+                              &rdquo; (nova categoria)
+                            </small>
+                          )}
                         </td>
                         <td>
                           <input
@@ -802,7 +815,9 @@ export function ProdutoImportacao({
                         <td>
                           {issues.length > 0
                             ? issues.join(" ")
-                            : "Produto pronto para importacao."}
+                            : warnings.length > 0
+                              ? warnings.join(" ")
+                              : "Produto pronto para importacao."}
                         </td>
                       </tr>
                     );

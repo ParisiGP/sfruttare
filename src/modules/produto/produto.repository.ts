@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type {
+  CondicaoProduto,
   ProdutoImagem,
   ProdutoImagemInput,
   ProdutoListFilters,
@@ -17,6 +18,9 @@ export type ProdutoWriteData = {
   tamanho?: string;
   preco: number;
   estoque: number;
+  condicao?: CondicaoProduto;
+  avarias?: string;
+  composicao?: string;
   pesoGramas?: number;
   alturaCm?: number;
   larguraCm?: number;
@@ -32,7 +36,10 @@ export type ProdutoImportCreateData = Omit<
   "imagens"
 >;
 
-function buildWhere(filters: ProdutoListFilters = {}) {
+function buildWhere(
+  filters: ProdutoListFilters = {},
+  referenciasDuplicadas?: string[]
+) {
   const where: Record<string, unknown> = {};
 
   if (filters.busca) {
@@ -91,6 +98,12 @@ function buildWhere(filters: ProdutoListFilters = {}) {
 
   if (filters.estoque === "SEM_ESTOQUE") {
     where.estoque = 0;
+  }
+
+  if (filters.apenasReferenciasDuplicadas) {
+    where.referencia = {
+      in: referenciasDuplicadas ?? [],
+    };
   }
 
   return where;
@@ -273,8 +286,15 @@ export class ProdutoRepository {
     const limite =
       filters.limite ?? 12;
 
+    const referenciasDuplicadas =
+      filters.apenasReferenciasDuplicadas
+        ? (
+          await this.findReferenciasDuplicadas()
+        ).map((grupo) => grupo.referencia)
+        : undefined;
+
     const where =
-      buildWhere(filters);
+      buildWhere(filters, referenciasDuplicadas);
 
     const [produtos, total] =
       await prisma.$transaction([
@@ -396,13 +416,57 @@ export class ProdutoRepository {
       }),
     ]);
 
+    const gruposDuplicados =
+      await this.findReferenciasDuplicadas();
+
+    const referenciasDuplicadas =
+      gruposDuplicados.reduce(
+        (soma, grupo) => soma + grupo.total,
+        0
+      );
+
     return {
       total,
       disponiveis,
       reservados,
       vendidos,
       semEstoque,
+      referenciasDuplicadas,
     };
+  }
+
+  async findReferenciasDuplicadas() {
+    const grupos = await prisma.produto.groupBy({
+      by: ["referencia"],
+      where: {
+        referencia: {
+          not: null,
+        },
+        NOT: {
+          referencia: "",
+        },
+      },
+      _count: {
+        referencia: true,
+      },
+      having: {
+        referencia: {
+          _count: {
+            gt: 1,
+          },
+        },
+      },
+    });
+
+    return grupos
+      .filter(
+        (grupo): grupo is typeof grupo & { referencia: string } =>
+          Boolean(grupo.referencia)
+      )
+      .map((grupo) => ({
+        referencia: grupo.referencia,
+        total: grupo._count.referencia,
+      }));
   }
 
   async createImages(

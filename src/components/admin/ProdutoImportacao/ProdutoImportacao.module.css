@@ -319,9 +319,13 @@
   min-width: 92px;
 }
 
+.table select {
+  min-width: 130px;
+}
+
 .table textarea {
   min-width: 220px;
-  min-height: 70px;
+  min-height: 40px;
   resize: vertical;
   font-family: inherit;
 }
@@ -329,6 +333,19 @@
 .invalidField {
   border-color: var(--color-danger) !important;
   background: rgba(168, 92, 74, 0.08) !important;
+}
+
+.warningField {
+  border-color: var(--color-warning) !important;
+  background: rgba(200, 155, 60, 0.1) !important;
+}
+
+.categoriaSugerida {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-warning);
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .rowVALIDO {

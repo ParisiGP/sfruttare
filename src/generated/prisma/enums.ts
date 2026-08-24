@@ -26,6 +26,15 @@ export const ProdutoStatus = {
 export type ProdutoStatus = (typeof ProdutoStatus)[keyof typeof ProdutoStatus]
 
 
+export const CondicaoProduto = {
+  NOVO: 'NOVO',
+  SEMINOVO: 'SEMINOVO',
+  USADO: 'USADO'
+} as const
+
+export type CondicaoProduto = (typeof CondicaoProduto)[keyof typeof CondicaoProduto]
+
+
 export const UserRole = {
   ADMIN: 'ADMIN',
   CLIENTE: 'CLIENTE'

@@ -86,7 +86,7 @@
 
 .metrics {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1px;
   border: 1px solid var(--color-border);
   background: var(--color-border);
@@ -99,6 +99,23 @@
   flex-direction: column;
   justify-content: center;
   background: rgba(255, 255, 255, 0.58);
+}
+
+.metricClicavel {
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.metricClicavel:hover {
+  background: rgba(139, 107, 63, 0.1);
+}
+
+.metricAtiva {
+  background: rgba(200, 155, 60, 0.14);
+}
+
+.metricAtiva strong {
+  color: var(--color-warning);
 }
 
 .metric strong {

@@ -34,6 +34,10 @@ model Produto {
   status      ProdutoStatus @default(DISPONIVEL)
   estoque     Int @default(1)
 
+  condicao    CondicaoProduto?
+  avarias     String?
+  composicao  String?
+
   pesoGramas    Int?
   alturaCm      Int?
   larguraCm     Int?
@@ -62,6 +66,12 @@ enum ProdutoStatus {
   DISPONIVEL
   RESERVADO
   VENDIDO
+}
+
+enum CondicaoProduto {
+  NOVO
+  SEMINOVO
+  USADO
 }
 
 model ProdutoImagem {
