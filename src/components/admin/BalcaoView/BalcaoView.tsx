@@ -236,6 +236,12 @@ export function BalcaoView() {
                           {" · "}
                         </>
                       )}
+                      {produto.tamanho && (
+                        <>
+                          Tam. {produto.tamanho}
+                          {" · "}
+                        </>
+                      )}
                       {formatarPreco(
                         produto.preco
                       )}
