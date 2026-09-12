@@ -391,13 +391,16 @@ export const ModelName = {
   Endereco: 'Endereco',
   Pedido: 'Pedido',
   PedidoItem: 'PedidoItem',
+  CheckoutSessao: 'CheckoutSessao',
   VitrineAba: 'VitrineAba',
   VitrineAbaProduto: 'VitrineAbaProduto',
   NewsletterInscricao: 'NewsletterInscricao',
   Carrinho: 'Carrinho',
   CarrinhoItem: 'CarrinhoItem',
   IntegracaoFrete: 'IntegracaoFrete',
-  InspiracaoSemana: 'InspiracaoSemana'
+  InspiracaoSemana: 'InspiracaoSemana',
+  VendaBalcao: 'VendaBalcao',
+  VendaBalcaoItem: 'VendaBalcaoItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "checkoutSessao" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana" | "vendaBalcao" | "vendaBalcaoItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -935,6 +938,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CheckoutSessao: {
+      payload: Prisma.$CheckoutSessaoPayload<ExtArgs>
+      fields: Prisma.CheckoutSessaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CheckoutSessaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CheckoutSessaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>
+        }
+        findFirst: {
+          args: Prisma.CheckoutSessaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CheckoutSessaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>
+        }
+        findMany: {
+          args: Prisma.CheckoutSessaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>[]
+        }
+        create: {
+          args: Prisma.CheckoutSessaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>
+        }
+        createMany: {
+          args: Prisma.CheckoutSessaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CheckoutSessaoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>[]
+        }
+        delete: {
+          args: Prisma.CheckoutSessaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>
+        }
+        update: {
+          args: Prisma.CheckoutSessaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.CheckoutSessaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CheckoutSessaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CheckoutSessaoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>[]
+        }
+        upsert: {
+          args: Prisma.CheckoutSessaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CheckoutSessaoPayload>
+        }
+        aggregate: {
+          args: Prisma.CheckoutSessaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCheckoutSessao>
+        }
+        groupBy: {
+          args: Prisma.CheckoutSessaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckoutSessaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CheckoutSessaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CheckoutSessaoCountAggregateOutputType> | number
+        }
+      }
+    }
     VitrineAba: {
       payload: Prisma.$VitrineAbaPayload<ExtArgs>
       fields: Prisma.VitrineAbaFieldRefs
@@ -1453,6 +1530,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    VendaBalcao: {
+      payload: Prisma.$VendaBalcaoPayload<ExtArgs>
+      fields: Prisma.VendaBalcaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VendaBalcaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VendaBalcaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>
+        }
+        findFirst: {
+          args: Prisma.VendaBalcaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VendaBalcaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>
+        }
+        findMany: {
+          args: Prisma.VendaBalcaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>[]
+        }
+        create: {
+          args: Prisma.VendaBalcaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>
+        }
+        createMany: {
+          args: Prisma.VendaBalcaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VendaBalcaoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>[]
+        }
+        delete: {
+          args: Prisma.VendaBalcaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>
+        }
+        update: {
+          args: Prisma.VendaBalcaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.VendaBalcaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VendaBalcaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VendaBalcaoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>[]
+        }
+        upsert: {
+          args: Prisma.VendaBalcaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoPayload>
+        }
+        aggregate: {
+          args: Prisma.VendaBalcaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVendaBalcao>
+        }
+        groupBy: {
+          args: Prisma.VendaBalcaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VendaBalcaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VendaBalcaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VendaBalcaoCountAggregateOutputType> | number
+        }
+      }
+    }
+    VendaBalcaoItem: {
+      payload: Prisma.$VendaBalcaoItemPayload<ExtArgs>
+      fields: Prisma.VendaBalcaoItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VendaBalcaoItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VendaBalcaoItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>
+        }
+        findFirst: {
+          args: Prisma.VendaBalcaoItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VendaBalcaoItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>
+        }
+        findMany: {
+          args: Prisma.VendaBalcaoItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>[]
+        }
+        create: {
+          args: Prisma.VendaBalcaoItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>
+        }
+        createMany: {
+          args: Prisma.VendaBalcaoItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VendaBalcaoItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>[]
+        }
+        delete: {
+          args: Prisma.VendaBalcaoItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>
+        }
+        update: {
+          args: Prisma.VendaBalcaoItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.VendaBalcaoItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VendaBalcaoItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VendaBalcaoItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.VendaBalcaoItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VendaBalcaoItemPayload>
+        }
+        aggregate: {
+          args: Prisma.VendaBalcaoItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVendaBalcaoItem>
+        }
+        groupBy: {
+          args: Prisma.VendaBalcaoItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VendaBalcaoItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VendaBalcaoItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VendaBalcaoItemCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1598,6 +1823,20 @@ export const PedidoItemScalarFieldEnum = {
 export type PedidoItemScalarFieldEnum = (typeof PedidoItemScalarFieldEnum)[keyof typeof PedidoItemScalarFieldEnum]
 
 
+export const CheckoutSessaoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  enderecoId: 'enderecoId',
+  frete: 'frete',
+  mpPreferenceId: 'mpPreferenceId',
+  status: 'status',
+  pedidoId: 'pedidoId',
+  createdAt: 'createdAt'
+} as const
+
+export type CheckoutSessaoScalarFieldEnum = (typeof CheckoutSessaoScalarFieldEnum)[keyof typeof CheckoutSessaoScalarFieldEnum]
+
+
 export const VitrineAbaScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
@@ -1675,6 +1914,32 @@ export const InspiracaoSemanaScalarFieldEnum = {
 } as const
 
 export type InspiracaoSemanaScalarFieldEnum = (typeof InspiracaoSemanaScalarFieldEnum)[keyof typeof InspiracaoSemanaScalarFieldEnum]
+
+
+export const VendaBalcaoScalarFieldEnum = {
+  id: 'id',
+  nomeCliente: 'nomeCliente',
+  emailCliente: 'emailCliente',
+  parcelas: 'parcelas',
+  subtotal: 'subtotal',
+  total: 'total',
+  totalComJuros: 'totalComJuros',
+  createdAt: 'createdAt'
+} as const
+
+export type VendaBalcaoScalarFieldEnum = (typeof VendaBalcaoScalarFieldEnum)[keyof typeof VendaBalcaoScalarFieldEnum]
+
+
+export const VendaBalcaoItemScalarFieldEnum = {
+  id: 'id',
+  vendaBalcaoId: 'vendaBalcaoId',
+  produtoId: 'produtoId',
+  nomeProduto: 'nomeProduto',
+  precoUnitario: 'precoUnitario',
+  createdAt: 'createdAt'
+} as const
+
+export type VendaBalcaoItemScalarFieldEnum = (typeof VendaBalcaoItemScalarFieldEnum)[keyof typeof VendaBalcaoItemScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1970,6 +2235,7 @@ export type GlobalOmitConfig = {
   endereco?: Prisma.EnderecoOmit
   pedido?: Prisma.PedidoOmit
   pedidoItem?: Prisma.PedidoItemOmit
+  checkoutSessao?: Prisma.CheckoutSessaoOmit
   vitrineAba?: Prisma.VitrineAbaOmit
   vitrineAbaProduto?: Prisma.VitrineAbaProdutoOmit
   newsletterInscricao?: Prisma.NewsletterInscricaoOmit
@@ -1977,6 +2243,8 @@ export type GlobalOmitConfig = {
   carrinhoItem?: Prisma.CarrinhoItemOmit
   integracaoFrete?: Prisma.IntegracaoFreteOmit
   inspiracaoSemana?: Prisma.InspiracaoSemanaOmit
+  vendaBalcao?: Prisma.VendaBalcaoOmit
+  vendaBalcaoItem?: Prisma.VendaBalcaoItemOmit
 }
 
 /* Types for Logging */

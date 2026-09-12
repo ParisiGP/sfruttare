@@ -1,0 +1,116 @@
+.wrapper {
+  width: min(560px, calc(100% - 40px));
+  min-height: 60vh;
+  margin: 0 auto;
+  padding: 64px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  font-size: 28px;
+  font-weight: 700;
+  background: rgba(139, 107, 63, 0.1);
+  color: var(--color-primary);
+}
+
+.wrapper.aprovado .icone {
+  background: rgba(122, 155, 118, 0.16);
+  color: var(--color-success);
+}
+
+.wrapper.pendente .icone {
+  background: rgba(200, 155, 60, 0.16);
+  color: var(--color-warning);
+}
+
+.wrapper.rejeitado .icone {
+  background: rgba(168, 92, 74, 0.14);
+  color: var(--color-danger);
+}
+
+.wrapper h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 5vw, 44px);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.mensagem {
+  max-width: 440px;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.referencia {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.acoes {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.botaoPrimario,
+.botaoSecundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 24px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.botaoPrimario {
+  border: 1px solid var(--color-primary-hover);
+  background: var(--color-primary-hover);
+  color: #fffaf1;
+}
+
+.botaoPrimario:hover {
+  filter: brightness(0.9);
+}
+
+.botaoSecundario {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.botaoSecundario:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .acoes {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .botaoPrimario,
+  .botaoSecundario {
+    width: 100%;
+  }
+}

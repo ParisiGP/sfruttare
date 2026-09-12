@@ -58,13 +58,16 @@ export const ModelName = {
   Endereco: 'Endereco',
   Pedido: 'Pedido',
   PedidoItem: 'PedidoItem',
+  CheckoutSessao: 'CheckoutSessao',
   VitrineAba: 'VitrineAba',
   VitrineAbaProduto: 'VitrineAbaProduto',
   NewsletterInscricao: 'NewsletterInscricao',
   Carrinho: 'Carrinho',
   CarrinhoItem: 'CarrinhoItem',
   IntegracaoFrete: 'IntegracaoFrete',
-  InspiracaoSemana: 'InspiracaoSemana'
+  InspiracaoSemana: 'InspiracaoSemana',
+  VendaBalcao: 'VendaBalcao',
+  VendaBalcaoItem: 'VendaBalcaoItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -189,6 +192,20 @@ export const PedidoItemScalarFieldEnum = {
 export type PedidoItemScalarFieldEnum = (typeof PedidoItemScalarFieldEnum)[keyof typeof PedidoItemScalarFieldEnum]
 
 
+export const CheckoutSessaoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  enderecoId: 'enderecoId',
+  frete: 'frete',
+  mpPreferenceId: 'mpPreferenceId',
+  status: 'status',
+  pedidoId: 'pedidoId',
+  createdAt: 'createdAt'
+} as const
+
+export type CheckoutSessaoScalarFieldEnum = (typeof CheckoutSessaoScalarFieldEnum)[keyof typeof CheckoutSessaoScalarFieldEnum]
+
+
 export const VitrineAbaScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
@@ -266,6 +283,32 @@ export const InspiracaoSemanaScalarFieldEnum = {
 } as const
 
 export type InspiracaoSemanaScalarFieldEnum = (typeof InspiracaoSemanaScalarFieldEnum)[keyof typeof InspiracaoSemanaScalarFieldEnum]
+
+
+export const VendaBalcaoScalarFieldEnum = {
+  id: 'id',
+  nomeCliente: 'nomeCliente',
+  emailCliente: 'emailCliente',
+  parcelas: 'parcelas',
+  subtotal: 'subtotal',
+  total: 'total',
+  totalComJuros: 'totalComJuros',
+  createdAt: 'createdAt'
+} as const
+
+export type VendaBalcaoScalarFieldEnum = (typeof VendaBalcaoScalarFieldEnum)[keyof typeof VendaBalcaoScalarFieldEnum]
+
+
+export const VendaBalcaoItemScalarFieldEnum = {
+  id: 'id',
+  vendaBalcaoId: 'vendaBalcaoId',
+  produtoId: 'produtoId',
+  nomeProduto: 'nomeProduto',
+  precoUnitario: 'precoUnitario',
+  createdAt: 'createdAt'
+} as const
+
+export type VendaBalcaoItemScalarFieldEnum = (typeof VendaBalcaoItemScalarFieldEnum)[keyof typeof VendaBalcaoItemScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -379,6 +379,81 @@ export class ProdutoRepository {
     });
   }
 
+  /**
+   * Mesmo filtro de `findPublicoPorBusca`, estendido com `cor` e
+   * `tamanho` — usado no balcão de venda presencial (Bazar), onde achar
+   * a peça rápido por essas características é mais útil do que no site.
+   */
+  async findDisponiveisParaBalcao(busca: string) {
+    return prisma.produto.findMany({
+      where: {
+        status: "DISPONIVEL",
+        OR: [
+          {
+            nome: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            marca: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            descricao: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            referencia: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            cor: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+          {
+            tamanho: {
+              contains: busca,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      include: this.includeRelations(),
+      orderBy: [
+        {
+          ordem: "asc",
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
+      take: 20,
+    });
+  }
+
+  async findManyPorIds(ids: string[]) {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    return prisma.produto.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   async count(filters: ProdutoListFilters = {}) {
     return prisma.produto.count({
       where: buildWhere(filters),

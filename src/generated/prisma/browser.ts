@@ -53,6 +53,11 @@ export type Pedido = Prisma.PedidoModel
  */
 export type PedidoItem = Prisma.PedidoItemModel
 /**
+ * Model CheckoutSessao
+ * 
+ */
+export type CheckoutSessao = Prisma.CheckoutSessaoModel
+/**
  * Model VitrineAba
  * 
  */
@@ -87,3 +92,13 @@ export type IntegracaoFrete = Prisma.IntegracaoFreteModel
  * 
  */
 export type InspiracaoSemana = Prisma.InspiracaoSemanaModel
+/**
+ * Model VendaBalcao
+ * 
+ */
+export type VendaBalcao = Prisma.VendaBalcaoModel
+/**
+ * Model VendaBalcaoItem
+ * 
+ */
+export type VendaBalcaoItem = Prisma.VendaBalcaoItemModel

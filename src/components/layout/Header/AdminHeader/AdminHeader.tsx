@@ -16,6 +16,11 @@ const navItems = [
     label: "Produtos",
   },
   {
+    id: "balcao",
+    href: "/admin/balcao",
+    label: "Balcão",
+  },
+  {
     id: "vitrine",
     href: "/admin/vitrine",
     label: "Vitrine",

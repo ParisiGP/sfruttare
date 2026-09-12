@@ -17,9 +17,10 @@ export class PedidoService {
 
   /**
    * Cria o Pedido a partir do carrinho atual do usuário e esvazia o
-   * carrinho em seguida. Não tem caller na UI ainda — será chamado
-   * pelo handler do webhook do Mercado Pago (Sprint 3), depois que o
-   * pagamento for confirmado. Nunca deve ser chamado antes disso.
+   * carrinho em seguida. Chamado pelo handler do webhook do Mercado
+   * Pago (src/app/api/webhooks/mercadopago/route.ts) depois que o
+   * pagamento é confirmado como aprovado. Nunca deve ser chamado antes
+   * disso — o Pedido já nasce com status "PAGO".
    */
   async criarPedidoAPartirDoCarrinho(
     usuarioId: string,
@@ -62,6 +63,7 @@ export class PedidoService {
       await this.pedidoRepository.create({
         usuarioId,
         enderecoId: dadosValidados.enderecoId,
+        status: "PAGO",
         frete: dadosValidados.frete,
         total,
         itens: resumoCarrinho.itens.map(

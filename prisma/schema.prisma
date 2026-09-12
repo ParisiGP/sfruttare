@@ -48,10 +48,11 @@ model Produto {
   categoriaId String
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
 
-  imagens       ProdutoImagem[]
-  pedidoItens   PedidoItem[]
-  abas          VitrineAbaProduto[]
-  carrinhoItens CarrinhoItem[]
+  imagens           ProdutoImagem[]
+  pedidoItens       PedidoItem[]
+  abas              VitrineAbaProduto[]
+  carrinhoItens     CarrinhoItem[]
+  vendasBalcaoItens VendaBalcaoItem[]
 
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
@@ -105,9 +106,10 @@ model Usuario {
 
   role      UserRole @default(CLIENTE)
 
-  enderecos Endereco[]
-  pedidos   Pedido[]
-  carrinho  Carrinho?
+  enderecos       Endereco[]
+  pedidos         Pedido[]
+  carrinho        Carrinho?
+  checkoutSessoes CheckoutSessao[]
 
   createdAt DateTime @default(now())
 }
@@ -135,7 +137,8 @@ model Endereco {
 
   usuario     Usuario @relation(fields: [usuarioId], references: [id])
 
-  pedidos     Pedido[]
+  pedidos         Pedido[]
+  checkoutSessoes CheckoutSessao[]
 
   createdAt   DateTime @default(now())
 }
@@ -183,6 +186,19 @@ model PedidoItem {
 
   precoUnitario  Decimal @db.Decimal(10,2)
 
+  createdAt      DateTime @default(now())
+}
+
+model CheckoutSessao {
+  id             String   @id @default(cuid())
+  usuarioId      String
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id])
+  enderecoId     String
+  endereco       Endereco @relation(fields: [enderecoId], references: [id])
+  frete          Decimal  @db.Decimal(10,2)
+  mpPreferenceId String   @unique
+  status         String   @default("PENDENTE") // PENDENTE | CONCLUIDA | REJEITADA
+  pedidoId       String?
   createdAt      DateTime @default(now())
 }
 
@@ -266,4 +282,27 @@ model InspiracaoSemana {
   ativo       Boolean @default(false)
 
   createdAt   DateTime @default(now())
+}
+
+model VendaBalcao {
+  id            String   @id @default(cuid())
+  nomeCliente   String
+  emailCliente  String?
+  parcelas      Int      @default(1)
+  subtotal      Decimal  @db.Decimal(10,2)
+  total         Decimal  @db.Decimal(10,2)
+  totalComJuros Decimal? @db.Decimal(10,2)
+  itens         VendaBalcaoItem[]
+  createdAt     DateTime @default(now())
+}
+
+model VendaBalcaoItem {
+  id            String   @id @default(cuid())
+  vendaBalcaoId String
+  vendaBalcao   VendaBalcao @relation(fields: [vendaBalcaoId], references: [id])
+  produtoId     String
+  produto       Produto  @relation(fields: [produtoId], references: [id])
+  nomeProduto   String
+  precoUnitario Decimal  @db.Decimal(10,2)
+  createdAt     DateTime @default(now())
 }

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import type { PedidoStatus } from "./pedido.types";
 
 export type PedidoItemWriteData = {
   produtoId: string;
@@ -9,6 +10,7 @@ export type PedidoItemWriteData = {
 export type PedidoWriteData = {
   usuarioId: string;
   enderecoId: string | null;
+  status: PedidoStatus;
   frete: number;
   total: number;
   itens: PedidoItemWriteData[];
@@ -21,6 +23,7 @@ export class PedidoRepository {
         data: {
           usuarioId: data.usuarioId,
           enderecoId: data.enderecoId,
+          status: data.status,
           frete: data.frete,
           total: data.total,
           itens: {

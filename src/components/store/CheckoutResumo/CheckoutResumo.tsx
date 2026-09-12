@@ -6,6 +6,7 @@ import { EnderecoSelecao } from "@/components/store/EnderecoSelecao/EnderecoSele
 
 import { calcularFrete } from "@/modules/frete/actions";
 import type { OpcaoFrete } from "@/modules/frete/frete.types";
+import { iniciarPagamento } from "@/modules/pagamento/actions";
 import type { EnderecoResumo } from "@/modules/endereco/endereco.types";
 import type { CarrinhoItemResumo } from "@/modules/carrinho/carrinho.types";
 import { formatarPreco } from "@/lib/formatarPreco";
@@ -36,6 +37,12 @@ export function CheckoutResumo({
     useState(false);
 
   const [erroFrete, setErroFrete] = useState("");
+
+  const [enviandoPagamento, setEnviandoPagamento] =
+    useState(false);
+
+  const [erroPagamento, setErroPagamento] =
+    useState("");
 
   useEffect(() => {
     if (!enderecoSelecionado) {
@@ -87,6 +94,37 @@ export function CheckoutResumo({
 
   const total =
     subtotal + (opcaoSelecionada?.preco ?? 0);
+
+  const podeFinalizar =
+    !!enderecoSelecionado &&
+    !!opcaoSelecionada &&
+    !enviandoPagamento;
+
+  async function handleFinalizarCompra() {
+    if (!enderecoSelecionado || !opcaoSelecionada) {
+      return;
+    }
+
+    setEnviandoPagamento(true);
+    setErroPagamento("");
+
+    const resultado = await iniciarPagamento(
+      enderecoSelecionado.id,
+      opcaoSelecionada.nome,
+      opcaoSelecionada.preco
+    );
+
+    if (!resultado.ok || !resultado.initPoint) {
+      setEnviandoPagamento(false);
+      setErroPagamento(
+        resultado.message ||
+          "Não foi possível iniciar o pagamento."
+      );
+      return;
+    }
+
+    window.location.href = resultado.initPoint;
+  }
 
   return (
     <div className={styles.layout}>
@@ -222,12 +260,21 @@ export function CheckoutResumo({
           <strong>{formatarPreco(total)}</strong>
         </div>
 
+        {erroPagamento && (
+          <p className={styles.erroPagamento}>
+            {erroPagamento}
+          </p>
+        )}
+
         <button
           type="button"
           className={styles.finalizarButton}
-          disabled
+          disabled={!podeFinalizar}
+          onClick={handleFinalizarCompra}
         >
-          Finalizar compra (em breve)
+          {enviandoPagamento
+            ? "Redirecionando..."
+            : "Finalizar compra"}
         </button>
       </aside>
     </div>

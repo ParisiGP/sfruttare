@@ -224,6 +224,7 @@ export type EnderecoWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Endereco"> | Date | string
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   pedidos?: Prisma.PedidoListRelationFilter
+  checkoutSessoes?: Prisma.CheckoutSessaoListRelationFilter
 }
 
 export type EnderecoOrderByWithRelationInput = {
@@ -239,6 +240,7 @@ export type EnderecoOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   usuario?: Prisma.UsuarioOrderByWithRelationInput
   pedidos?: Prisma.PedidoOrderByRelationAggregateInput
+  checkoutSessoes?: Prisma.CheckoutSessaoOrderByRelationAggregateInput
 }
 
 export type EnderecoWhereUniqueInput = Prisma.AtLeast<{
@@ -257,6 +259,7 @@ export type EnderecoWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Endereco"> | Date | string
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   pedidos?: Prisma.PedidoListRelationFilter
+  checkoutSessoes?: Prisma.CheckoutSessaoListRelationFilter
 }, "id">
 
 export type EnderecoOrderByWithAggregationInput = {
@@ -303,6 +306,7 @@ export type EnderecoCreateInput = {
   createdAt?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutEnderecosInput
   pedidos?: Prisma.PedidoCreateNestedManyWithoutEnderecoInput
+  checkoutSessoes?: Prisma.CheckoutSessaoCreateNestedManyWithoutEnderecoInput
 }
 
 export type EnderecoUncheckedCreateInput = {
@@ -317,6 +321,7 @@ export type EnderecoUncheckedCreateInput = {
   usuarioId: string
   createdAt?: Date | string
   pedidos?: Prisma.PedidoUncheckedCreateNestedManyWithoutEnderecoInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUncheckedCreateNestedManyWithoutEnderecoInput
 }
 
 export type EnderecoUpdateInput = {
@@ -331,6 +336,7 @@ export type EnderecoUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutEnderecosNestedInput
   pedidos?: Prisma.PedidoUpdateManyWithoutEnderecoNestedInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUpdateManyWithoutEnderecoNestedInput
 }
 
 export type EnderecoUncheckedUpdateInput = {
@@ -345,6 +351,7 @@ export type EnderecoUncheckedUpdateInput = {
   usuarioId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pedidos?: Prisma.PedidoUncheckedUpdateManyWithoutEnderecoNestedInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUncheckedUpdateManyWithoutEnderecoNestedInput
 }
 
 export type EnderecoCreateManyInput = {
@@ -439,6 +446,11 @@ export type EnderecoNullableScalarRelationFilter = {
   isNot?: Prisma.EnderecoWhereInput | null
 }
 
+export type EnderecoScalarRelationFilter = {
+  is?: Prisma.EnderecoWhereInput
+  isNot?: Prisma.EnderecoWhereInput
+}
+
 export type EnderecoCreateNestedManyWithoutUsuarioInput = {
   create?: Prisma.XOR<Prisma.EnderecoCreateWithoutUsuarioInput, Prisma.EnderecoUncheckedCreateWithoutUsuarioInput> | Prisma.EnderecoCreateWithoutUsuarioInput[] | Prisma.EnderecoUncheckedCreateWithoutUsuarioInput[]
   connectOrCreate?: Prisma.EnderecoCreateOrConnectWithoutUsuarioInput | Prisma.EnderecoCreateOrConnectWithoutUsuarioInput[]
@@ -497,6 +509,20 @@ export type EnderecoUpdateOneWithoutPedidosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EnderecoUpdateToOneWithWhereWithoutPedidosInput, Prisma.EnderecoUpdateWithoutPedidosInput>, Prisma.EnderecoUncheckedUpdateWithoutPedidosInput>
 }
 
+export type EnderecoCreateNestedOneWithoutCheckoutSessoesInput = {
+  create?: Prisma.XOR<Prisma.EnderecoCreateWithoutCheckoutSessoesInput, Prisma.EnderecoUncheckedCreateWithoutCheckoutSessoesInput>
+  connectOrCreate?: Prisma.EnderecoCreateOrConnectWithoutCheckoutSessoesInput
+  connect?: Prisma.EnderecoWhereUniqueInput
+}
+
+export type EnderecoUpdateOneRequiredWithoutCheckoutSessoesNestedInput = {
+  create?: Prisma.XOR<Prisma.EnderecoCreateWithoutCheckoutSessoesInput, Prisma.EnderecoUncheckedCreateWithoutCheckoutSessoesInput>
+  connectOrCreate?: Prisma.EnderecoCreateOrConnectWithoutCheckoutSessoesInput
+  upsert?: Prisma.EnderecoUpsertWithoutCheckoutSessoesInput
+  connect?: Prisma.EnderecoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EnderecoUpdateToOneWithWhereWithoutCheckoutSessoesInput, Prisma.EnderecoUpdateWithoutCheckoutSessoesInput>, Prisma.EnderecoUncheckedUpdateWithoutCheckoutSessoesInput>
+}
+
 export type EnderecoCreateWithoutUsuarioInput = {
   id?: string
   cep: string
@@ -508,6 +534,7 @@ export type EnderecoCreateWithoutUsuarioInput = {
   estado: string
   createdAt?: Date | string
   pedidos?: Prisma.PedidoCreateNestedManyWithoutEnderecoInput
+  checkoutSessoes?: Prisma.CheckoutSessaoCreateNestedManyWithoutEnderecoInput
 }
 
 export type EnderecoUncheckedCreateWithoutUsuarioInput = {
@@ -521,6 +548,7 @@ export type EnderecoUncheckedCreateWithoutUsuarioInput = {
   estado: string
   createdAt?: Date | string
   pedidos?: Prisma.PedidoUncheckedCreateNestedManyWithoutEnderecoInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUncheckedCreateNestedManyWithoutEnderecoInput
 }
 
 export type EnderecoCreateOrConnectWithoutUsuarioInput = {
@@ -576,6 +604,7 @@ export type EnderecoCreateWithoutPedidosInput = {
   estado: string
   createdAt?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutEnderecosInput
+  checkoutSessoes?: Prisma.CheckoutSessaoCreateNestedManyWithoutEnderecoInput
 }
 
 export type EnderecoUncheckedCreateWithoutPedidosInput = {
@@ -589,6 +618,7 @@ export type EnderecoUncheckedCreateWithoutPedidosInput = {
   estado: string
   usuarioId: string
   createdAt?: Date | string
+  checkoutSessoes?: Prisma.CheckoutSessaoUncheckedCreateNestedManyWithoutEnderecoInput
 }
 
 export type EnderecoCreateOrConnectWithoutPedidosInput = {
@@ -618,6 +648,7 @@ export type EnderecoUpdateWithoutPedidosInput = {
   estado?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutEnderecosNestedInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUpdateManyWithoutEnderecoNestedInput
 }
 
 export type EnderecoUncheckedUpdateWithoutPedidosInput = {
@@ -631,6 +662,79 @@ export type EnderecoUncheckedUpdateWithoutPedidosInput = {
   estado?: Prisma.StringFieldUpdateOperationsInput | string
   usuarioId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkoutSessoes?: Prisma.CheckoutSessaoUncheckedUpdateManyWithoutEnderecoNestedInput
+}
+
+export type EnderecoCreateWithoutCheckoutSessoesInput = {
+  id?: string
+  cep: string
+  logradouro: string
+  numero: string
+  complemento?: string | null
+  bairro: string
+  cidade: string
+  estado: string
+  createdAt?: Date | string
+  usuario: Prisma.UsuarioCreateNestedOneWithoutEnderecosInput
+  pedidos?: Prisma.PedidoCreateNestedManyWithoutEnderecoInput
+}
+
+export type EnderecoUncheckedCreateWithoutCheckoutSessoesInput = {
+  id?: string
+  cep: string
+  logradouro: string
+  numero: string
+  complemento?: string | null
+  bairro: string
+  cidade: string
+  estado: string
+  usuarioId: string
+  createdAt?: Date | string
+  pedidos?: Prisma.PedidoUncheckedCreateNestedManyWithoutEnderecoInput
+}
+
+export type EnderecoCreateOrConnectWithoutCheckoutSessoesInput = {
+  where: Prisma.EnderecoWhereUniqueInput
+  create: Prisma.XOR<Prisma.EnderecoCreateWithoutCheckoutSessoesInput, Prisma.EnderecoUncheckedCreateWithoutCheckoutSessoesInput>
+}
+
+export type EnderecoUpsertWithoutCheckoutSessoesInput = {
+  update: Prisma.XOR<Prisma.EnderecoUpdateWithoutCheckoutSessoesInput, Prisma.EnderecoUncheckedUpdateWithoutCheckoutSessoesInput>
+  create: Prisma.XOR<Prisma.EnderecoCreateWithoutCheckoutSessoesInput, Prisma.EnderecoUncheckedCreateWithoutCheckoutSessoesInput>
+  where?: Prisma.EnderecoWhereInput
+}
+
+export type EnderecoUpdateToOneWithWhereWithoutCheckoutSessoesInput = {
+  where?: Prisma.EnderecoWhereInput
+  data: Prisma.XOR<Prisma.EnderecoUpdateWithoutCheckoutSessoesInput, Prisma.EnderecoUncheckedUpdateWithoutCheckoutSessoesInput>
+}
+
+export type EnderecoUpdateWithoutCheckoutSessoesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cep?: Prisma.StringFieldUpdateOperationsInput | string
+  logradouro?: Prisma.StringFieldUpdateOperationsInput | string
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  complemento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bairro?: Prisma.StringFieldUpdateOperationsInput | string
+  cidade?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  usuario?: Prisma.UsuarioUpdateOneRequiredWithoutEnderecosNestedInput
+  pedidos?: Prisma.PedidoUpdateManyWithoutEnderecoNestedInput
+}
+
+export type EnderecoUncheckedUpdateWithoutCheckoutSessoesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cep?: Prisma.StringFieldUpdateOperationsInput | string
+  logradouro?: Prisma.StringFieldUpdateOperationsInput | string
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  complemento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bairro?: Prisma.StringFieldUpdateOperationsInput | string
+  cidade?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  usuarioId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pedidos?: Prisma.PedidoUncheckedUpdateManyWithoutEnderecoNestedInput
 }
 
 export type EnderecoCreateManyUsuarioInput = {
@@ -656,6 +760,7 @@ export type EnderecoUpdateWithoutUsuarioInput = {
   estado?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pedidos?: Prisma.PedidoUpdateManyWithoutEnderecoNestedInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUpdateManyWithoutEnderecoNestedInput
 }
 
 export type EnderecoUncheckedUpdateWithoutUsuarioInput = {
@@ -669,6 +774,7 @@ export type EnderecoUncheckedUpdateWithoutUsuarioInput = {
   estado?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pedidos?: Prisma.PedidoUncheckedUpdateManyWithoutEnderecoNestedInput
+  checkoutSessoes?: Prisma.CheckoutSessaoUncheckedUpdateManyWithoutEnderecoNestedInput
 }
 
 export type EnderecoUncheckedUpdateManyWithoutUsuarioInput = {
@@ -690,10 +796,12 @@ export type EnderecoUncheckedUpdateManyWithoutUsuarioInput = {
 
 export type EnderecoCountOutputType = {
   pedidos: number
+  checkoutSessoes: number
 }
 
 export type EnderecoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pedidos?: boolean | EnderecoCountOutputTypeCountPedidosArgs
+  checkoutSessoes?: boolean | EnderecoCountOutputTypeCountCheckoutSessoesArgs
 }
 
 /**
@@ -713,6 +821,13 @@ export type EnderecoCountOutputTypeCountPedidosArgs<ExtArgs extends runtime.Type
   where?: Prisma.PedidoWhereInput
 }
 
+/**
+ * EnderecoCountOutputType without action
+ */
+export type EnderecoCountOutputTypeCountCheckoutSessoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CheckoutSessaoWhereInput
+}
+
 
 export type EnderecoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -727,6 +842,7 @@ export type EnderecoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   pedidos?: boolean | Prisma.Endereco$pedidosArgs<ExtArgs>
+  checkoutSessoes?: boolean | Prisma.Endereco$checkoutSessoesArgs<ExtArgs>
   _count?: boolean | Prisma.EnderecoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["endereco"]>
 
@@ -775,6 +891,7 @@ export type EnderecoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type EnderecoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   pedidos?: boolean | Prisma.Endereco$pedidosArgs<ExtArgs>
+  checkoutSessoes?: boolean | Prisma.Endereco$checkoutSessoesArgs<ExtArgs>
   _count?: boolean | Prisma.EnderecoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EnderecoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -789,6 +906,7 @@ export type $EnderecoPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     usuario: Prisma.$UsuarioPayload<ExtArgs>
     pedidos: Prisma.$PedidoPayload<ExtArgs>[]
+    checkoutSessoes: Prisma.$CheckoutSessaoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1197,6 +1315,7 @@ export interface Prisma__EnderecoClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   usuario<T extends Prisma.UsuarioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioDefaultArgs<ExtArgs>>): Prisma.Prisma__UsuarioClient<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   pedidos<T extends Prisma.Endereco$pedidosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Endereco$pedidosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  checkoutSessoes<T extends Prisma.Endereco$checkoutSessoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Endereco$checkoutSessoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckoutSessaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1658,6 +1777,30 @@ export type Endereco$pedidosArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.PedidoScalarFieldEnum | Prisma.PedidoScalarFieldEnum[]
+}
+
+/**
+ * Endereco.checkoutSessoes
+ */
+export type Endereco$checkoutSessoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CheckoutSessao
+   */
+  select?: Prisma.CheckoutSessaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CheckoutSessao
+   */
+  omit?: Prisma.CheckoutSessaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CheckoutSessaoInclude<ExtArgs> | null
+  where?: Prisma.CheckoutSessaoWhereInput
+  orderBy?: Prisma.CheckoutSessaoOrderByWithRelationInput | Prisma.CheckoutSessaoOrderByWithRelationInput[]
+  cursor?: Prisma.CheckoutSessaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CheckoutSessaoScalarFieldEnum | Prisma.CheckoutSessaoScalarFieldEnum[]
 }
 
 /**
