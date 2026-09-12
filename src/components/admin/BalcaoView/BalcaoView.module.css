@@ -199,6 +199,14 @@
   letter-spacing: 0.06em;
 }
 
+.campo .campoErro {
+  color: var(--color-danger);
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .campo input {
   min-height: 44px;
   padding: 0 12px;

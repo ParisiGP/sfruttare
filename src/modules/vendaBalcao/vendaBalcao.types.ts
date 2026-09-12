@@ -11,6 +11,7 @@ export type ProdutoBalcaoResumo = {
 export type ConfirmarVendaBalcaoInput = {
   nomeCliente: string;
   emailCliente?: string;
+  telefoneCliente?: string;
   parcelas: number;
   produtoIds: string[];
 };
@@ -25,6 +26,7 @@ export type VendaBalcaoResumo = {
   id: string;
   nomeCliente: string;
   emailCliente: string;
+  telefoneCliente: string;
   parcelas: number;
   subtotal: number;
   total: number;

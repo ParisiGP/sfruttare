@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { celularValido } from "@/lib/telefone";
+
 export const confirmarVendaBalcaoSchema = z.object({
   nomeCliente: z
     .string()
@@ -10,6 +12,16 @@ export const confirmarVendaBalcaoSchema = z.object({
     .string()
     .trim()
     .email("Digite um e-mail válido.")
+    .optional()
+    .or(z.literal("")),
+
+  telefoneCliente: z
+    .string()
+    .trim()
+    .refine(celularValido, {
+      message:
+        "Digite um celular válido, com DDD.",
+    })
     .optional()
     .or(z.literal("")),
 

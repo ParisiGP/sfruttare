@@ -48,6 +48,7 @@ export default async function BalcaoHistoricoPage() {
                   <th>Data/hora</th>
                   <th>Cliente</th>
                   <th>E-mail</th>
+                  <th>Celular</th>
                   <th>Itens</th>
                   <th>Parcelas</th>
                   <th>Total</th>
@@ -67,6 +68,11 @@ export default async function BalcaoHistoricoPage() {
 
                     <td>
                       {venda.emailCliente || "—"}
+                    </td>
+
+                    <td>
+                      {venda.telefoneCliente ||
+                        "—"}
                     </td>
 
                     <td>

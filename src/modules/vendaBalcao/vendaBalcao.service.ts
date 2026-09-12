@@ -105,6 +105,9 @@ export class VendaBalcaoService {
         nomeCliente: dadosValidados.nomeCliente,
         emailCliente:
           dadosValidados.emailCliente || undefined,
+        telefoneCliente:
+          dadosValidados.telefoneCliente ||
+          undefined,
         parcelas: dadosValidados.parcelas,
         subtotal,
         total,
@@ -143,6 +146,7 @@ export class VendaBalcaoService {
     id: string;
     nomeCliente: string;
     emailCliente: string | null;
+    telefoneCliente: string | null;
     parcelas: number;
     subtotal: unknown;
     total: unknown;
@@ -158,6 +162,8 @@ export class VendaBalcaoService {
       id: venda.id,
       nomeCliente: venda.nomeCliente,
       emailCliente: venda.emailCliente ?? "",
+      telefoneCliente:
+        venda.telefoneCliente ?? "",
       parcelas: venda.parcelas,
       subtotal: Number(venda.subtotal),
       total: Number(venda.total),

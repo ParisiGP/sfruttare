@@ -9,6 +9,7 @@ export type VendaBalcaoItemWriteData = {
 export type VendaBalcaoWriteData = {
   nomeCliente: string;
   emailCliente?: string;
+  telefoneCliente?: string;
   parcelas: number;
   subtotal: number;
   total: number;
@@ -48,6 +49,7 @@ export class VendaBalcaoRepository {
         data: {
           nomeCliente: data.nomeCliente,
           emailCliente: data.emailCliente,
+          telefoneCliente: data.telefoneCliente,
           parcelas: data.parcelas,
           subtotal: data.subtotal,
           total: data.total,

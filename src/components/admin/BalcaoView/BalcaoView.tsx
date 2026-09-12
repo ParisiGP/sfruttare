@@ -14,6 +14,10 @@ import {
 import { calcularTotalComJuros } from "@/modules/vendaBalcao/tabelaJurosMaquininha";
 import type { ProdutoBalcaoResumo } from "@/modules/vendaBalcao/vendaBalcao.types";
 import { formatarPreco } from "@/lib/formatarPreco";
+import {
+  celularValido,
+  formatarCelular,
+} from "@/lib/telefone";
 
 import styles from "./BalcaoView.module.css";
 
@@ -41,6 +45,8 @@ export function BalcaoView() {
   const [nomeCliente, setNomeCliente] =
     useState("");
   const [emailCliente, setEmailCliente] =
+    useState("");
+  const [telefoneCliente, setTelefoneCliente] =
     useState("");
   const [parcelas, setParcelas] = useState(1);
 
@@ -119,9 +125,14 @@ export function BalcaoView() {
     );
   }
 
+  const telefoneInvalido =
+    telefoneCliente.trim().length > 0 &&
+    !celularValido(telefoneCliente);
+
   const podeConfirmar =
     nomeCliente.trim().length > 0 &&
     carrinho.length > 0 &&
+    !telefoneInvalido &&
     !confirmando;
 
   async function handleConfirmarVenda() {
@@ -136,6 +147,8 @@ export function BalcaoView() {
     const resultado = await confirmarVendaBalcao({
       nomeCliente: nomeCliente.trim(),
       emailCliente: emailCliente.trim() || undefined,
+      telefoneCliente:
+        telefoneCliente.trim() || undefined,
       parcelas,
       produtoIds: carrinho.map(
         (produto) => produto.id
@@ -158,6 +171,7 @@ export function BalcaoView() {
     setCarrinho([]);
     setNomeCliente("");
     setEmailCliente("");
+    setTelefoneCliente("");
     setParcelas(1);
     setBusca("");
     setResultados([]);
@@ -400,6 +414,31 @@ export function BalcaoView() {
               setEmailCliente(event.target.value)
             }
           />
+        </label>
+
+        <label className={styles.campo}>
+          <span>Celular do cliente</span>
+          <input
+            type="tel"
+            inputMode="tel"
+            placeholder="(11) 91234-5678"
+            value={telefoneCliente}
+            onChange={(event) =>
+              setTelefoneCliente(
+                formatarCelular(
+                  event.target.value
+                )
+              )
+            }
+          />
+          {telefoneInvalido && (
+            <span
+              className={styles.campoErro}
+            >
+              Digite um celular válido, com
+              DDD.
+            </span>
+          )}
         </label>
 
         <div className={styles.totais}>

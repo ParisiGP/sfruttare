@@ -285,15 +285,16 @@ model InspiracaoSemana {
 }
 
 model VendaBalcao {
-  id            String   @id @default(cuid())
-  nomeCliente   String
-  emailCliente  String?
-  parcelas      Int      @default(1)
-  subtotal      Decimal  @db.Decimal(10,2)
-  total         Decimal  @db.Decimal(10,2)
-  totalComJuros Decimal? @db.Decimal(10,2)
-  itens         VendaBalcaoItem[]
-  createdAt     DateTime @default(now())
+  id              String   @id @default(cuid())
+  nomeCliente     String
+  emailCliente    String?
+  telefoneCliente String?
+  parcelas        Int      @default(1)
+  subtotal        Decimal  @db.Decimal(10,2)
+  total           Decimal  @db.Decimal(10,2)
+  totalComJuros   Decimal? @db.Decimal(10,2)
+  itens           VendaBalcaoItem[]
+  createdAt       DateTime @default(now())
 }
 
 model VendaBalcaoItem {

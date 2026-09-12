@@ -289,6 +289,7 @@ export const VendaBalcaoScalarFieldEnum = {
   id: 'id',
   nomeCliente: 'nomeCliente',
   emailCliente: 'emailCliente',
+  telefoneCliente: 'telefoneCliente',
   parcelas: 'parcelas',
   subtotal: 'subtotal',
   total: 'total',
