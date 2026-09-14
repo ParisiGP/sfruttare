@@ -2,25 +2,50 @@ import Link from "next/link";
 
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { VendaBalcaoService } from "@/modules/vendaBalcao/vendaBalcao.service";
-import { formatarPreco } from "@/lib/formatarPreco";
+import { BalcaoHistoricoLista } from "@/components/admin/BalcaoHistoricoLista/BalcaoHistoricoLista";
 
 import styles from "./page.module.css";
 
-function formatarDataHora(data: Date) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(data);
+type PageProps = {
+  searchParams?: Promise<
+    Record<string, string | string[] | undefined>
+  >;
+};
+
+function getParam(
+  value: string | string[] | undefined
+) {
+  return Array.isArray(value) ? value[0] : value;
 }
 
-export default async function BalcaoHistoricoPage() {
+export default async function BalcaoHistoricoPage({
+  searchParams,
+}: PageProps) {
   await requireAdmin();
+
+  const params = (await searchParams) ?? {};
+
+  const filtros = {
+    dataInicial:
+      getParam(params.dataInicial) || undefined,
+    dataFinal:
+      getParam(params.dataFinal) || undefined,
+    nomeCliente:
+      getParam(params.nomeCliente) || undefined,
+  };
+
+  const filtroAtivo =
+    !!filtros.dataInicial ||
+    !!filtros.dataFinal ||
+    !!filtros.nomeCliente;
 
   const vendaBalcaoService =
     new VendaBalcaoService();
 
-  const vendas =
-    await vendaBalcaoService.listarVendas();
+  const { vendas, totalLiquido } =
+    await vendaBalcaoService.listarVendas(
+      filtros
+    );
 
   return (
     <main>
@@ -36,97 +61,65 @@ export default async function BalcaoHistoricoPage() {
           </Link>
         </header>
 
-        {vendas.length === 0 ? (
-          <p className={styles.vazio}>
-            Nenhuma venda registrada ainda.
-          </p>
-        ) : (
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Data/hora</th>
-                  <th>Cliente</th>
-                  <th>E-mail</th>
-                  <th>Celular</th>
-                  <th>Itens</th>
-                  <th>Parcelas</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
+        <form
+          method="GET"
+          className={styles.filtros}
+        >
+          <label className={styles.filtroCampo}>
+            <span>De</span>
+            <input
+              type="date"
+              name="dataInicial"
+              defaultValue={
+                filtros.dataInicial ?? ""
+              }
+            />
+          </label>
 
-              <tbody>
-                {vendas.map((venda) => (
-                  <tr key={venda.id}>
-                    <td>
-                      {formatarDataHora(
-                        venda.createdAt
-                      )}
-                    </td>
+          <label className={styles.filtroCampo}>
+            <span>Até</span>
+            <input
+              type="date"
+              name="dataFinal"
+              defaultValue={
+                filtros.dataFinal ?? ""
+              }
+            />
+          </label>
 
-                    <td>{venda.nomeCliente}</td>
+          <label className={styles.filtroCampo}>
+            <span>Cliente</span>
+            <input
+              type="text"
+              name="nomeCliente"
+              defaultValue={
+                filtros.nomeCliente ?? ""
+              }
+              placeholder="Nome do cliente"
+            />
+          </label>
 
-                    <td>
-                      {venda.emailCliente || "—"}
-                    </td>
+          <button
+            type="submit"
+            className={styles.filtrarButton}
+          >
+            Filtrar
+          </button>
 
-                    <td>
-                      {venda.telefoneCliente ||
-                        "—"}
-                    </td>
+          {filtroAtivo && (
+            <Link
+              href="/admin/balcao/historico"
+              className={styles.limparLink}
+            >
+              Limpar filtros
+            </Link>
+          )}
+        </form>
 
-                    <td>
-                      <ul
-                        className={
-                          styles.itensLista
-                        }
-                      >
-                        {venda.itens.map(
-                          (item) => (
-                            <li key={item.id}>
-                              {item.nomeProduto}{" "}
-                              (
-                              {formatarPreco(
-                                item.precoUnitario
-                              )}
-                              )
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </td>
-
-                    <td>{venda.parcelas}x</td>
-
-                    <td>
-                      <strong>
-                        {formatarPreco(
-                          venda.total
-                        )}
-                      </strong>
-
-                      {venda.totalComJuros !==
-                        null &&
-                        venda.totalComJuros !==
-                          venda.total && (
-                          <span
-                            className={
-                              styles.totalComJuros
-                            }
-                          >
-                            {formatarPreco(
-                              venda.totalComJuros
-                            )}{" "}
-                            com juros
-                          </span>
-                        )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <BalcaoHistoricoLista
+          vendas={vendas}
+          totalLiquido={totalLiquido}
+        />
       </div>
     </main>
   );

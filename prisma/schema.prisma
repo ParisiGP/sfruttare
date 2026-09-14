@@ -285,16 +285,20 @@ model InspiracaoSemana {
 }
 
 model VendaBalcao {
-  id              String   @id @default(cuid())
-  nomeCliente     String
-  emailCliente    String?
-  telefoneCliente String?
-  parcelas        Int      @default(1)
-  subtotal        Decimal  @db.Decimal(10,2)
-  total           Decimal  @db.Decimal(10,2)
-  totalComJuros   Decimal? @db.Decimal(10,2)
-  itens           VendaBalcaoItem[]
-  createdAt       DateTime @default(now())
+  id                 String   @id @default(cuid())
+  nomeCliente        String
+  emailCliente       String?
+  telefoneCliente    String?
+  parcelas           Int      @default(1)
+  subtotal           Decimal  @db.Decimal(10,2)
+  descontoTipo       String?
+  descontoEntrada    Decimal? @db.Decimal(10,2)
+  descontoAplicado   Decimal? @db.Decimal(10,2)
+  total              Decimal  @db.Decimal(10,2)
+  totalComJuros      Decimal? @db.Decimal(10,2)
+  itens              VendaBalcaoItem[]
+  devolucaoComoTroca DevolucaoBalcao?
+  createdAt          DateTime @default(now())
 }
 
 model VendaBalcaoItem {
@@ -305,5 +309,19 @@ model VendaBalcaoItem {
   produto       Produto  @relation(fields: [produtoId], references: [id])
   nomeProduto   String
   precoUnitario Decimal  @db.Decimal(10,2)
+  devolucoes    DevolucaoBalcao[]
   createdAt     DateTime @default(now())
+}
+
+model DevolucaoBalcao {
+  id                String   @id @default(cuid())
+  vendaBalcaoItemId String   @unique
+  vendaBalcaoItem   VendaBalcaoItem @relation(fields: [vendaBalcaoItemId], references: [id])
+  tipo              String   // "DEVOLUCAO" | "TROCA"
+  valorDevolvido    Decimal  @db.Decimal(10,2)
+  vendaTrocaId      String?  @unique
+  vendaTroca        VendaBalcao? @relation(fields: [vendaTrocaId], references: [id])
+  diferencaValor    Decimal? @db.Decimal(10,2)
+  motivo            String?
+  createdAt         DateTime @default(now())
 }

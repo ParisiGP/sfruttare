@@ -102,3 +102,8 @@ export type VendaBalcao = Prisma.VendaBalcaoModel
  * 
  */
 export type VendaBalcaoItem = Prisma.VendaBalcaoItemModel
+/**
+ * Model DevolucaoBalcao
+ * 
+ */
+export type DevolucaoBalcao = Prisma.DevolucaoBalcaoModel

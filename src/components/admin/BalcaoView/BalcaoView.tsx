@@ -8,11 +8,17 @@ import {
 } from "react";
 
 import {
+  buscarClientesParaBalcao,
   buscarProdutosParaBalcao,
   confirmarVendaBalcao,
 } from "@/modules/vendaBalcao/actions";
 import { calcularTotalComJuros } from "@/modules/vendaBalcao/tabelaJurosMaquininha";
-import type { ProdutoBalcaoResumo } from "@/modules/vendaBalcao/vendaBalcao.types";
+import { calcularDescontoAplicado } from "@/modules/vendaBalcao/desconto";
+import type {
+  ClienteBalcaoResumo,
+  DescontoTipo,
+  ProdutoBalcaoResumo,
+} from "@/modules/vendaBalcao/vendaBalcao.types";
 import { formatarPreco } from "@/lib/formatarPreco";
 import {
   celularValido,
@@ -44,9 +50,22 @@ export function BalcaoView() {
 
   const [nomeCliente, setNomeCliente] =
     useState("");
+  const [sugestoesClientes, setSugestoesClientes] =
+    useState<ClienteBalcaoResumo[]>([]);
+  const [
+    indiceDestacadoCliente,
+    setIndiceDestacadoCliente,
+  ] = useState(-1);
+  const suprimirBuscaClienteRef = useRef(false);
+  const clienteWrapRef =
+    useRef<HTMLDivElement>(null);
   const [emailCliente, setEmailCliente] =
     useState("");
   const [telefoneCliente, setTelefoneCliente] =
+    useState("");
+  const [descontoTipo, setDescontoTipo] =
+    useState<DescontoTipo | null>(null);
+  const [descontoValor, setDescontoValor] =
     useState("");
   const [parcelas, setParcelas] = useState(1);
 
@@ -92,6 +111,115 @@ export function BalcaoView() {
     };
   }, [busca]);
 
+  useEffect(() => {
+    if (suprimirBuscaClienteRef.current) {
+      suprimirBuscaClienteRef.current = false;
+      setSugestoesClientes([]);
+      return;
+    }
+
+    const termo = nomeCliente.trim();
+
+    if (termo.length < 2) {
+      setSugestoesClientes([]);
+      return;
+    }
+
+    let cancelado = false;
+
+    const timer = setTimeout(async () => {
+      const resultado =
+        await buscarClientesParaBalcao(termo);
+
+      if (cancelado) {
+        return;
+      }
+
+      setSugestoesClientes(
+        resultado.ok ? resultado.clientes : []
+      );
+      setIndiceDestacadoCliente(-1);
+    }, DEBOUNCE_MS);
+
+    return () => {
+      cancelado = true;
+      clearTimeout(timer);
+    };
+  }, [nomeCliente]);
+
+  useEffect(() => {
+    function handleClickFora(
+      event: MouseEvent
+    ) {
+      if (
+        clienteWrapRef.current &&
+        !clienteWrapRef.current.contains(
+          event.target as Node
+        )
+      ) {
+        setSugestoesClientes([]);
+      }
+    }
+
+    document.addEventListener(
+      "mousedown",
+      handleClickFora
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickFora
+      );
+    };
+  }, []);
+
+  function selecionarCliente(
+    cliente: ClienteBalcaoResumo
+  ) {
+    suprimirBuscaClienteRef.current = true;
+    setNomeCliente(cliente.nomeCliente);
+    setEmailCliente(cliente.emailCliente);
+    setTelefoneCliente(cliente.telefoneCliente);
+    setSugestoesClientes([]);
+    setIndiceDestacadoCliente(-1);
+  }
+
+  function handleNomeClienteKeyDown(
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    if (sugestoesClientes.length === 0) {
+      return;
+    }
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setIndiceDestacadoCliente(
+        (atual) =>
+          (atual + 1) % sugestoesClientes.length
+      );
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setIndiceDestacadoCliente((atual) =>
+        atual <= 0
+          ? sugestoesClientes.length - 1
+          : atual - 1
+      );
+    } else if (event.key === "Enter") {
+      if (indiceDestacadoCliente >= 0) {
+        event.preventDefault();
+        selecionarCliente(
+          sugestoesClientes[
+            indiceDestacadoCliente
+          ]
+        );
+      }
+    } else if (event.key === "Escape") {
+      setSugestoesClientes([]);
+      setIndiceDestacadoCliente(-1);
+    }
+  }
+
   const subtotal = useMemo(
     () =>
       carrinho.reduce(
@@ -101,10 +229,39 @@ export function BalcaoView() {
     [carrinho]
   );
 
+  const descontoEntradaNumero =
+    descontoValor === ""
+      ? undefined
+      : Number(descontoValor);
+
+  const descontoAplicado = useMemo(
+    () =>
+      calcularDescontoAplicado(
+        subtotal,
+        descontoTipo ?? undefined,
+        descontoEntradaNumero
+      ),
+    [
+      subtotal,
+      descontoTipo,
+      descontoEntradaNumero,
+    ]
+  );
+
+  const descontoInvalido =
+    descontoAplicado > subtotal;
+
+  const totalFinal = descontoInvalido
+    ? subtotal
+    : subtotal - descontoAplicado;
+
   const totalComJuros = useMemo(
     () =>
-      calcularTotalComJuros(subtotal, parcelas),
-    [subtotal, parcelas]
+      calcularTotalComJuros(
+        totalFinal,
+        parcelas
+      ),
+    [totalFinal, parcelas]
   );
 
   function adicionarAoCarrinho(
@@ -133,6 +290,7 @@ export function BalcaoView() {
     nomeCliente.trim().length > 0 &&
     carrinho.length > 0 &&
     !telefoneInvalido &&
+    !descontoInvalido &&
     !confirmando;
 
   async function handleConfirmarVenda() {
@@ -149,6 +307,9 @@ export function BalcaoView() {
       emailCliente: emailCliente.trim() || undefined,
       telefoneCliente:
         telefoneCliente.trim() || undefined,
+      descontoTipo:
+        descontoTipo ?? undefined,
+      descontoEntrada: descontoEntradaNumero,
       parcelas,
       produtoIds: carrinho.map(
         (produto) => produto.id
@@ -164,14 +325,18 @@ export function BalcaoView() {
 
     setSucesso(
       `Venda de ${formatarPreco(
-        subtotal
+        totalFinal
       )} confirmada para ${nomeCliente.trim()}.`
     );
 
     setCarrinho([]);
     setNomeCliente("");
+    setSugestoesClientes([]);
+    setIndiceDestacadoCliente(-1);
     setEmailCliente("");
     setTelefoneCliente("");
+    setDescontoTipo(null);
+    setDescontoValor("");
     setParcelas(1);
     setBusca("");
     setResultados([]);
@@ -299,14 +464,14 @@ export function BalcaoView() {
             <tbody>
               {PARCELAS_DISPONIVEIS.map((n) => {
                 const valorSemJuros =
-                  subtotal > 0
-                    ? subtotal / n
+                  totalFinal > 0
+                    ? totalFinal / n
                     : 0;
 
                 const valorComJuros =
-                  subtotal > 0
+                  totalFinal > 0
                     ? calcularTotalComJuros(
-                        subtotal,
+                        totalFinal,
                         n
                       ) / n
                     : 0;
@@ -394,16 +559,77 @@ export function BalcaoView() {
           </ul>
         )}
 
-        <label className={styles.campo}>
-          <span>Nome do cliente *</span>
-          <input
-            type="text"
-            value={nomeCliente}
-            onChange={(event) =>
-              setNomeCliente(event.target.value)
-            }
-          />
-        </label>
+        <div
+          className={styles.campoComSugestoes}
+          ref={clienteWrapRef}
+        >
+          <label className={styles.campo}>
+            <span>Nome do cliente *</span>
+            <input
+              type="text"
+              autoComplete="off"
+              value={nomeCliente}
+              onChange={(event) =>
+                setNomeCliente(
+                  event.target.value
+                )
+              }
+              onKeyDown={
+                handleNomeClienteKeyDown
+              }
+            />
+          </label>
+
+          {sugestoesClientes.length > 0 && (
+            <ul
+              className={styles.sugestoesLista}
+            >
+              {sugestoesClientes.map(
+                (cliente, index) => (
+                  <li
+                    key={
+                      cliente.nomeCliente +
+                      index
+                    }
+                  >
+                    <button
+                      type="button"
+                      className={
+                        index ===
+                        indiceDestacadoCliente
+                          ? `${styles.sugestaoItem} ${styles.sugestaoItemAtiva}`
+                          : styles.sugestaoItem
+                      }
+                      onClick={() =>
+                        selecionarCliente(
+                          cliente
+                        )
+                      }
+                      onMouseEnter={() =>
+                        setIndiceDestacadoCliente(
+                          index
+                        )
+                      }
+                    >
+                      <strong>
+                        {cliente.nomeCliente}
+                      </strong>
+                      {cliente.telefoneCliente && (
+                        <span>
+                          {" "}
+                          —{" "}
+                          {
+                            cliente.telefoneCliente
+                          }
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                )
+              )}
+            </ul>
+          )}
+        </div>
 
         <label className={styles.campo}>
           <span>E-mail do cliente</span>
@@ -441,20 +667,114 @@ export function BalcaoView() {
           )}
         </label>
 
+        <div className={styles.descontoGrupo}>
+          <label className={styles.campo}>
+            <span>Desconto em R$</span>
+            <input
+              type="number"
+              min={0}
+              step="0.01"
+              disabled={
+                descontoTipo === "PERCENTUAL"
+              }
+              value={
+                descontoTipo === "VALOR"
+                  ? descontoValor
+                  : ""
+              }
+              onChange={(event) => {
+                const valor =
+                  event.target.value;
+
+                if (valor === "") {
+                  setDescontoTipo(null);
+                  setDescontoValor("");
+                  return;
+                }
+
+                setDescontoTipo("VALOR");
+                setDescontoValor(valor);
+              }}
+            />
+          </label>
+
+          <label className={styles.campo}>
+            <span>Desconto em %</span>
+            <input
+              type="number"
+              min={0}
+              max={100}
+              step="0.1"
+              disabled={
+                descontoTipo === "VALOR"
+              }
+              value={
+                descontoTipo === "PERCENTUAL"
+                  ? descontoValor
+                  : ""
+              }
+              onChange={(event) => {
+                const valor =
+                  event.target.value;
+
+                if (valor === "") {
+                  setDescontoTipo(null);
+                  setDescontoValor("");
+                  return;
+                }
+
+                setDescontoTipo("PERCENTUAL");
+                setDescontoValor(valor);
+              }}
+            />
+          </label>
+        </div>
+
+        {descontoInvalido && (
+          <p className={styles.erro}>
+            O desconto não pode ser maior que o
+            subtotal da venda.
+          </p>
+        )}
+
         <div className={styles.totais}>
           <div className={styles.totalLinha}>
-            <span>Sem juros</span>
+            <span>Subtotal</span>
             <strong>
               {formatarPreco(subtotal)}
             </strong>
           </div>
 
+          {descontoAplicado > 0 &&
+            !descontoInvalido && (
+              <div
+                className={styles.totalLinha}
+              >
+                <span>Desconto aplicado</span>
+                <strong>
+                  −
+                  {formatarPreco(
+                    descontoAplicado
+                  )}
+                </strong>
+              </div>
+            )}
+
           <div className={styles.totalLinha}>
-            <span>Com juros ({parcelas}x)</span>
+            <span>Total</span>
             <strong>
-              {formatarPreco(totalComJuros)}
+              {formatarPreco(totalFinal)}
             </strong>
           </div>
+
+          {totalComJuros !== totalFinal && (
+            <div className={styles.totalLinha}>
+              <span>Com juros ({parcelas}x)</span>
+              <strong>
+                {formatarPreco(totalComJuros)}
+              </strong>
+            </div>
+          )}
         </div>
 
         {erro && (

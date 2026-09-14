@@ -400,7 +400,8 @@ export const ModelName = {
   IntegracaoFrete: 'IntegracaoFrete',
   InspiracaoSemana: 'InspiracaoSemana',
   VendaBalcao: 'VendaBalcao',
-  VendaBalcaoItem: 'VendaBalcaoItem'
+  VendaBalcaoItem: 'VendaBalcaoItem',
+  DevolucaoBalcao: 'DevolucaoBalcao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "checkoutSessao" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana" | "vendaBalcao" | "vendaBalcaoItem"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "checkoutSessao" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana" | "vendaBalcao" | "vendaBalcaoItem" | "devolucaoBalcao"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1678,6 +1679,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DevolucaoBalcao: {
+      payload: Prisma.$DevolucaoBalcaoPayload<ExtArgs>
+      fields: Prisma.DevolucaoBalcaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DevolucaoBalcaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DevolucaoBalcaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>
+        }
+        findFirst: {
+          args: Prisma.DevolucaoBalcaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DevolucaoBalcaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>
+        }
+        findMany: {
+          args: Prisma.DevolucaoBalcaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>[]
+        }
+        create: {
+          args: Prisma.DevolucaoBalcaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>
+        }
+        createMany: {
+          args: Prisma.DevolucaoBalcaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DevolucaoBalcaoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>[]
+        }
+        delete: {
+          args: Prisma.DevolucaoBalcaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>
+        }
+        update: {
+          args: Prisma.DevolucaoBalcaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.DevolucaoBalcaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DevolucaoBalcaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DevolucaoBalcaoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>[]
+        }
+        upsert: {
+          args: Prisma.DevolucaoBalcaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevolucaoBalcaoPayload>
+        }
+        aggregate: {
+          args: Prisma.DevolucaoBalcaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDevolucaoBalcao>
+        }
+        groupBy: {
+          args: Prisma.DevolucaoBalcaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DevolucaoBalcaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DevolucaoBalcaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DevolucaoBalcaoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1923,6 +1998,9 @@ export const VendaBalcaoScalarFieldEnum = {
   telefoneCliente: 'telefoneCliente',
   parcelas: 'parcelas',
   subtotal: 'subtotal',
+  descontoTipo: 'descontoTipo',
+  descontoEntrada: 'descontoEntrada',
+  descontoAplicado: 'descontoAplicado',
   total: 'total',
   totalComJuros: 'totalComJuros',
   createdAt: 'createdAt'
@@ -1941,6 +2019,20 @@ export const VendaBalcaoItemScalarFieldEnum = {
 } as const
 
 export type VendaBalcaoItemScalarFieldEnum = (typeof VendaBalcaoItemScalarFieldEnum)[keyof typeof VendaBalcaoItemScalarFieldEnum]
+
+
+export const DevolucaoBalcaoScalarFieldEnum = {
+  id: 'id',
+  vendaBalcaoItemId: 'vendaBalcaoItemId',
+  tipo: 'tipo',
+  valorDevolvido: 'valorDevolvido',
+  vendaTrocaId: 'vendaTrocaId',
+  diferencaValor: 'diferencaValor',
+  motivo: 'motivo',
+  createdAt: 'createdAt'
+} as const
+
+export type DevolucaoBalcaoScalarFieldEnum = (typeof DevolucaoBalcaoScalarFieldEnum)[keyof typeof DevolucaoBalcaoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2246,6 +2338,7 @@ export type GlobalOmitConfig = {
   inspiracaoSemana?: Prisma.InspiracaoSemanaOmit
   vendaBalcao?: Prisma.VendaBalcaoOmit
   vendaBalcaoItem?: Prisma.VendaBalcaoItemOmit
+  devolucaoBalcao?: Prisma.DevolucaoBalcaoOmit
 }
 
 /* Types for Logging */

@@ -226,6 +226,7 @@ export type VendaBalcaoItemWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"VendaBalcaoItem"> | Date | string
   vendaBalcao?: Prisma.XOR<Prisma.VendaBalcaoScalarRelationFilter, Prisma.VendaBalcaoWhereInput>
   produto?: Prisma.XOR<Prisma.ProdutoScalarRelationFilter, Prisma.ProdutoWhereInput>
+  devolucoes?: Prisma.DevolucaoBalcaoListRelationFilter
 }
 
 export type VendaBalcaoItemOrderByWithRelationInput = {
@@ -237,6 +238,7 @@ export type VendaBalcaoItemOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   vendaBalcao?: Prisma.VendaBalcaoOrderByWithRelationInput
   produto?: Prisma.ProdutoOrderByWithRelationInput
+  devolucoes?: Prisma.DevolucaoBalcaoOrderByRelationAggregateInput
 }
 
 export type VendaBalcaoItemWhereUniqueInput = Prisma.AtLeast<{
@@ -251,6 +253,7 @@ export type VendaBalcaoItemWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"VendaBalcaoItem"> | Date | string
   vendaBalcao?: Prisma.XOR<Prisma.VendaBalcaoScalarRelationFilter, Prisma.VendaBalcaoWhereInput>
   produto?: Prisma.XOR<Prisma.ProdutoScalarRelationFilter, Prisma.ProdutoWhereInput>
+  devolucoes?: Prisma.DevolucaoBalcaoListRelationFilter
 }, "id">
 
 export type VendaBalcaoItemOrderByWithAggregationInput = {
@@ -286,6 +289,7 @@ export type VendaBalcaoItemCreateInput = {
   createdAt?: Date | string
   vendaBalcao: Prisma.VendaBalcaoCreateNestedOneWithoutItensInput
   produto: Prisma.ProdutoCreateNestedOneWithoutVendasBalcaoItensInput
+  devolucoes?: Prisma.DevolucaoBalcaoCreateNestedManyWithoutVendaBalcaoItemInput
 }
 
 export type VendaBalcaoItemUncheckedCreateInput = {
@@ -295,6 +299,7 @@ export type VendaBalcaoItemUncheckedCreateInput = {
   nomeProduto: string
   precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
+  devolucoes?: Prisma.DevolucaoBalcaoUncheckedCreateNestedManyWithoutVendaBalcaoItemInput
 }
 
 export type VendaBalcaoItemUpdateInput = {
@@ -304,6 +309,7 @@ export type VendaBalcaoItemUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vendaBalcao?: Prisma.VendaBalcaoUpdateOneRequiredWithoutItensNestedInput
   produto?: Prisma.ProdutoUpdateOneRequiredWithoutVendasBalcaoItensNestedInput
+  devolucoes?: Prisma.DevolucaoBalcaoUpdateManyWithoutVendaBalcaoItemNestedInput
 }
 
 export type VendaBalcaoItemUncheckedUpdateInput = {
@@ -313,6 +319,7 @@ export type VendaBalcaoItemUncheckedUpdateInput = {
   nomeProduto?: Prisma.StringFieldUpdateOperationsInput | string
   precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  devolucoes?: Prisma.DevolucaoBalcaoUncheckedUpdateManyWithoutVendaBalcaoItemNestedInput
 }
 
 export type VendaBalcaoItemCreateManyInput = {
@@ -383,6 +390,11 @@ export type VendaBalcaoItemMinOrderByAggregateInput = {
 
 export type VendaBalcaoItemSumOrderByAggregateInput = {
   precoUnitario?: Prisma.SortOrder
+}
+
+export type VendaBalcaoItemScalarRelationFilter = {
+  is?: Prisma.VendaBalcaoItemWhereInput
+  isNot?: Prisma.VendaBalcaoItemWhereInput
 }
 
 export type VendaBalcaoItemCreateNestedManyWithoutProdutoInput = {
@@ -469,12 +481,27 @@ export type VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoNestedInput = {
   deleteMany?: Prisma.VendaBalcaoItemScalarWhereInput | Prisma.VendaBalcaoItemScalarWhereInput[]
 }
 
+export type VendaBalcaoItemCreateNestedOneWithoutDevolucoesInput = {
+  create?: Prisma.XOR<Prisma.VendaBalcaoItemCreateWithoutDevolucoesInput, Prisma.VendaBalcaoItemUncheckedCreateWithoutDevolucoesInput>
+  connectOrCreate?: Prisma.VendaBalcaoItemCreateOrConnectWithoutDevolucoesInput
+  connect?: Prisma.VendaBalcaoItemWhereUniqueInput
+}
+
+export type VendaBalcaoItemUpdateOneRequiredWithoutDevolucoesNestedInput = {
+  create?: Prisma.XOR<Prisma.VendaBalcaoItemCreateWithoutDevolucoesInput, Prisma.VendaBalcaoItemUncheckedCreateWithoutDevolucoesInput>
+  connectOrCreate?: Prisma.VendaBalcaoItemCreateOrConnectWithoutDevolucoesInput
+  upsert?: Prisma.VendaBalcaoItemUpsertWithoutDevolucoesInput
+  connect?: Prisma.VendaBalcaoItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VendaBalcaoItemUpdateToOneWithWhereWithoutDevolucoesInput, Prisma.VendaBalcaoItemUpdateWithoutDevolucoesInput>, Prisma.VendaBalcaoItemUncheckedUpdateWithoutDevolucoesInput>
+}
+
 export type VendaBalcaoItemCreateWithoutProdutoInput = {
   id?: string
   nomeProduto: string
   precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   vendaBalcao: Prisma.VendaBalcaoCreateNestedOneWithoutItensInput
+  devolucoes?: Prisma.DevolucaoBalcaoCreateNestedManyWithoutVendaBalcaoItemInput
 }
 
 export type VendaBalcaoItemUncheckedCreateWithoutProdutoInput = {
@@ -483,6 +510,7 @@ export type VendaBalcaoItemUncheckedCreateWithoutProdutoInput = {
   nomeProduto: string
   precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
+  devolucoes?: Prisma.DevolucaoBalcaoUncheckedCreateNestedManyWithoutVendaBalcaoItemInput
 }
 
 export type VendaBalcaoItemCreateOrConnectWithoutProdutoInput = {
@@ -529,6 +557,7 @@ export type VendaBalcaoItemCreateWithoutVendaBalcaoInput = {
   precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   produto: Prisma.ProdutoCreateNestedOneWithoutVendasBalcaoItensInput
+  devolucoes?: Prisma.DevolucaoBalcaoCreateNestedManyWithoutVendaBalcaoItemInput
 }
 
 export type VendaBalcaoItemUncheckedCreateWithoutVendaBalcaoInput = {
@@ -537,6 +566,7 @@ export type VendaBalcaoItemUncheckedCreateWithoutVendaBalcaoInput = {
   nomeProduto: string
   precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
+  devolucoes?: Prisma.DevolucaoBalcaoUncheckedCreateNestedManyWithoutVendaBalcaoItemInput
 }
 
 export type VendaBalcaoItemCreateOrConnectWithoutVendaBalcaoInput = {
@@ -565,6 +595,58 @@ export type VendaBalcaoItemUpdateManyWithWhereWithoutVendaBalcaoInput = {
   data: Prisma.XOR<Prisma.VendaBalcaoItemUpdateManyMutationInput, Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoInput>
 }
 
+export type VendaBalcaoItemCreateWithoutDevolucoesInput = {
+  id?: string
+  nomeProduto: string
+  precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  vendaBalcao: Prisma.VendaBalcaoCreateNestedOneWithoutItensInput
+  produto: Prisma.ProdutoCreateNestedOneWithoutVendasBalcaoItensInput
+}
+
+export type VendaBalcaoItemUncheckedCreateWithoutDevolucoesInput = {
+  id?: string
+  vendaBalcaoId: string
+  produtoId: string
+  nomeProduto: string
+  precoUnitario: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+}
+
+export type VendaBalcaoItemCreateOrConnectWithoutDevolucoesInput = {
+  where: Prisma.VendaBalcaoItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.VendaBalcaoItemCreateWithoutDevolucoesInput, Prisma.VendaBalcaoItemUncheckedCreateWithoutDevolucoesInput>
+}
+
+export type VendaBalcaoItemUpsertWithoutDevolucoesInput = {
+  update: Prisma.XOR<Prisma.VendaBalcaoItemUpdateWithoutDevolucoesInput, Prisma.VendaBalcaoItemUncheckedUpdateWithoutDevolucoesInput>
+  create: Prisma.XOR<Prisma.VendaBalcaoItemCreateWithoutDevolucoesInput, Prisma.VendaBalcaoItemUncheckedCreateWithoutDevolucoesInput>
+  where?: Prisma.VendaBalcaoItemWhereInput
+}
+
+export type VendaBalcaoItemUpdateToOneWithWhereWithoutDevolucoesInput = {
+  where?: Prisma.VendaBalcaoItemWhereInput
+  data: Prisma.XOR<Prisma.VendaBalcaoItemUpdateWithoutDevolucoesInput, Prisma.VendaBalcaoItemUncheckedUpdateWithoutDevolucoesInput>
+}
+
+export type VendaBalcaoItemUpdateWithoutDevolucoesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomeProduto?: Prisma.StringFieldUpdateOperationsInput | string
+  precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vendaBalcao?: Prisma.VendaBalcaoUpdateOneRequiredWithoutItensNestedInput
+  produto?: Prisma.ProdutoUpdateOneRequiredWithoutVendasBalcaoItensNestedInput
+}
+
+export type VendaBalcaoItemUncheckedUpdateWithoutDevolucoesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  vendaBalcaoId?: Prisma.StringFieldUpdateOperationsInput | string
+  produtoId?: Prisma.StringFieldUpdateOperationsInput | string
+  nomeProduto?: Prisma.StringFieldUpdateOperationsInput | string
+  precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type VendaBalcaoItemCreateManyProdutoInput = {
   id?: string
   vendaBalcaoId: string
@@ -579,6 +661,7 @@ export type VendaBalcaoItemUpdateWithoutProdutoInput = {
   precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vendaBalcao?: Prisma.VendaBalcaoUpdateOneRequiredWithoutItensNestedInput
+  devolucoes?: Prisma.DevolucaoBalcaoUpdateManyWithoutVendaBalcaoItemNestedInput
 }
 
 export type VendaBalcaoItemUncheckedUpdateWithoutProdutoInput = {
@@ -587,6 +670,7 @@ export type VendaBalcaoItemUncheckedUpdateWithoutProdutoInput = {
   nomeProduto?: Prisma.StringFieldUpdateOperationsInput | string
   precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  devolucoes?: Prisma.DevolucaoBalcaoUncheckedUpdateManyWithoutVendaBalcaoItemNestedInput
 }
 
 export type VendaBalcaoItemUncheckedUpdateManyWithoutProdutoInput = {
@@ -611,6 +695,7 @@ export type VendaBalcaoItemUpdateWithoutVendaBalcaoInput = {
   precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produto?: Prisma.ProdutoUpdateOneRequiredWithoutVendasBalcaoItensNestedInput
+  devolucoes?: Prisma.DevolucaoBalcaoUpdateManyWithoutVendaBalcaoItemNestedInput
 }
 
 export type VendaBalcaoItemUncheckedUpdateWithoutVendaBalcaoInput = {
@@ -619,6 +704,7 @@ export type VendaBalcaoItemUncheckedUpdateWithoutVendaBalcaoInput = {
   nomeProduto?: Prisma.StringFieldUpdateOperationsInput | string
   precoUnitario?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  devolucoes?: Prisma.DevolucaoBalcaoUncheckedUpdateManyWithoutVendaBalcaoItemNestedInput
 }
 
 export type VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoInput = {
@@ -630,6 +716,35 @@ export type VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoInput = {
 }
 
 
+/**
+ * Count Type VendaBalcaoItemCountOutputType
+ */
+
+export type VendaBalcaoItemCountOutputType = {
+  devolucoes: number
+}
+
+export type VendaBalcaoItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  devolucoes?: boolean | VendaBalcaoItemCountOutputTypeCountDevolucoesArgs
+}
+
+/**
+ * VendaBalcaoItemCountOutputType without action
+ */
+export type VendaBalcaoItemCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VendaBalcaoItemCountOutputType
+   */
+  select?: Prisma.VendaBalcaoItemCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * VendaBalcaoItemCountOutputType without action
+ */
+export type VendaBalcaoItemCountOutputTypeCountDevolucoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DevolucaoBalcaoWhereInput
+}
+
 
 export type VendaBalcaoItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -640,6 +755,8 @@ export type VendaBalcaoItemSelect<ExtArgs extends runtime.Types.Extensions.Inter
   createdAt?: boolean
   vendaBalcao?: boolean | Prisma.VendaBalcaoDefaultArgs<ExtArgs>
   produto?: boolean | Prisma.ProdutoDefaultArgs<ExtArgs>
+  devolucoes?: boolean | Prisma.VendaBalcaoItem$devolucoesArgs<ExtArgs>
+  _count?: boolean | Prisma.VendaBalcaoItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vendaBalcaoItem"]>
 
 export type VendaBalcaoItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -677,6 +794,8 @@ export type VendaBalcaoItemOmit<ExtArgs extends runtime.Types.Extensions.Interna
 export type VendaBalcaoItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vendaBalcao?: boolean | Prisma.VendaBalcaoDefaultArgs<ExtArgs>
   produto?: boolean | Prisma.ProdutoDefaultArgs<ExtArgs>
+  devolucoes?: boolean | Prisma.VendaBalcaoItem$devolucoesArgs<ExtArgs>
+  _count?: boolean | Prisma.VendaBalcaoItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VendaBalcaoItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vendaBalcao?: boolean | Prisma.VendaBalcaoDefaultArgs<ExtArgs>
@@ -692,6 +811,7 @@ export type $VendaBalcaoItemPayload<ExtArgs extends runtime.Types.Extensions.Int
   objects: {
     vendaBalcao: Prisma.$VendaBalcaoPayload<ExtArgs>
     produto: Prisma.$ProdutoPayload<ExtArgs>
+    devolucoes: Prisma.$DevolucaoBalcaoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1096,6 +1216,7 @@ export interface Prisma__VendaBalcaoItemClient<T, Null = never, ExtArgs extends 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   vendaBalcao<T extends Prisma.VendaBalcaoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VendaBalcaoDefaultArgs<ExtArgs>>): Prisma.Prisma__VendaBalcaoClient<runtime.Types.Result.GetResult<Prisma.$VendaBalcaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   produto<T extends Prisma.ProdutoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProdutoDefaultArgs<ExtArgs>>): Prisma.Prisma__ProdutoClient<runtime.Types.Result.GetResult<Prisma.$ProdutoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  devolucoes<T extends Prisma.VendaBalcaoItem$devolucoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VendaBalcaoItem$devolucoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevolucaoBalcaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1529,6 +1650,30 @@ export type VendaBalcaoItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many VendaBalcaoItems to delete.
    */
   limit?: number
+}
+
+/**
+ * VendaBalcaoItem.devolucoes
+ */
+export type VendaBalcaoItem$devolucoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DevolucaoBalcao
+   */
+  select?: Prisma.DevolucaoBalcaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DevolucaoBalcao
+   */
+  omit?: Prisma.DevolucaoBalcaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DevolucaoBalcaoInclude<ExtArgs> | null
+  where?: Prisma.DevolucaoBalcaoWhereInput
+  orderBy?: Prisma.DevolucaoBalcaoOrderByWithRelationInput | Prisma.DevolucaoBalcaoOrderByWithRelationInput[]
+  cursor?: Prisma.DevolucaoBalcaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DevolucaoBalcaoScalarFieldEnum | Prisma.DevolucaoBalcaoScalarFieldEnum[]
 }
 
 /**

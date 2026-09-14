@@ -137,6 +137,107 @@ Essa tela vai ser usada num ambiente físico corrido (balcão de evento), não �
 - Layout simples, poucos cliques entre "achar peça" e "adicionar ao carrinho".
 - Pode (e deve) ser mais funcional/direta que o padrão visual da loja pública — não precisa aplicar floreios/identidade visual aqui, é uma ferramenta interna de operação, não uma vitrine.
 
-## Ao concluir
+---
 
-Registrar no CLAUDE.md que essa tela foi implementada — **só marcar como concluído depois de testar de verdade** (cadastrar uma peça de teste, buscar, adicionar ao carrinho, confirmar, e conferir que o status virou `VENDIDO` e a venda aparece no histórico). Essa é a única alteração permitida nesse arquivo — não editar mais nada nele.
+# Parte 2 — Refinamentos pós-Bazar
+
+**O Bazar já aconteceu e já existe venda real gravada no banco (`VendaBalcao`/`VendaBalcaoItem`).** Tudo abaixo precisa ser **aditivo** — novas colunas opcionais, novos models — nunca renomear, remover ou migrar dado que já existe. Nenhuma linha já gravada pode ser alterada ou apagada por esta tarefa.
+
+## 7. Descontos no carrinho do caixa
+
+Dois campos novos na coluna do carrinho (`/admin/balcao`), acima da tabela de parcelas: **"Desconto em R$"** e **"Desconto em %"** — **mutuamente exclusivos**: preencher um desabilita/limpa o outro (não podem ser somados na mesma venda).
+
+- O desconto se aplica sobre o `subtotal`, antes de calcular `totalComJuros` (os juros da maquininha incidem sobre o valor que será de fato cobrado, já com desconto).
+- Validação: o desconto não pode deixar o total menor que zero (percentual não pode passar de 100%; valor em R$ não pode passar do subtotal).
+- Mostrar no resumo, de forma clara: Subtotal → Desconto aplicado (−R$) → Total.
+
+**Schema — adicionar em `VendaBalcao`** (campos novos, opcionais, não afeta as vendas já gravadas, que ficam com esses campos `null`):
+```prisma
+model VendaBalcao {
+  // ...campos existentes...
+  descontoTipo     String?  // "VALOR" | "PERCENTUAL"
+  descontoEntrada  Decimal? @db.Decimal(10,2) // o número digitado (R$ se tipo VALOR, ex.: 10 se tipo PERCENTUAL = 10%)
+  descontoAplicado Decimal? @db.Decimal(10,2) // valor final em R$ do desconto, já calculado — evita recalcular percentual toda hora num relatório
+}
+```
+`total` continua sendo o valor final (subtotal − descontoAplicado), igual já é hoje — só passa a poder ser menor que o subtotal.
+
+## 8. Trocas e devoluções
+
+**Novo model** (não mexe em `VendaBalcao`/`VendaBalcaoItem` existentes, só referencia):
+```prisma
+model DevolucaoBalcao {
+  id                String   @id @default(cuid())
+  vendaBalcaoItemId String
+  vendaBalcaoItem   VendaBalcaoItem @relation(fields: [vendaBalcaoItemId], references: [id])
+  tipo              String   // "DEVOLUCAO" | "TROCA"
+  valorDevolvido    Decimal  @db.Decimal(10,2) // snapshot do precoUnitario do item devolvido
+  novoProdutoId     String?  // só preenchido se tipo = "TROCA"
+  novoProduto       Produto? @relation("DevolucaoNovoProduto", fields: [novoProdutoId], references: [id])
+  diferencaValor    Decimal? @db.Decimal(10,2) // preco do novo produto − valorDevolvido (só em TROCA; positivo = cliente pagou mais, negativo = loja devolveu diferença)
+  motivo            String?
+  createdAt         DateTime @default(now())
+}
+```
+Adicionar relação reversa `devolucoes DevolucaoBalcao[]` em `VendaBalcaoItem`, e a relação nomeada `"DevolucaoNovoProduto"` em `Produto`.
+
+**Regras de negócio:**
+- Um `VendaBalcaoItem` só pode ter **uma** `DevolucaoBalcao` associada — validar antes de permitir (não devolver a mesma peça duas vezes).
+- **Devolução simples**: cria o registro (`tipo: "DEVOLUCAO"`) e o `Produto` original volta automaticamente para `status: "DISPONIVEL"` — sem perguntar estado da peça (decisão já alinhada).
+- **Troca**: mesma coisa, mais: o novo produto escolhido precisa estar `DISPONIVEL` no momento (revalidar, mesma proteção de corrida já usada em `VendaBalcaoRepository.create` com `updateMany`/`where: status`), passa para `VENDIDO`, e `diferencaValor` é calculado e gravado — **não processa nenhum pagamento**, só registra a diferença pra bater conta depois (o ajuste real acontece na maquininha, fora do sistema, igual o resto do fluxo do balcão).
+- Tudo dentro de uma transação: reverter produto antigo, atualizar novo produto (se troca), criar o registro.
+
+**UI**: na tela de histórico (`/admin/balcao/historico`), cada item de cada venda ganha um botão **"Devolver"** e **"Trocar"** — some depois que o item já tiver uma devolução registrada. Abre um modal: campo de motivo (opcional); se for troca, um campo de busca pra escolher a peça nova (reaproveitar a mesma busca de `buscarProdutosDisponiveis` já usada no balcão).
+
+## 9. Refino do histórico — "batimento"
+
+Ajustes em `/admin/balcao/historico`:
+- **Agrupar por dia**: as vendas passam a ser exibidas em seções por data (mais recente primeiro), cada seção com um subtotal do dia.
+- **Filtro por período**: campos de data inicial/final (GET, mesmo padrão já usado em `ProdutosAdmin`). Também um filtro simples por nome do cliente, já que é barato de reaproveitar.
+- **Total geral em destaque**, refletindo o filtro aplicado, calculado como **líquido**: soma de `VendaBalcao.total` do período **menos** o valor das devoluções simples **mais** o `diferencaValor` das trocas do período (o efeito líquido de uma troca na receita já é exatamente a diferença entre o produto novo e o devolvido — não precisa subtrair os dois separadamente).
+- Cada venda no histórico deve mostrar visualmente se algum item dela foi devolvido/trocado (ex.: item riscado ou badge "Devolvido"/"Trocado"), pra bater com o total líquido.
+
+**Simplificação assumida, documentando pra você validar**: se uma venda teve desconto e depois um dos itens dela é devolvido, o valor devolvido registrado é o `precoUnitario` original do item (sem tentar ratear o desconto proporcionalmente entre os itens da venda). Se isso não bater com o jeito que você faz a conta na prática, me avisa que ajusto.
+
+## Ao concluir (Parte 2)
+
+Registrar no CLAUDE.md o que foi implementado (Parte 1 e/ou Parte 2, dependendo do que for feito primeiro) — **só marcar como concluído depois de testar de verdade**, incluindo: uma venda de teste com desconto aplicado, uma devolução simples (confere se o produto volta pra `DISPONIVEL`), uma troca (confere se o produto novo vai pra `VENDIDO` e a diferença é gravada), e o total do relatório batendo com o valor líquido esperado. Essa é a única alteração permitida nesse arquivo — não editar mais nada nele.
+
+---
+
+# Parte 3 — Autocomplete de cliente no balcão
+
+**Mesma regra da Parte 2 continua valendo: já existe venda real gravada (`VendaBalcao`/`VendaBalcaoItem`/`DevolucaoBalcao`). Tudo abaixo é só leitura desses dados + um campo novo opcional — nada do que já existe pode ser alterado, renomeado ou removido.**
+
+## Motivação
+
+O mesmo cliente pode comprar mais de uma vez (cliente recorrente do brechó) e hoje precisa redigitar nome, e-mail e telefone do zero toda vez no balcão. Não existe (e não é o momento de criar) um model `Cliente` dedicado — isso seria uma mudança maior de arquitetura, fora de escopo aqui. A solução reaproveita o próprio histórico de `VendaBalcao`, que já guarda `nomeCliente`/`emailCliente`/`telefoneCliente` de cada venda.
+
+## 10. Busca de cliente enquanto digita, com preenchimento automático
+
+No campo **"Nome do cliente"** da tela `/admin/balcao` (coluna do carrinho), mesmo padrão de busca com debounce já usado na busca de peças ao lado:
+
+- A partir de 2 caracteres digitados, consulta clientes cujo nome já apareceu em alguma venda anterior e contenha o termo digitado (case-insensitive — mesma lógica do filtro de nome já usado em `/admin/balcao/historico`).
+- Mostra um dropdown abaixo do campo com até 6 sugestões, cada uma exibindo nome + telefone (quando houver) para diferenciar homônimos — ex.: "Maria Silva — (11) 91234-5678".
+- Se o mesmo nome aparecer em mais de uma venda (com dados diferentes, ex.: telefone atualizado), usar os dados da venda **mais recente** daquele cliente.
+- Selecionar uma sugestão (clique, ou Enter/setas do teclado) preenche automaticamente os campos **Nome**, **E-mail** e **Celular** com os dados daquela venda, e fecha o dropdown.
+- Depois de preenchidos, os campos continuam 100% editáveis — selecionar da lista é um atalho, não trava nada (ex.: cliente mudou de telefone, o caixa pode corrigir na hora).
+- Nome novo, sem venda anterior: não mostra nenhum dropdown nem mensagem — é o caminho normal de primeira compra, não é um estado de erro.
+- Se a consulta falhar (erro de rede/banco): falha silenciosa, dropdown simplesmente não aparece — mesma decisão já usada na busca de peças, para não travar o atendimento por causa de uma funcionalidade de conveniência.
+- Dropdown fecha ao clicar fora, selecionar um item, ou apertar Esc.
+
+**Mobile:** a tela de balcão já é usada em tablet/celular durante o atendimento — itens do dropdown precisam ter altura de toque ≥44px (padrão já usado no resto do projeto).
+
+### Backend
+
+- **`VendaBalcaoRepository`**: novo método `findClientesPorNome(termo: string)` — `findMany` em `VendaBalcao` com `where: { nomeCliente: { contains: termo, mode: "insensitive" } }`, `select` só `nomeCliente`/`emailCliente`/`telefoneCliente`/`createdAt`, `orderBy: { createdAt: "desc" }`, `take` um teto (ex.: 30) só pra não trazer histórico inteiro antes de deduplicar.
+- **`VendaBalcaoService`**: novo método `buscarClientes(termo)` — exige mínimo de 2 caracteres (abaixo disso retorna lista vazia sem consultar o banco, mesmo padrão da busca global do site). Deduplica os resultados do repository por nome normalizado (`trim().toLowerCase()`), mantendo a primeira ocorrência de cada nome (a mais recente, já que a query veio ordenada por `createdAt desc`). Retorna no máximo 6 sugestões.
+- **`actions.ts`**: nova action `buscarClientesParaBalcao(termo)`, mesmo padrão `{ok, message, clientes}` de `buscarProdutosParaBalcao`, chamando `requireAdmin()` no topo.
+
+### Frontend (`BalcaoView.tsx`)
+
+Mesmo padrão já usado no campo de busca de peças (debounce de 300ms, estado local, cancelamento de busca desatualizada). Nenhum campo novo no banco é necessário para isso — é só leitura do que já existe.
+
+## Ao concluir (Parte 3)
+
+Registrar no CLAUDE.md o que foi implementado — só marcar como concluído depois de testar de verdade: cadastrar duas vendas de teste pro mesmo nome de cliente com telefones diferentes, confirmar que a sugestão traz o dado da venda mais recente, e confirmar que um nome nunca usado antes não mostra dropdown nenhum. Essa é a única alteração permitida no CLAUDE.md — não editar mais nada nele.
