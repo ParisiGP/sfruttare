@@ -1,4 +1,5 @@
 import { ProdutoRepository } from "@/modules/produto/produto.repository";
+import { converterPeriodo } from "@/lib/periodo";
 
 import { VendaBalcaoRepository } from "./vendaBalcao.repository";
 import type { VendaBalcaoListFilters } from "./vendaBalcao.repository";
@@ -271,19 +272,8 @@ export class VendaBalcaoService {
   private montarFiltroData(
     filtros: FiltroHistoricoBalcao
   ): VendaBalcaoListFilters {
-    const resultado: VendaBalcaoListFilters = {};
-
-    if (filtros.dataInicial) {
-      resultado.dataInicial = new Date(
-        `${filtros.dataInicial}T00:00:00`
-      );
-    }
-
-    if (filtros.dataFinal) {
-      resultado.dataFinal = new Date(
-        `${filtros.dataFinal}T23:59:59.999`
-      );
-    }
+    const resultado: VendaBalcaoListFilters =
+      converterPeriodo(filtros);
 
     if (filtros.nomeCliente?.trim()) {
       resultado.nomeCliente =

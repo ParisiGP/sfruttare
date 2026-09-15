@@ -1,0 +1,327 @@
+.wrapper {
+  width: min(1280px, calc(100% - 40px));
+  margin: 32px auto 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.filtroCampo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filtroCampo span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.filtroCampo input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.filtroCampo input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.filtrarButton {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fffaf1;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.filtrarButton:hover {
+  background: var(--color-primary-hover);
+}
+
+.limparLink {
+  align-self: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.limparLink:hover {
+  text-decoration: underline;
+}
+
+.atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.atalhoLink {
+  min-height: 44px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.atalhoLink:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.erro {
+  margin: 0;
+  padding: 16px 20px;
+  border: 1px solid rgba(168, 92, 74, 0.24);
+  border-radius: var(--radius-md);
+  background: rgba(168, 92, 74, 0.08);
+  color: var(--color-danger);
+  font-size: 14px;
+}
+
+.vazio {
+  padding: 60px 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.secao h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.card span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.card strong {
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.cardDestaque {
+  border-color: var(--color-primary);
+}
+
+.cardDestaque strong {
+  color: var(--color-primary);
+}
+
+.metricasPorCanal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.canalBloco {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+}
+
+.canalBloco h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cardsGridPequeno {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.cardsGridPequeno .card {
+  padding: 12px;
+}
+
+.cardsGridPequeno .card strong {
+  font-size: 17px;
+}
+
+.rankingLista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.rankingItem {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rankingItem:last-child {
+  border-bottom: none;
+}
+
+.rankingPosicao {
+  min-width: 28px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rankingTipo {
+  flex: 1 1 160px;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.rankingQuantidade {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.rankingFaturamento {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.comparativoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.comparativoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.comparativoCard h3 {
+  margin: 0 0 4px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.comparativoLinha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.comparativoLinha span {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.comparativoLinha strong {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .cardsGrid,
+  .metricasPorCanal,
+  .comparativoGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cardsGridPequeno {
+    grid-template-columns: 1fr;
+  }
+}

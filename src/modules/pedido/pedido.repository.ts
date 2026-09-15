@@ -77,6 +77,43 @@ export class PedidoRepository {
     });
   }
 
+  /**
+   * Só pedidos efetivamente pagos — `PIX_PENDENTE` (ainda não pago) e
+   * `CANCELADO` ficam de fora de qualquer métrica de faturamento.
+   */
+  async findPagosNoPeriodo(
+    dataInicial?: Date,
+    dataFinal?: Date
+  ) {
+    const where: Record<string, unknown> = {
+      status: {
+        in: ["PAGO", "ENVIADO", "ENTREGUE"],
+      },
+    };
+
+    if (dataInicial || dataFinal) {
+      const createdAt: Record<string, Date> = {};
+
+      if (dataInicial) {
+        createdAt.gte = dataInicial;
+      }
+
+      if (dataFinal) {
+        createdAt.lte = dataFinal;
+      }
+
+      where.createdAt = createdAt;
+    }
+
+    return prisma.pedido.findMany({
+      where,
+      include: this.includeRelations(),
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
   private includeRelations() {
     return {
       endereco: true,

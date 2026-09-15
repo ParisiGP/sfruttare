@@ -35,6 +35,11 @@ const navItems = [
     href: "/admin/usuarios",
     label: "Usuários",
   },
+  {
+    id: "desempenho",
+    href: "/admin/desempenho",
+    label: "Desempenho",
+  },
 ];
 
 export function AdminHeader() {
