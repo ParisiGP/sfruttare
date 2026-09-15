@@ -335,6 +335,7 @@ export class VendaBalcaoService {
       id: string;
       nomeProduto: string;
       precoUnitario: unknown;
+      produto: { referencia: string | null } | null;
       devolucoes: {
         id: string;
         tipo: string;
@@ -384,6 +385,8 @@ export class VendaBalcaoService {
         return {
           id: item.id,
           nomeProduto: item.nomeProduto,
+          referencia:
+            item.produto?.referencia ?? "",
           precoUnitario: Number(
             item.precoUnitario
           ),

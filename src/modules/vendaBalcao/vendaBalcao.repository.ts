@@ -177,6 +177,9 @@ export class VendaBalcaoRepository {
     return {
       itens: {
         include: {
+          produto: {
+            select: { referencia: true },
+          },
           devolucoes: {
             include: {
               vendaTroca: {

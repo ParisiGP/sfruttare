@@ -174,7 +174,15 @@ export function BalcaoHistoricoLista({
                                 >
                                   {
                                     item.nomeProduto
-                                  }{" "}
+                                  }
+                                  {item.referencia && (
+                                    <>
+                                      {" · "}
+                                      {
+                                        item.referencia
+                                      }
+                                    </>
+                                  )}{" "}
                                   (
                                   {formatarPreco(
                                     item.precoUnitario

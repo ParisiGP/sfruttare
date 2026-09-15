@@ -40,6 +40,7 @@ export type DevolucaoResumo = {
 export type VendaBalcaoItemResumo = {
   id: string;
   nomeProduto: string;
+  referencia: string;
   precoUnitario: number;
   devolucao: DevolucaoResumo | null;
 };
