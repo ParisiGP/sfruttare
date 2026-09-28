@@ -3,6 +3,7 @@ import { WebhookSignatureValidator } from "mercadopago";
 
 import { MercadoPagoService } from "@/modules/pagamento/pagamento.service";
 import { CheckoutSessaoRepository } from "@/modules/pagamento/checkoutSessao.repository";
+import { mapearFormaPagamento } from "@/modules/pagamento/mapearFormaPagamento";
 import { PedidoService } from "@/modules/pedido/pedido.service";
 
 const mercadoPagoService =
@@ -121,11 +122,18 @@ export async function POST(request: NextRequest) {
     }
 
     if (pagamento.status === STATUS_APROVADO) {
+      const formaPagamento =
+        mapearFormaPagamento(
+          pagamento.payment_method_id,
+          pagamento.payment_type_id
+        );
+
       const pedido =
         await pedidoService.criarPedidoAPartirDoCarrinho(
           checkoutSessao.usuarioId,
           checkoutSessao.enderecoId,
-          Number(checkoutSessao.frete)
+          Number(checkoutSessao.frete),
+          formaPagamento
         );
 
       await checkoutSessaoRepository.updateStatus(

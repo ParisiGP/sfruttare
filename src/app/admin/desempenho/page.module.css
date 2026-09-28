@@ -6,11 +6,36 @@
   gap: 24px;
 }
 
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .header h1 {
   margin: 0;
   color: var(--color-text);
   font-size: 26px;
   font-weight: 800;
+}
+
+.reservasAtivasLink {
+  padding: 8px 14px;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.reservasAtivasLink:hover {
+  background: rgba(139, 107, 63, 0.08);
+}
+
+.reservasAtivasLink strong {
+  font-size: 15px;
 }
 
 .filtros {

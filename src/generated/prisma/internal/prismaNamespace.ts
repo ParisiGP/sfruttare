@@ -401,7 +401,8 @@ export const ModelName = {
   InspiracaoSemana: 'InspiracaoSemana',
   VendaBalcao: 'VendaBalcao',
   VendaBalcaoItem: 'VendaBalcaoItem',
-  DevolucaoBalcao: 'DevolucaoBalcao'
+  DevolucaoBalcao: 'DevolucaoBalcao',
+  Reserva: 'Reserva'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "checkoutSessao" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana" | "vendaBalcao" | "vendaBalcaoItem" | "devolucaoBalcao"
+    modelProps: "categoria" | "produto" | "produtoImagem" | "usuario" | "endereco" | "pedido" | "pedidoItem" | "checkoutSessao" | "vitrineAba" | "vitrineAbaProduto" | "newsletterInscricao" | "carrinho" | "carrinhoItem" | "integracaoFrete" | "inspiracaoSemana" | "vendaBalcao" | "vendaBalcaoItem" | "devolucaoBalcao" | "reserva"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1753,6 +1754,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Reserva: {
+      payload: Prisma.$ReservaPayload<ExtArgs>
+      fields: Prisma.ReservaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReservaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReservaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>
+        }
+        findFirst: {
+          args: Prisma.ReservaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReservaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>
+        }
+        findMany: {
+          args: Prisma.ReservaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>[]
+        }
+        create: {
+          args: Prisma.ReservaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>
+        }
+        createMany: {
+          args: Prisma.ReservaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReservaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>[]
+        }
+        delete: {
+          args: Prisma.ReservaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>
+        }
+        update: {
+          args: Prisma.ReservaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReservaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReservaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReservaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReservaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReservaPayload>
+        }
+        aggregate: {
+          args: Prisma.ReservaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReserva>
+        }
+        groupBy: {
+          args: Prisma.ReservaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReservaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReservaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReservaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1880,6 +1955,7 @@ export const PedidoScalarFieldEnum = {
   status: 'status',
   frete: 'frete',
   total: 'total',
+  formaPagamento: 'formaPagamento',
   createdAt: 'createdAt'
 } as const
 
@@ -2003,6 +2079,7 @@ export const VendaBalcaoScalarFieldEnum = {
   descontoAplicado: 'descontoAplicado',
   total: 'total',
   totalComJuros: 'totalComJuros',
+  formaPagamento: 'formaPagamento',
   createdAt: 'createdAt'
 } as const
 
@@ -2033,6 +2110,21 @@ export const DevolucaoBalcaoScalarFieldEnum = {
 } as const
 
 export type DevolucaoBalcaoScalarFieldEnum = (typeof DevolucaoBalcaoScalarFieldEnum)[keyof typeof DevolucaoBalcaoScalarFieldEnum]
+
+
+export const ReservaScalarFieldEnum = {
+  id: 'id',
+  produtoId: 'produtoId',
+  nomeCliente: 'nomeCliente',
+  telefoneCliente: 'telefoneCliente',
+  canal: 'canal',
+  status: 'status',
+  vendaBalcaoId: 'vendaBalcaoId',
+  createdAt: 'createdAt',
+  atualizadoEm: 'atualizadoEm'
+} as const
+
+export type ReservaScalarFieldEnum = (typeof ReservaScalarFieldEnum)[keyof typeof ReservaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2339,6 +2431,7 @@ export type GlobalOmitConfig = {
   vendaBalcao?: Prisma.VendaBalcaoOmit
   vendaBalcaoItem?: Prisma.VendaBalcaoItemOmit
   devolucaoBalcao?: Prisma.DevolucaoBalcaoOmit
+  reserva?: Prisma.ReservaOmit
 }
 
 /* Types for Logging */

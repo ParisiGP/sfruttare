@@ -9,12 +9,17 @@ import type {
   ProdutoAdminItem,
   ProdutoStatus,
 } from "@/modules/produto/produto.types";
+import {
+  cancelarReservaDoProduto,
+  criarReserva,
+} from "@/modules/reserva/actions";
 
 import { Modal } from "@/components/ui/Modal/Modal";
 
 import { PhotoEditor } from "@/components/admin/PhotoEditor/PhotoEditor"
 
 import { formatarPreco } from "@/lib/formatarPreco";
+import { formatarCelular } from "@/lib/telefone";
 
 import styles from "./ProdutoCard.module.css";
 
@@ -43,6 +48,112 @@ export function ProdutoCard({
 
   const [editorAberto, setEditorAberto] =
     useState(false);
+
+  const [
+    statusSelecionado,
+    setStatusSelecionado,
+  ] = useState<ProdutoStatus>(produto.status);
+  const [nomeReserva, setNomeReserva] =
+    useState("");
+  const [telefoneReserva, setTelefoneReserva] =
+    useState("");
+  const [
+    confirmandoLiberar,
+    setConfirmandoLiberar,
+  ] = useState(false);
+  const [salvandoStatus, setSalvandoStatus] =
+    useState(false);
+  const [erroStatus, setErroStatus] =
+    useState("");
+
+  useEffect(() => {
+    setStatusSelecionado(produto.status);
+  }, [produto.status]);
+
+  const precisaConfirmarLiberacao =
+    produto.status === "RESERVADO" &&
+    statusSelecionado === "DISPONIVEL";
+
+  const precisaNomeReserva =
+    statusSelecionado === "RESERVADO" &&
+    produto.status !== "RESERVADO";
+
+  async function handleAtualizarStatus() {
+    setErroStatus("");
+
+    if (precisaNomeReserva) {
+      if (!nomeReserva.trim()) {
+        setErroStatus(
+          "Informe o nome do cliente pra reservar."
+        );
+        return;
+      }
+
+      setSalvandoStatus(true);
+
+      const resultado = await criarReserva({
+        produtoId: produto.id,
+        nomeCliente: nomeReserva.trim(),
+        telefoneCliente:
+          telefoneReserva.trim() || undefined,
+        canal: "SITE",
+      });
+
+      setSalvandoStatus(false);
+
+      if (!resultado.ok) {
+        setErroStatus(resultado.message);
+        return;
+      }
+
+      setNomeReserva("");
+      setTelefoneReserva("");
+      return;
+    }
+
+    if (precisaConfirmarLiberacao) {
+      if (!confirmandoLiberar) {
+        setConfirmandoLiberar(true);
+        return;
+      }
+
+      setSalvandoStatus(true);
+
+      const resultado =
+        await cancelarReservaDoProduto(
+          produto.id
+        );
+
+      setSalvandoStatus(false);
+      setConfirmandoLiberar(false);
+
+      if (!resultado.ok) {
+        setErroStatus(resultado.message);
+        return;
+      }
+
+      return;
+    }
+
+    setSalvandoStatus(true);
+
+    const formData = new FormData();
+    formData.append("id", produto.id);
+    formData.append(
+      "status",
+      statusSelecionado
+    );
+    await alterarStatusProdutoForm(formData);
+
+    setSalvandoStatus(false);
+  }
+
+  function handleCancelarReservaInline() {
+    setStatusSelecionado(produto.status);
+    setNomeReserva("");
+    setTelefoneReserva("");
+    setErroStatus("");
+  }
 
   const touchStart =
     useRef<number | null>(null);
@@ -310,19 +421,17 @@ export function ProdutoCard({
             </div>
           </dl>
 
-          <form
-            action={alterarStatusProdutoForm}
-            className={styles.statusForm}
-          >
-            <input
-              type="hidden"
-              name="id"
-              value={produto.id}
-            />
-
+          <div className={styles.statusForm}>
             <select
-              name="status"
-              defaultValue={produto.status}
+              value={statusSelecionado}
+              onChange={(event) => {
+                setStatusSelecionado(
+                  event.target
+                    .value as ProdutoStatus
+                );
+                setErroStatus("");
+                setConfirmandoLiberar(false);
+              }}
               aria-label="Status do produto"
             >
               <option value="DISPONIVEL">
@@ -336,10 +445,93 @@ export function ProdutoCard({
               </option>
             </select>
 
-            <button type="submit">
-              Atualizar
+            <button
+              type="button"
+              disabled={salvandoStatus}
+              onClick={
+                handleAtualizarStatus
+              }
+            >
+              {salvandoStatus
+                ? "Salvando..."
+                : precisaConfirmarLiberacao &&
+                  confirmandoLiberar
+                ? "Confirmar"
+                : "Atualizar"}
             </button>
-          </form>
+          </div>
+
+          {precisaNomeReserva && (
+            <div
+              className={
+                styles.reservaInline
+              }
+            >
+              <label>
+                <span>
+                  Nome do cliente *
+                </span>
+                <input
+                  type="text"
+                  value={nomeReserva}
+                  onChange={(event) =>
+                    setNomeReserva(
+                      event.target.value
+                    )
+                  }
+                />
+              </label>
+
+              <label>
+                <span>
+                  Celular (opcional)
+                </span>
+                <input
+                  type="tel"
+                  placeholder="(11) 91234-5678"
+                  value={telefoneReserva}
+                  onChange={(event) =>
+                    setTelefoneReserva(
+                      formatarCelular(
+                        event.target.value
+                      )
+                    )
+                  }
+                />
+              </label>
+
+              <button
+                type="button"
+                className={
+                  styles.cancelarReservaInline
+                }
+                onClick={
+                  handleCancelarReservaInline
+                }
+              >
+                Cancelar
+              </button>
+            </div>
+          )}
+
+          {precisaConfirmarLiberacao &&
+            confirmandoLiberar && (
+              <p
+                className={
+                  styles.avisoConfirmar
+                }
+              >
+                Clique em &ldquo;Confirmar&rdquo;
+                pra liberar essa peça — a
+                reserva será cancelada.
+              </p>
+            )}
+
+          {erroStatus && (
+            <p className={styles.erroStatus}>
+              {erroStatus}
+            </p>
+          )}
 
           <div className={styles.actions}>
             <button

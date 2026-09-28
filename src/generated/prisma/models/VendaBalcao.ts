@@ -56,6 +56,7 @@ export type VendaBalcaoMinAggregateOutputType = {
   descontoAplicado: runtime.Decimal | null
   total: runtime.Decimal | null
   totalComJuros: runtime.Decimal | null
+  formaPagamento: string | null
   createdAt: Date | null
 }
 
@@ -71,6 +72,7 @@ export type VendaBalcaoMaxAggregateOutputType = {
   descontoAplicado: runtime.Decimal | null
   total: runtime.Decimal | null
   totalComJuros: runtime.Decimal | null
+  formaPagamento: string | null
   createdAt: Date | null
 }
 
@@ -86,6 +88,7 @@ export type VendaBalcaoCountAggregateOutputType = {
   descontoAplicado: number
   total: number
   totalComJuros: number
+  formaPagamento: number
   createdAt: number
   _all: number
 }
@@ -121,6 +124,7 @@ export type VendaBalcaoMinAggregateInputType = {
   descontoAplicado?: true
   total?: true
   totalComJuros?: true
+  formaPagamento?: true
   createdAt?: true
 }
 
@@ -136,6 +140,7 @@ export type VendaBalcaoMaxAggregateInputType = {
   descontoAplicado?: true
   total?: true
   totalComJuros?: true
+  formaPagamento?: true
   createdAt?: true
 }
 
@@ -151,6 +156,7 @@ export type VendaBalcaoCountAggregateInputType = {
   descontoAplicado?: true
   total?: true
   totalComJuros?: true
+  formaPagamento?: true
   createdAt?: true
   _all?: true
 }
@@ -253,6 +259,7 @@ export type VendaBalcaoGroupByOutputType = {
   descontoAplicado: runtime.Decimal | null
   total: runtime.Decimal
   totalComJuros: runtime.Decimal | null
+  formaPagamento: string | null
   createdAt: Date
   _count: VendaBalcaoCountAggregateOutputType | null
   _avg: VendaBalcaoAvgAggregateOutputType | null
@@ -291,9 +298,11 @@ export type VendaBalcaoWhereInput = {
   descontoAplicado?: Prisma.DecimalNullableFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.DecimalNullableFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.StringNullableFilter<"VendaBalcao"> | string | null
   createdAt?: Prisma.DateTimeFilter<"VendaBalcao"> | Date | string
   itens?: Prisma.VendaBalcaoItemListRelationFilter
   devolucaoComoTroca?: Prisma.XOR<Prisma.DevolucaoBalcaoNullableScalarRelationFilter, Prisma.DevolucaoBalcaoWhereInput> | null
+  reservasConvertidas?: Prisma.ReservaListRelationFilter
 }
 
 export type VendaBalcaoOrderByWithRelationInput = {
@@ -308,9 +317,11 @@ export type VendaBalcaoOrderByWithRelationInput = {
   descontoAplicado?: Prisma.SortOrderInput | Prisma.SortOrder
   total?: Prisma.SortOrder
   totalComJuros?: Prisma.SortOrderInput | Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   itens?: Prisma.VendaBalcaoItemOrderByRelationAggregateInput
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoOrderByWithRelationInput
+  reservasConvertidas?: Prisma.ReservaOrderByRelationAggregateInput
 }
 
 export type VendaBalcaoWhereUniqueInput = Prisma.AtLeast<{
@@ -328,9 +339,11 @@ export type VendaBalcaoWhereUniqueInput = Prisma.AtLeast<{
   descontoAplicado?: Prisma.DecimalNullableFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.DecimalNullableFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.StringNullableFilter<"VendaBalcao"> | string | null
   createdAt?: Prisma.DateTimeFilter<"VendaBalcao"> | Date | string
   itens?: Prisma.VendaBalcaoItemListRelationFilter
   devolucaoComoTroca?: Prisma.XOR<Prisma.DevolucaoBalcaoNullableScalarRelationFilter, Prisma.DevolucaoBalcaoWhereInput> | null
+  reservasConvertidas?: Prisma.ReservaListRelationFilter
 }, "id">
 
 export type VendaBalcaoOrderByWithAggregationInput = {
@@ -345,6 +358,7 @@ export type VendaBalcaoOrderByWithAggregationInput = {
   descontoAplicado?: Prisma.SortOrderInput | Prisma.SortOrder
   total?: Prisma.SortOrder
   totalComJuros?: Prisma.SortOrderInput | Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.VendaBalcaoCountOrderByAggregateInput
   _avg?: Prisma.VendaBalcaoAvgOrderByAggregateInput
@@ -368,6 +382,7 @@ export type VendaBalcaoScalarWhereWithAggregatesInput = {
   descontoAplicado?: Prisma.DecimalNullableWithAggregatesFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalWithAggregatesFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.DecimalNullableWithAggregatesFilter<"VendaBalcao"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.StringNullableWithAggregatesFilter<"VendaBalcao"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"VendaBalcao"> | Date | string
 }
 
@@ -383,9 +398,11 @@ export type VendaBalcaoCreateInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutVendaBalcaoInput
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoCreateNestedOneWithoutVendaTrocaInput
+  reservasConvertidas?: Prisma.ReservaCreateNestedManyWithoutVendaBalcaoInput
 }
 
 export type VendaBalcaoUncheckedCreateInput = {
@@ -400,9 +417,11 @@ export type VendaBalcaoUncheckedCreateInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutVendaBalcaoInput
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoUncheckedCreateNestedOneWithoutVendaTrocaInput
+  reservasConvertidas?: Prisma.ReservaUncheckedCreateNestedManyWithoutVendaBalcaoInput
 }
 
 export type VendaBalcaoUpdateInput = {
@@ -417,9 +436,11 @@ export type VendaBalcaoUpdateInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.VendaBalcaoItemUpdateManyWithoutVendaBalcaoNestedInput
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoUpdateOneWithoutVendaTrocaNestedInput
+  reservasConvertidas?: Prisma.ReservaUpdateManyWithoutVendaBalcaoNestedInput
 }
 
 export type VendaBalcaoUncheckedUpdateInput = {
@@ -434,9 +455,11 @@ export type VendaBalcaoUncheckedUpdateInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoNestedInput
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoUncheckedUpdateOneWithoutVendaTrocaNestedInput
+  reservasConvertidas?: Prisma.ReservaUncheckedUpdateManyWithoutVendaBalcaoNestedInput
 }
 
 export type VendaBalcaoCreateManyInput = {
@@ -451,6 +474,7 @@ export type VendaBalcaoCreateManyInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
 }
 
@@ -466,6 +490,7 @@ export type VendaBalcaoUpdateManyMutationInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -481,6 +506,7 @@ export type VendaBalcaoUncheckedUpdateManyInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -496,6 +522,7 @@ export type VendaBalcaoCountOrderByAggregateInput = {
   descontoAplicado?: Prisma.SortOrder
   total?: Prisma.SortOrder
   totalComJuros?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -520,6 +547,7 @@ export type VendaBalcaoMaxOrderByAggregateInput = {
   descontoAplicado?: Prisma.SortOrder
   total?: Prisma.SortOrder
   totalComJuros?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -535,6 +563,7 @@ export type VendaBalcaoMinOrderByAggregateInput = {
   descontoAplicado?: Prisma.SortOrder
   total?: Prisma.SortOrder
   totalComJuros?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -595,6 +624,22 @@ export type VendaBalcaoUpdateOneWithoutDevolucaoComoTrocaNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VendaBalcaoUpdateToOneWithWhereWithoutDevolucaoComoTrocaInput, Prisma.VendaBalcaoUpdateWithoutDevolucaoComoTrocaInput>, Prisma.VendaBalcaoUncheckedUpdateWithoutDevolucaoComoTrocaInput>
 }
 
+export type VendaBalcaoCreateNestedOneWithoutReservasConvertidasInput = {
+  create?: Prisma.XOR<Prisma.VendaBalcaoCreateWithoutReservasConvertidasInput, Prisma.VendaBalcaoUncheckedCreateWithoutReservasConvertidasInput>
+  connectOrCreate?: Prisma.VendaBalcaoCreateOrConnectWithoutReservasConvertidasInput
+  connect?: Prisma.VendaBalcaoWhereUniqueInput
+}
+
+export type VendaBalcaoUpdateOneWithoutReservasConvertidasNestedInput = {
+  create?: Prisma.XOR<Prisma.VendaBalcaoCreateWithoutReservasConvertidasInput, Prisma.VendaBalcaoUncheckedCreateWithoutReservasConvertidasInput>
+  connectOrCreate?: Prisma.VendaBalcaoCreateOrConnectWithoutReservasConvertidasInput
+  upsert?: Prisma.VendaBalcaoUpsertWithoutReservasConvertidasInput
+  disconnect?: Prisma.VendaBalcaoWhereInput | boolean
+  delete?: Prisma.VendaBalcaoWhereInput | boolean
+  connect?: Prisma.VendaBalcaoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VendaBalcaoUpdateToOneWithWhereWithoutReservasConvertidasInput, Prisma.VendaBalcaoUpdateWithoutReservasConvertidasInput>, Prisma.VendaBalcaoUncheckedUpdateWithoutReservasConvertidasInput>
+}
+
 export type VendaBalcaoCreateWithoutItensInput = {
   id?: string
   nomeCliente: string
@@ -607,8 +652,10 @@ export type VendaBalcaoCreateWithoutItensInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoCreateNestedOneWithoutVendaTrocaInput
+  reservasConvertidas?: Prisma.ReservaCreateNestedManyWithoutVendaBalcaoInput
 }
 
 export type VendaBalcaoUncheckedCreateWithoutItensInput = {
@@ -623,8 +670,10 @@ export type VendaBalcaoUncheckedCreateWithoutItensInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoUncheckedCreateNestedOneWithoutVendaTrocaInput
+  reservasConvertidas?: Prisma.ReservaUncheckedCreateNestedManyWithoutVendaBalcaoInput
 }
 
 export type VendaBalcaoCreateOrConnectWithoutItensInput = {
@@ -655,8 +704,10 @@ export type VendaBalcaoUpdateWithoutItensInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoUpdateOneWithoutVendaTrocaNestedInput
+  reservasConvertidas?: Prisma.ReservaUpdateManyWithoutVendaBalcaoNestedInput
 }
 
 export type VendaBalcaoUncheckedUpdateWithoutItensInput = {
@@ -671,8 +722,10 @@ export type VendaBalcaoUncheckedUpdateWithoutItensInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   devolucaoComoTroca?: Prisma.DevolucaoBalcaoUncheckedUpdateOneWithoutVendaTrocaNestedInput
+  reservasConvertidas?: Prisma.ReservaUncheckedUpdateManyWithoutVendaBalcaoNestedInput
 }
 
 export type VendaBalcaoCreateWithoutDevolucaoComoTrocaInput = {
@@ -687,8 +740,10 @@ export type VendaBalcaoCreateWithoutDevolucaoComoTrocaInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutVendaBalcaoInput
+  reservasConvertidas?: Prisma.ReservaCreateNestedManyWithoutVendaBalcaoInput
 }
 
 export type VendaBalcaoUncheckedCreateWithoutDevolucaoComoTrocaInput = {
@@ -703,8 +758,10 @@ export type VendaBalcaoUncheckedCreateWithoutDevolucaoComoTrocaInput = {
   descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutVendaBalcaoInput
+  reservasConvertidas?: Prisma.ReservaUncheckedCreateNestedManyWithoutVendaBalcaoInput
 }
 
 export type VendaBalcaoCreateOrConnectWithoutDevolucaoComoTrocaInput = {
@@ -735,8 +792,10 @@ export type VendaBalcaoUpdateWithoutDevolucaoComoTrocaInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.VendaBalcaoItemUpdateManyWithoutVendaBalcaoNestedInput
+  reservasConvertidas?: Prisma.ReservaUpdateManyWithoutVendaBalcaoNestedInput
 }
 
 export type VendaBalcaoUncheckedUpdateWithoutDevolucaoComoTrocaInput = {
@@ -751,8 +810,98 @@ export type VendaBalcaoUncheckedUpdateWithoutDevolucaoComoTrocaInput = {
   descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoNestedInput
+  reservasConvertidas?: Prisma.ReservaUncheckedUpdateManyWithoutVendaBalcaoNestedInput
+}
+
+export type VendaBalcaoCreateWithoutReservasConvertidasInput = {
+  id?: string
+  nomeCliente: string
+  emailCliente?: string | null
+  telefoneCliente?: string | null
+  parcelas?: number
+  subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descontoTipo?: string | null
+  descontoEntrada?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
+  createdAt?: Date | string
+  itens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutVendaBalcaoInput
+  devolucaoComoTroca?: Prisma.DevolucaoBalcaoCreateNestedOneWithoutVendaTrocaInput
+}
+
+export type VendaBalcaoUncheckedCreateWithoutReservasConvertidasInput = {
+  id?: string
+  nomeCliente: string
+  emailCliente?: string | null
+  telefoneCliente?: string | null
+  parcelas?: number
+  subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descontoTipo?: string | null
+  descontoEntrada?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  descontoAplicado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalComJuros?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: string | null
+  createdAt?: Date | string
+  itens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutVendaBalcaoInput
+  devolucaoComoTroca?: Prisma.DevolucaoBalcaoUncheckedCreateNestedOneWithoutVendaTrocaInput
+}
+
+export type VendaBalcaoCreateOrConnectWithoutReservasConvertidasInput = {
+  where: Prisma.VendaBalcaoWhereUniqueInput
+  create: Prisma.XOR<Prisma.VendaBalcaoCreateWithoutReservasConvertidasInput, Prisma.VendaBalcaoUncheckedCreateWithoutReservasConvertidasInput>
+}
+
+export type VendaBalcaoUpsertWithoutReservasConvertidasInput = {
+  update: Prisma.XOR<Prisma.VendaBalcaoUpdateWithoutReservasConvertidasInput, Prisma.VendaBalcaoUncheckedUpdateWithoutReservasConvertidasInput>
+  create: Prisma.XOR<Prisma.VendaBalcaoCreateWithoutReservasConvertidasInput, Prisma.VendaBalcaoUncheckedCreateWithoutReservasConvertidasInput>
+  where?: Prisma.VendaBalcaoWhereInput
+}
+
+export type VendaBalcaoUpdateToOneWithWhereWithoutReservasConvertidasInput = {
+  where?: Prisma.VendaBalcaoWhereInput
+  data: Prisma.XOR<Prisma.VendaBalcaoUpdateWithoutReservasConvertidasInput, Prisma.VendaBalcaoUncheckedUpdateWithoutReservasConvertidasInput>
+}
+
+export type VendaBalcaoUpdateWithoutReservasConvertidasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomeCliente?: Prisma.StringFieldUpdateOperationsInput | string
+  emailCliente?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefoneCliente?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parcelas?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descontoTipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descontoEntrada?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itens?: Prisma.VendaBalcaoItemUpdateManyWithoutVendaBalcaoNestedInput
+  devolucaoComoTroca?: Prisma.DevolucaoBalcaoUpdateOneWithoutVendaTrocaNestedInput
+}
+
+export type VendaBalcaoUncheckedUpdateWithoutReservasConvertidasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomeCliente?: Prisma.StringFieldUpdateOperationsInput | string
+  emailCliente?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefoneCliente?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parcelas?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descontoTipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descontoEntrada?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  descontoAplicado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalComJuros?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutVendaBalcaoNestedInput
+  devolucaoComoTroca?: Prisma.DevolucaoBalcaoUncheckedUpdateOneWithoutVendaTrocaNestedInput
 }
 
 
@@ -762,10 +911,12 @@ export type VendaBalcaoUncheckedUpdateWithoutDevolucaoComoTrocaInput = {
 
 export type VendaBalcaoCountOutputType = {
   itens: number
+  reservasConvertidas: number
 }
 
 export type VendaBalcaoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   itens?: boolean | VendaBalcaoCountOutputTypeCountItensArgs
+  reservasConvertidas?: boolean | VendaBalcaoCountOutputTypeCountReservasConvertidasArgs
 }
 
 /**
@@ -785,6 +936,13 @@ export type VendaBalcaoCountOutputTypeCountItensArgs<ExtArgs extends runtime.Typ
   where?: Prisma.VendaBalcaoItemWhereInput
 }
 
+/**
+ * VendaBalcaoCountOutputType without action
+ */
+export type VendaBalcaoCountOutputTypeCountReservasConvertidasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReservaWhereInput
+}
+
 
 export type VendaBalcaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -798,9 +956,11 @@ export type VendaBalcaoSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   descontoAplicado?: boolean
   total?: boolean
   totalComJuros?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
   itens?: boolean | Prisma.VendaBalcao$itensArgs<ExtArgs>
   devolucaoComoTroca?: boolean | Prisma.VendaBalcao$devolucaoComoTrocaArgs<ExtArgs>
+  reservasConvertidas?: boolean | Prisma.VendaBalcao$reservasConvertidasArgs<ExtArgs>
   _count?: boolean | Prisma.VendaBalcaoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vendaBalcao"]>
 
@@ -816,6 +976,7 @@ export type VendaBalcaoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   descontoAplicado?: boolean
   total?: boolean
   totalComJuros?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["vendaBalcao"]>
 
@@ -831,6 +992,7 @@ export type VendaBalcaoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   descontoAplicado?: boolean
   total?: boolean
   totalComJuros?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["vendaBalcao"]>
 
@@ -846,13 +1008,15 @@ export type VendaBalcaoSelectScalar = {
   descontoAplicado?: boolean
   total?: boolean
   totalComJuros?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
 }
 
-export type VendaBalcaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nomeCliente" | "emailCliente" | "telefoneCliente" | "parcelas" | "subtotal" | "descontoTipo" | "descontoEntrada" | "descontoAplicado" | "total" | "totalComJuros" | "createdAt", ExtArgs["result"]["vendaBalcao"]>
+export type VendaBalcaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nomeCliente" | "emailCliente" | "telefoneCliente" | "parcelas" | "subtotal" | "descontoTipo" | "descontoEntrada" | "descontoAplicado" | "total" | "totalComJuros" | "formaPagamento" | "createdAt", ExtArgs["result"]["vendaBalcao"]>
 export type VendaBalcaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   itens?: boolean | Prisma.VendaBalcao$itensArgs<ExtArgs>
   devolucaoComoTroca?: boolean | Prisma.VendaBalcao$devolucaoComoTrocaArgs<ExtArgs>
+  reservasConvertidas?: boolean | Prisma.VendaBalcao$reservasConvertidasArgs<ExtArgs>
   _count?: boolean | Prisma.VendaBalcaoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VendaBalcaoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -863,6 +1027,7 @@ export type $VendaBalcaoPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     itens: Prisma.$VendaBalcaoItemPayload<ExtArgs>[]
     devolucaoComoTroca: Prisma.$DevolucaoBalcaoPayload<ExtArgs> | null
+    reservasConvertidas: Prisma.$ReservaPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -876,6 +1041,7 @@ export type $VendaBalcaoPayload<ExtArgs extends runtime.Types.Extensions.Interna
     descontoAplicado: runtime.Decimal | null
     total: runtime.Decimal
     totalComJuros: runtime.Decimal | null
+    formaPagamento: string | null
     createdAt: Date
   }, ExtArgs["result"]["vendaBalcao"]>
   composites: {}
@@ -1273,6 +1439,7 @@ export interface Prisma__VendaBalcaoClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   itens<T extends Prisma.VendaBalcao$itensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VendaBalcao$itensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VendaBalcaoItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   devolucaoComoTroca<T extends Prisma.VendaBalcao$devolucaoComoTrocaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VendaBalcao$devolucaoComoTrocaArgs<ExtArgs>>): Prisma.Prisma__DevolucaoBalcaoClient<runtime.Types.Result.GetResult<Prisma.$DevolucaoBalcaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  reservasConvertidas<T extends Prisma.VendaBalcao$reservasConvertidasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VendaBalcao$reservasConvertidasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1313,6 +1480,7 @@ export interface VendaBalcaoFieldRefs {
   readonly descontoAplicado: Prisma.FieldRef<"VendaBalcao", 'Decimal'>
   readonly total: Prisma.FieldRef<"VendaBalcao", 'Decimal'>
   readonly totalComJuros: Prisma.FieldRef<"VendaBalcao", 'Decimal'>
+  readonly formaPagamento: Prisma.FieldRef<"VendaBalcao", 'String'>
   readonly createdAt: Prisma.FieldRef<"VendaBalcao", 'DateTime'>
 }
     
@@ -1747,6 +1915,30 @@ export type VendaBalcao$devolucaoComoTrocaArgs<ExtArgs extends runtime.Types.Ext
    */
   include?: Prisma.DevolucaoBalcaoInclude<ExtArgs> | null
   where?: Prisma.DevolucaoBalcaoWhereInput
+}
+
+/**
+ * VendaBalcao.reservasConvertidas
+ */
+export type VendaBalcao$reservasConvertidasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Reserva
+   */
+  select?: Prisma.ReservaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Reserva
+   */
+  omit?: Prisma.ReservaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReservaInclude<ExtArgs> | null
+  where?: Prisma.ReservaWhereInput
+  orderBy?: Prisma.ReservaOrderByWithRelationInput | Prisma.ReservaOrderByWithRelationInput[]
+  cursor?: Prisma.ReservaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReservaScalarFieldEnum | Prisma.ReservaScalarFieldEnum[]
 }
 
 /**

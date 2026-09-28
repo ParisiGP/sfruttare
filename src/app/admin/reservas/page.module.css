@@ -1,0 +1,92 @@
+.wrapper {
+  width: min(1280px, calc(100% - 40px));
+  margin: 32px auto 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.filtroCampo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filtroCampo span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.filtroCampo input,
+.filtroCampo select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.filtroCampo input:focus,
+.filtroCampo select:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.filtrarButton {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fffaf1;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.filtrarButton:hover {
+  background: var(--color-primary-hover);
+}
+
+.limparLink {
+  align-self: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.limparLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -25,7 +25,8 @@ export class PedidoService {
   async criarPedidoAPartirDoCarrinho(
     usuarioId: string,
     enderecoId: string,
-    frete: number
+    frete: number,
+    formaPagamento?: string
   ) {
     const dadosValidados =
       criarPedidoSchema.parse({
@@ -66,6 +67,7 @@ export class PedidoService {
         status: "PAGO",
         frete: dadosValidados.frete,
         total,
+        formaPagamento,
         itens: resumoCarrinho.itens.map(
           (item) => ({
             produtoId: item.produto.id,

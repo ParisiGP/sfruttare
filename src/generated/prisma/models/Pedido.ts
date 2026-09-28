@@ -43,6 +43,7 @@ export type PedidoMinAggregateOutputType = {
   status: $Enums.PedidoStatus | null
   frete: runtime.Decimal | null
   total: runtime.Decimal | null
+  formaPagamento: string | null
   createdAt: Date | null
 }
 
@@ -53,6 +54,7 @@ export type PedidoMaxAggregateOutputType = {
   status: $Enums.PedidoStatus | null
   frete: runtime.Decimal | null
   total: runtime.Decimal | null
+  formaPagamento: string | null
   createdAt: Date | null
 }
 
@@ -63,6 +65,7 @@ export type PedidoCountAggregateOutputType = {
   status: number
   frete: number
   total: number
+  formaPagamento: number
   createdAt: number
   _all: number
 }
@@ -85,6 +88,7 @@ export type PedidoMinAggregateInputType = {
   status?: true
   frete?: true
   total?: true
+  formaPagamento?: true
   createdAt?: true
 }
 
@@ -95,6 +99,7 @@ export type PedidoMaxAggregateInputType = {
   status?: true
   frete?: true
   total?: true
+  formaPagamento?: true
   createdAt?: true
 }
 
@@ -105,6 +110,7 @@ export type PedidoCountAggregateInputType = {
   status?: true
   frete?: true
   total?: true
+  formaPagamento?: true
   createdAt?: true
   _all?: true
 }
@@ -202,6 +208,7 @@ export type PedidoGroupByOutputType = {
   status: $Enums.PedidoStatus
   frete: runtime.Decimal
   total: runtime.Decimal
+  formaPagamento: string | null
   createdAt: Date
   _count: PedidoCountAggregateOutputType | null
   _avg: PedidoAvgAggregateOutputType | null
@@ -235,6 +242,7 @@ export type PedidoWhereInput = {
   status?: Prisma.EnumPedidoStatusFilter<"Pedido"> | $Enums.PedidoStatus
   frete?: Prisma.DecimalFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.StringNullableFilter<"Pedido"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Pedido"> | Date | string
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   endereco?: Prisma.XOR<Prisma.EnderecoNullableScalarRelationFilter, Prisma.EnderecoWhereInput> | null
@@ -248,6 +256,7 @@ export type PedidoOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   frete?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   usuario?: Prisma.UsuarioOrderByWithRelationInput
   endereco?: Prisma.EnderecoOrderByWithRelationInput
@@ -264,6 +273,7 @@ export type PedidoWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumPedidoStatusFilter<"Pedido"> | $Enums.PedidoStatus
   frete?: Prisma.DecimalFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.StringNullableFilter<"Pedido"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Pedido"> | Date | string
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
   endereco?: Prisma.XOR<Prisma.EnderecoNullableScalarRelationFilter, Prisma.EnderecoWhereInput> | null
@@ -277,6 +287,7 @@ export type PedidoOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   frete?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PedidoCountOrderByAggregateInput
   _avg?: Prisma.PedidoAvgOrderByAggregateInput
@@ -295,6 +306,7 @@ export type PedidoScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumPedidoStatusWithAggregatesFilter<"Pedido"> | $Enums.PedidoStatus
   frete?: Prisma.DecimalWithAggregatesFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalWithAggregatesFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.StringNullableWithAggregatesFilter<"Pedido"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Pedido"> | Date | string
 }
 
@@ -303,6 +315,7 @@ export type PedidoCreateInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutPedidosInput
   endereco?: Prisma.EnderecoCreateNestedOneWithoutPedidosInput
@@ -316,6 +329,7 @@ export type PedidoUncheckedCreateInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutPedidoInput
 }
@@ -325,6 +339,7 @@ export type PedidoUpdateInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutPedidosNestedInput
   endereco?: Prisma.EnderecoUpdateOneWithoutPedidosNestedInput
@@ -338,6 +353,7 @@ export type PedidoUncheckedUpdateInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.PedidoItemUncheckedUpdateManyWithoutPedidoNestedInput
 }
@@ -349,6 +365,7 @@ export type PedidoCreateManyInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
 }
 
@@ -357,6 +374,7 @@ export type PedidoUpdateManyMutationInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -367,6 +385,7 @@ export type PedidoUncheckedUpdateManyInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -387,6 +406,7 @@ export type PedidoCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   frete?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -402,6 +422,7 @@ export type PedidoMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   frete?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -412,6 +433,7 @@ export type PedidoMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   frete?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  formaPagamento?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -532,6 +554,7 @@ export type PedidoCreateWithoutUsuarioInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   endereco?: Prisma.EnderecoCreateNestedOneWithoutPedidosInput
   itens?: Prisma.PedidoItemCreateNestedManyWithoutPedidoInput
@@ -543,6 +566,7 @@ export type PedidoUncheckedCreateWithoutUsuarioInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutPedidoInput
 }
@@ -583,6 +607,7 @@ export type PedidoScalarWhereInput = {
   status?: Prisma.EnumPedidoStatusFilter<"Pedido"> | $Enums.PedidoStatus
   frete?: Prisma.DecimalFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFilter<"Pedido"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.StringNullableFilter<"Pedido"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Pedido"> | Date | string
 }
 
@@ -591,6 +616,7 @@ export type PedidoCreateWithoutEnderecoInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutPedidosInput
   itens?: Prisma.PedidoItemCreateNestedManyWithoutPedidoInput
@@ -602,6 +628,7 @@ export type PedidoUncheckedCreateWithoutEnderecoInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   itens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutPedidoInput
 }
@@ -637,6 +664,7 @@ export type PedidoCreateWithoutItensInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutPedidosInput
   endereco?: Prisma.EnderecoCreateNestedOneWithoutPedidosInput
@@ -649,6 +677,7 @@ export type PedidoUncheckedCreateWithoutItensInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
 }
 
@@ -673,6 +702,7 @@ export type PedidoUpdateWithoutItensInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutPedidosNestedInput
   endereco?: Prisma.EnderecoUpdateOneWithoutPedidosNestedInput
@@ -685,6 +715,7 @@ export type PedidoUncheckedUpdateWithoutItensInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -694,6 +725,7 @@ export type PedidoCreateManyUsuarioInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
 }
 
@@ -702,6 +734,7 @@ export type PedidoUpdateWithoutUsuarioInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endereco?: Prisma.EnderecoUpdateOneWithoutPedidosNestedInput
   itens?: Prisma.PedidoItemUpdateManyWithoutPedidoNestedInput
@@ -713,6 +746,7 @@ export type PedidoUncheckedUpdateWithoutUsuarioInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.PedidoItemUncheckedUpdateManyWithoutPedidoNestedInput
 }
@@ -723,6 +757,7 @@ export type PedidoUncheckedUpdateManyWithoutUsuarioInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -732,6 +767,7 @@ export type PedidoCreateManyEnderecoInput = {
   status?: $Enums.PedidoStatus
   frete?: runtime.Decimal | runtime.DecimalJsLike | number | string
   total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: string | null
   createdAt?: Date | string
 }
 
@@ -740,6 +776,7 @@ export type PedidoUpdateWithoutEnderecoInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutPedidosNestedInput
   itens?: Prisma.PedidoItemUpdateManyWithoutPedidoNestedInput
@@ -751,6 +788,7 @@ export type PedidoUncheckedUpdateWithoutEnderecoInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itens?: Prisma.PedidoItemUncheckedUpdateManyWithoutPedidoNestedInput
 }
@@ -761,6 +799,7 @@ export type PedidoUncheckedUpdateManyWithoutEnderecoInput = {
   status?: Prisma.EnumPedidoStatusFieldUpdateOperationsInput | $Enums.PedidoStatus
   frete?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  formaPagamento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -802,6 +841,7 @@ export type PedidoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   status?: boolean
   frete?: boolean
   total?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   endereco?: boolean | Prisma.Pedido$enderecoArgs<ExtArgs>
@@ -816,6 +856,7 @@ export type PedidoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   status?: boolean
   frete?: boolean
   total?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   endereco?: boolean | Prisma.Pedido$enderecoArgs<ExtArgs>
@@ -828,6 +869,7 @@ export type PedidoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   status?: boolean
   frete?: boolean
   total?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   endereco?: boolean | Prisma.Pedido$enderecoArgs<ExtArgs>
@@ -840,10 +882,11 @@ export type PedidoSelectScalar = {
   status?: boolean
   frete?: boolean
   total?: boolean
+  formaPagamento?: boolean
   createdAt?: boolean
 }
 
-export type PedidoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuarioId" | "enderecoId" | "status" | "frete" | "total" | "createdAt", ExtArgs["result"]["pedido"]>
+export type PedidoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuarioId" | "enderecoId" | "status" | "frete" | "total" | "formaPagamento" | "createdAt", ExtArgs["result"]["pedido"]>
 export type PedidoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
   endereco?: boolean | Prisma.Pedido$enderecoArgs<ExtArgs>
@@ -873,6 +916,7 @@ export type $PedidoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     status: $Enums.PedidoStatus
     frete: runtime.Decimal
     total: runtime.Decimal
+    formaPagamento: string | null
     createdAt: Date
   }, ExtArgs["result"]["pedido"]>
   composites: {}
@@ -1306,6 +1350,7 @@ export interface PedidoFieldRefs {
   readonly status: Prisma.FieldRef<"Pedido", 'PedidoStatus'>
   readonly frete: Prisma.FieldRef<"Pedido", 'Decimal'>
   readonly total: Prisma.FieldRef<"Pedido", 'Decimal'>
+  readonly formaPagamento: Prisma.FieldRef<"Pedido", 'String'>
   readonly createdAt: Prisma.FieldRef<"Pedido", 'DateTime'>
 }
     

@@ -219,6 +219,13 @@ export function ProdutosAdmin({
                 Importar produtos
               </Link>
 
+              <Link
+                href="/admin/reservas"
+                className={styles.secondaryButton}
+              >
+                Ver reservas
+              </Link>
+
               <button
                 type="button"
                 className={styles.newButton}

@@ -390,6 +390,7 @@ export type ProdutoWhereInput = {
   abas?: Prisma.VitrineAbaProdutoListRelationFilter
   carrinhoItens?: Prisma.CarrinhoItemListRelationFilter
   vendasBalcaoItens?: Prisma.VendaBalcaoItemListRelationFilter
+  reservas?: Prisma.ReservaListRelationFilter
 }
 
 export type ProdutoOrderByWithRelationInput = {
@@ -422,6 +423,7 @@ export type ProdutoOrderByWithRelationInput = {
   abas?: Prisma.VitrineAbaProdutoOrderByRelationAggregateInput
   carrinhoItens?: Prisma.CarrinhoItemOrderByRelationAggregateInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemOrderByRelationAggregateInput
+  reservas?: Prisma.ReservaOrderByRelationAggregateInput
 }
 
 export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
@@ -457,6 +459,7 @@ export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
   abas?: Prisma.VitrineAbaProdutoListRelationFilter
   carrinhoItens?: Prisma.CarrinhoItemListRelationFilter
   vendasBalcaoItens?: Prisma.VendaBalcaoItemListRelationFilter
+  reservas?: Prisma.ReservaListRelationFilter
 }, "id" | "slug">
 
 export type ProdutoOrderByWithAggregationInput = {
@@ -548,6 +551,7 @@ export type ProdutoCreateInput = {
   abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateInput = {
@@ -579,6 +583,7 @@ export type ProdutoUncheckedCreateInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUpdateInput = {
@@ -610,6 +615,7 @@ export type ProdutoUpdateInput = {
   abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateInput = {
@@ -641,6 +647,7 @@ export type ProdutoUncheckedUpdateInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateManyInput = {
@@ -985,6 +992,20 @@ export type ProdutoUpdateOneRequiredWithoutVendasBalcaoItensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProdutoUpdateToOneWithWhereWithoutVendasBalcaoItensInput, Prisma.ProdutoUpdateWithoutVendasBalcaoItensInput>, Prisma.ProdutoUncheckedUpdateWithoutVendasBalcaoItensInput>
 }
 
+export type ProdutoCreateNestedOneWithoutReservasInput = {
+  create?: Prisma.XOR<Prisma.ProdutoCreateWithoutReservasInput, Prisma.ProdutoUncheckedCreateWithoutReservasInput>
+  connectOrCreate?: Prisma.ProdutoCreateOrConnectWithoutReservasInput
+  connect?: Prisma.ProdutoWhereUniqueInput
+}
+
+export type ProdutoUpdateOneRequiredWithoutReservasNestedInput = {
+  create?: Prisma.XOR<Prisma.ProdutoCreateWithoutReservasInput, Prisma.ProdutoUncheckedCreateWithoutReservasInput>
+  connectOrCreate?: Prisma.ProdutoCreateOrConnectWithoutReservasInput
+  upsert?: Prisma.ProdutoUpsertWithoutReservasInput
+  connect?: Prisma.ProdutoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProdutoUpdateToOneWithWhereWithoutReservasInput, Prisma.ProdutoUpdateWithoutReservasInput>, Prisma.ProdutoUncheckedUpdateWithoutReservasInput>
+}
+
 export type ProdutoCreateWithoutCategoriaInput = {
   id?: string
   nome: string
@@ -1013,6 +1034,7 @@ export type ProdutoCreateWithoutCategoriaInput = {
   abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutCategoriaInput = {
@@ -1043,6 +1065,7 @@ export type ProdutoUncheckedCreateWithoutCategoriaInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutCategoriaInput = {
@@ -1128,6 +1151,7 @@ export type ProdutoCreateWithoutImagensInput = {
   abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutImagensInput = {
@@ -1158,6 +1182,7 @@ export type ProdutoUncheckedCreateWithoutImagensInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutImagensInput = {
@@ -1204,6 +1229,7 @@ export type ProdutoUpdateWithoutImagensInput = {
   abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutImagensInput = {
@@ -1234,6 +1260,7 @@ export type ProdutoUncheckedUpdateWithoutImagensInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateWithoutPedidoItensInput = {
@@ -1264,6 +1291,7 @@ export type ProdutoCreateWithoutPedidoItensInput = {
   abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
@@ -1294,6 +1322,7 @@ export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutPedidoItensInput = {
@@ -1340,6 +1369,7 @@ export type ProdutoUpdateWithoutPedidoItensInput = {
   abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
@@ -1370,6 +1400,7 @@ export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateWithoutAbasInput = {
@@ -1400,6 +1431,7 @@ export type ProdutoCreateWithoutAbasInput = {
   pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutAbasInput = {
@@ -1430,6 +1462,7 @@ export type ProdutoUncheckedCreateWithoutAbasInput = {
   pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutAbasInput = {
@@ -1476,6 +1509,7 @@ export type ProdutoUpdateWithoutAbasInput = {
   pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutAbasInput = {
@@ -1506,6 +1540,7 @@ export type ProdutoUncheckedUpdateWithoutAbasInput = {
   pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateWithoutCarrinhoItensInput = {
@@ -1536,6 +1571,7 @@ export type ProdutoCreateWithoutCarrinhoItensInput = {
   pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
   abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutCarrinhoItensInput = {
@@ -1566,6 +1602,7 @@ export type ProdutoUncheckedCreateWithoutCarrinhoItensInput = {
   pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
   abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutCarrinhoItensInput = {
@@ -1612,6 +1649,7 @@ export type ProdutoUpdateWithoutCarrinhoItensInput = {
   pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
   abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutCarrinhoItensInput = {
@@ -1642,6 +1680,7 @@ export type ProdutoUncheckedUpdateWithoutCarrinhoItensInput = {
   pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
   abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateWithoutVendasBalcaoItensInput = {
@@ -1672,6 +1711,7 @@ export type ProdutoCreateWithoutVendasBalcaoItensInput = {
   pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
   abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoUncheckedCreateWithoutVendasBalcaoItensInput = {
@@ -1702,6 +1742,7 @@ export type ProdutoUncheckedCreateWithoutVendasBalcaoItensInput = {
   pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
   abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
+  reservas?: Prisma.ReservaUncheckedCreateNestedManyWithoutProdutoInput
 }
 
 export type ProdutoCreateOrConnectWithoutVendasBalcaoItensInput = {
@@ -1748,6 +1789,7 @@ export type ProdutoUpdateWithoutVendasBalcaoItensInput = {
   pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
   abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutVendasBalcaoItensInput = {
@@ -1778,6 +1820,147 @@ export type ProdutoUncheckedUpdateWithoutVendasBalcaoItensInput = {
   pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
   abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
+}
+
+export type ProdutoCreateWithoutReservasInput = {
+  id?: string
+  nome: string
+  slug: string
+  tamanho?: string | null
+  descricao?: string | null
+  cor?: string | null
+  referencia?: string | null
+  marca?: string | null
+  preco: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: $Enums.ProdutoTipo
+  status?: $Enums.ProdutoStatus
+  estoque?: number
+  condicao?: $Enums.CondicaoProduto | null
+  avarias?: string | null
+  composicao?: string | null
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
+  ordem?: number
+  updatedAt?: Date | string
+  createdAt?: Date | string
+  categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
+  imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
+  pedidoItens?: Prisma.PedidoItemCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoCreateNestedManyWithoutProdutoInput
+  carrinhoItens?: Prisma.CarrinhoItemCreateNestedManyWithoutProdutoInput
+  vendasBalcaoItens?: Prisma.VendaBalcaoItemCreateNestedManyWithoutProdutoInput
+}
+
+export type ProdutoUncheckedCreateWithoutReservasInput = {
+  id?: string
+  nome: string
+  slug: string
+  tamanho?: string | null
+  descricao?: string | null
+  cor?: string | null
+  referencia?: string | null
+  marca?: string | null
+  preco: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: $Enums.ProdutoTipo
+  status?: $Enums.ProdutoStatus
+  estoque?: number
+  condicao?: $Enums.CondicaoProduto | null
+  avarias?: string | null
+  composicao?: string | null
+  pesoGramas?: number | null
+  alturaCm?: number | null
+  larguraCm?: number | null
+  comprimentoCm?: number | null
+  ordem?: number
+  categoriaId: string
+  updatedAt?: Date | string
+  createdAt?: Date | string
+  imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
+  pedidoItens?: Prisma.PedidoItemUncheckedCreateNestedManyWithoutProdutoInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedCreateNestedManyWithoutProdutoInput
+  carrinhoItens?: Prisma.CarrinhoItemUncheckedCreateNestedManyWithoutProdutoInput
+  vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedCreateNestedManyWithoutProdutoInput
+}
+
+export type ProdutoCreateOrConnectWithoutReservasInput = {
+  where: Prisma.ProdutoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProdutoCreateWithoutReservasInput, Prisma.ProdutoUncheckedCreateWithoutReservasInput>
+}
+
+export type ProdutoUpsertWithoutReservasInput = {
+  update: Prisma.XOR<Prisma.ProdutoUpdateWithoutReservasInput, Prisma.ProdutoUncheckedUpdateWithoutReservasInput>
+  create: Prisma.XOR<Prisma.ProdutoCreateWithoutReservasInput, Prisma.ProdutoUncheckedCreateWithoutReservasInput>
+  where?: Prisma.ProdutoWhereInput
+}
+
+export type ProdutoUpdateToOneWithWhereWithoutReservasInput = {
+  where?: Prisma.ProdutoWhereInput
+  data: Prisma.XOR<Prisma.ProdutoUpdateWithoutReservasInput, Prisma.ProdutoUncheckedUpdateWithoutReservasInput>
+}
+
+export type ProdutoUpdateWithoutReservasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  tamanho?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referencia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marca?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preco?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
+  status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
+  estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  condicao?: Prisma.NullableEnumCondicaoProdutoFieldUpdateOperationsInput | $Enums.CondicaoProduto | null
+  avarias?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  composicao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
+  imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
+  pedidoItens?: Prisma.PedidoItemUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
+  carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
+  vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+}
+
+export type ProdutoUncheckedUpdateWithoutReservasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  tamanho?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referencia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marca?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preco?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tipo?: Prisma.EnumProdutoTipoFieldUpdateOperationsInput | $Enums.ProdutoTipo
+  status?: Prisma.EnumProdutoStatusFieldUpdateOperationsInput | $Enums.ProdutoStatus
+  estoque?: Prisma.IntFieldUpdateOperationsInput | number
+  condicao?: Prisma.NullableEnumCondicaoProdutoFieldUpdateOperationsInput | $Enums.CondicaoProduto | null
+  avarias?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  composicao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pesoGramas?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  alturaCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
+  pedidoItens?: Prisma.PedidoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
+  carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoCreateManyCategoriaInput = {
@@ -1833,6 +2016,7 @@ export type ProdutoUpdateWithoutCategoriaInput = {
   abas?: Prisma.VitrineAbaProdutoUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
@@ -1863,6 +2047,7 @@ export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
   abas?: Prisma.VitrineAbaProdutoUncheckedUpdateManyWithoutProdutoNestedInput
   carrinhoItens?: Prisma.CarrinhoItemUncheckedUpdateManyWithoutProdutoNestedInput
   vendasBalcaoItens?: Prisma.VendaBalcaoItemUncheckedUpdateManyWithoutProdutoNestedInput
+  reservas?: Prisma.ReservaUncheckedUpdateManyWithoutProdutoNestedInput
 }
 
 export type ProdutoUncheckedUpdateManyWithoutCategoriaInput = {
@@ -1901,6 +2086,7 @@ export type ProdutoCountOutputType = {
   abas: number
   carrinhoItens: number
   vendasBalcaoItens: number
+  reservas: number
 }
 
 export type ProdutoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1909,6 +2095,7 @@ export type ProdutoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   abas?: boolean | ProdutoCountOutputTypeCountAbasArgs
   carrinhoItens?: boolean | ProdutoCountOutputTypeCountCarrinhoItensArgs
   vendasBalcaoItens?: boolean | ProdutoCountOutputTypeCountVendasBalcaoItensArgs
+  reservas?: boolean | ProdutoCountOutputTypeCountReservasArgs
 }
 
 /**
@@ -1956,6 +2143,13 @@ export type ProdutoCountOutputTypeCountVendasBalcaoItensArgs<ExtArgs extends run
   where?: Prisma.VendaBalcaoItemWhereInput
 }
 
+/**
+ * ProdutoCountOutputType without action
+ */
+export type ProdutoCountOutputTypeCountReservasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReservaWhereInput
+}
+
 
 export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1987,6 +2181,7 @@ export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   abas?: boolean | Prisma.Produto$abasArgs<ExtArgs>
   carrinhoItens?: boolean | Prisma.Produto$carrinhoItensArgs<ExtArgs>
   vendasBalcaoItens?: boolean | Prisma.Produto$vendasBalcaoItensArgs<ExtArgs>
+  reservas?: boolean | Prisma.Produto$reservasArgs<ExtArgs>
   _count?: boolean | Prisma.ProdutoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["produto"]>
 
@@ -2078,6 +2273,7 @@ export type ProdutoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   abas?: boolean | Prisma.Produto$abasArgs<ExtArgs>
   carrinhoItens?: boolean | Prisma.Produto$carrinhoItensArgs<ExtArgs>
   vendasBalcaoItens?: boolean | Prisma.Produto$vendasBalcaoItensArgs<ExtArgs>
+  reservas?: boolean | Prisma.Produto$reservasArgs<ExtArgs>
   _count?: boolean | Prisma.ProdutoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProdutoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2096,6 +2292,7 @@ export type $ProdutoPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     abas: Prisma.$VitrineAbaProdutoPayload<ExtArgs>[]
     carrinhoItens: Prisma.$CarrinhoItemPayload<ExtArgs>[]
     vendasBalcaoItens: Prisma.$VendaBalcaoItemPayload<ExtArgs>[]
+    reservas: Prisma.$ReservaPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2521,6 +2718,7 @@ export interface Prisma__ProdutoClient<T, Null = never, ExtArgs extends runtime.
   abas<T extends Prisma.Produto$abasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$abasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VitrineAbaProdutoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   carrinhoItens<T extends Prisma.Produto$carrinhoItensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$carrinhoItensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CarrinhoItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vendasBalcaoItens<T extends Prisma.Produto$vendasBalcaoItensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$vendasBalcaoItensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VendaBalcaoItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reservas<T extends Prisma.Produto$reservasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Produto$reservasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3091,6 +3289,30 @@ export type Produto$vendasBalcaoItensArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.VendaBalcaoItemScalarFieldEnum | Prisma.VendaBalcaoItemScalarFieldEnum[]
+}
+
+/**
+ * Produto.reservas
+ */
+export type Produto$reservasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Reserva
+   */
+  select?: Prisma.ReservaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Reserva
+   */
+  omit?: Prisma.ReservaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReservaInclude<ExtArgs> | null
+  where?: Prisma.ReservaWhereInput
+  orderBy?: Prisma.ReservaOrderByWithRelationInput | Prisma.ReservaOrderByWithRelationInput[]
+  cursor?: Prisma.ReservaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReservaScalarFieldEnum | Prisma.ReservaScalarFieldEnum[]
 }
 
 /**

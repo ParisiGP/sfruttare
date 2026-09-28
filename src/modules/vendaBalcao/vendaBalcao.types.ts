@@ -6,9 +6,17 @@ export type ProdutoBalcaoResumo = {
   cor: string;
   tamanho: string;
   imagemUrl: string | null;
+  status: "DISPONIVEL" | "RESERVADO";
+  reservadoPara: string | null;
 };
 
 export type DescontoTipo = "VALOR" | "PERCENTUAL";
+
+export type FormaPagamentoBalcao =
+  | "DINHEIRO"
+  | "PIX"
+  | "DEBITO"
+  | "CREDITO";
 
 export type ConfirmarVendaBalcaoInput = {
   nomeCliente: string;
@@ -17,6 +25,7 @@ export type ConfirmarVendaBalcaoInput = {
   descontoTipo?: DescontoTipo;
   descontoEntrada?: number;
   parcelas: number;
+  formaPagamento?: FormaPagamentoBalcao;
   produtoIds: string[];
 };
 
@@ -57,6 +66,7 @@ export type VendaBalcaoResumo = {
   descontoAplicado: number | null;
   total: number;
   totalComJuros: number | null;
+  formaPagamento: FormaPagamentoBalcao | null;
   itens: VendaBalcaoItemResumo[];
   createdAt: Date;
 };

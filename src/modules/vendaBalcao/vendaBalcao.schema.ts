@@ -41,10 +41,29 @@ export const confirmarVendaBalcaoSchema = z
       .min(1, "Parcelas deve ser entre 1 e 12.")
       .max(12, "Parcelas deve ser entre 1 e 12."),
 
+    formaPagamento: z
+      .enum([
+        "DINHEIRO",
+        "PIX",
+        "DEBITO",
+        "CREDITO",
+      ])
+      .optional(),
+
     produtoIds: z
       .array(z.string().cuid())
       .min(1, "Adicione ao menos uma peça ao carrinho."),
   })
+  .refine(
+    (dados) =>
+      dados.parcelas > 1 ||
+      !!dados.formaPagamento,
+    {
+      message:
+        "Escolha a forma de pagamento.",
+      path: ["formaPagamento"],
+    }
+  )
   .refine(
     (dados) =>
       (dados.descontoTipo === undefined) ===

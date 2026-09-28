@@ -53,6 +53,7 @@ model Produto {
   abas              VitrineAbaProduto[]
   carrinhoItens     CarrinhoItem[]
   vendasBalcaoItens VendaBalcaoItem[]
+  reservas          Reserva[]
 
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
@@ -159,6 +160,8 @@ model Pedido {
   frete Decimal @db.Decimal(10,2) @default(0)
 
   total      Decimal @db.Decimal(10,2)
+
+  formaPagamento String? // "PIX" | "DEBITO" | "CREDITO" | "OUTRO"
 
   itens      PedidoItem[]
 
@@ -285,20 +288,22 @@ model InspiracaoSemana {
 }
 
 model VendaBalcao {
-  id                 String   @id @default(cuid())
-  nomeCliente        String
-  emailCliente       String?
-  telefoneCliente    String?
-  parcelas           Int      @default(1)
-  subtotal           Decimal  @db.Decimal(10,2)
-  descontoTipo       String?
-  descontoEntrada    Decimal? @db.Decimal(10,2)
-  descontoAplicado   Decimal? @db.Decimal(10,2)
-  total              Decimal  @db.Decimal(10,2)
-  totalComJuros      Decimal? @db.Decimal(10,2)
-  itens              VendaBalcaoItem[]
-  devolucaoComoTroca DevolucaoBalcao?
-  createdAt          DateTime @default(now())
+  id                  String   @id @default(cuid())
+  nomeCliente         String
+  emailCliente        String?
+  telefoneCliente     String?
+  parcelas            Int      @default(1)
+  subtotal            Decimal  @db.Decimal(10,2)
+  descontoTipo        String?
+  descontoEntrada     Decimal? @db.Decimal(10,2)
+  descontoAplicado    Decimal? @db.Decimal(10,2)
+  total               Decimal  @db.Decimal(10,2)
+  totalComJuros       Decimal? @db.Decimal(10,2)
+  formaPagamento      String? // "DINHEIRO" | "PIX" | "DEBITO" | "CREDITO"
+  itens               VendaBalcaoItem[]
+  devolucaoComoTroca  DevolucaoBalcao?
+  reservasConvertidas Reserva[]
+  createdAt           DateTime @default(now())
 }
 
 model VendaBalcaoItem {
@@ -324,4 +329,18 @@ model DevolucaoBalcao {
   diferencaValor    Decimal? @db.Decimal(10,2)
   motivo            String?
   createdAt         DateTime @default(now())
+}
+
+model Reserva {
+  id              String   @id @default(cuid())
+  produtoId       String
+  produto         Produto  @relation(fields: [produtoId], references: [id])
+  nomeCliente     String
+  telefoneCliente String?
+  canal           String   // "BALCAO" | "SITE"
+  status          String   @default("ATIVA") // "ATIVA" | "CONVERTIDA" | "CANCELADA"
+  vendaBalcaoId   String?
+  vendaBalcao     VendaBalcao? @relation(fields: [vendaBalcaoId], references: [id])
+  createdAt       DateTime @default(now())
+  atualizadoEm    DateTime @updatedAt
 }

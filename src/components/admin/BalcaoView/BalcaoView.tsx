@@ -12,11 +12,13 @@ import {
   buscarProdutosParaBalcao,
   confirmarVendaBalcao,
 } from "@/modules/vendaBalcao/actions";
+import { criarReserva } from "@/modules/reserva/actions";
 import { calcularTotalComJuros } from "@/modules/vendaBalcao/tabelaJurosMaquininha";
 import { calcularDescontoAplicado } from "@/modules/vendaBalcao/desconto";
 import type {
   ClienteBalcaoResumo,
   DescontoTipo,
+  FormaPagamentoBalcao,
   ProdutoBalcaoResumo,
 } from "@/modules/vendaBalcao/vendaBalcao.types";
 import { formatarPreco } from "@/lib/formatarPreco";
@@ -32,6 +34,16 @@ const PARCELAS_DISPONIVEIS = Array.from(
   (_, index) => index + 1
 );
 
+const FORMAS_PAGAMENTO: {
+  valor: FormaPagamentoBalcao;
+  label: string;
+}[] = [
+  { valor: "DINHEIRO", label: "Dinheiro" },
+  { valor: "PIX", label: "Pix" },
+  { valor: "DEBITO", label: "Débito" },
+  { valor: "CREDITO", label: "Crédito" },
+];
+
 const DEBOUNCE_MS = 300;
 
 export function BalcaoView() {
@@ -43,6 +55,21 @@ export function BalcaoView() {
     ProdutoBalcaoResumo[]
   >([]);
   const [buscando, setBuscando] = useState(false);
+
+  const [
+    reservandoProdutoId,
+    setReservandoProdutoId,
+  ] = useState<string | null>(null);
+  const [nomeReservaInline, setNomeReservaInline] =
+    useState("");
+  const [
+    telefoneReservaInline,
+    setTelefoneReservaInline,
+  ] = useState("");
+  const [salvandoReserva, setSalvandoReserva] =
+    useState(false);
+  const [erroReservaInline, setErroReservaInline] =
+    useState("");
 
   const [carrinho, setCarrinho] = useState<
     ProdutoBalcaoResumo[]
@@ -68,6 +95,10 @@ export function BalcaoView() {
   const [descontoValor, setDescontoValor] =
     useState("");
   const [parcelas, setParcelas] = useState(1);
+  const [formaPagamento, setFormaPagamento] =
+    useState<FormaPagamentoBalcao | null>(
+      null
+    );
 
   const [confirmando, setConfirmando] =
     useState(false);
@@ -282,15 +313,82 @@ export function BalcaoView() {
     );
   }
 
+  function abrirReservaInline(
+    produtoId: string
+  ) {
+    setReservandoProdutoId(produtoId);
+    setNomeReservaInline("");
+    setTelefoneReservaInline("");
+    setErroReservaInline("");
+  }
+
+  function cancelarReservaInline() {
+    setReservandoProdutoId(null);
+    setNomeReservaInline("");
+    setTelefoneReservaInline("");
+    setErroReservaInline("");
+  }
+
+  async function confirmarReservaInline(
+    produtoId: string
+  ) {
+    if (!nomeReservaInline.trim()) {
+      setErroReservaInline(
+        "Informe o nome do cliente pra reservar."
+      );
+      return;
+    }
+
+    setSalvandoReserva(true);
+    setErroReservaInline("");
+
+    const resultado = await criarReserva({
+      produtoId,
+      nomeCliente: nomeReservaInline.trim(),
+      telefoneCliente:
+        telefoneReservaInline.trim() ||
+        undefined,
+      canal: "BALCAO",
+    });
+
+    setSalvandoReserva(false);
+
+    if (!resultado.ok) {
+      setErroReservaInline(resultado.message);
+      return;
+    }
+
+    cancelarReservaInline();
+
+    // Atualiza a busca na hora pra trocar "Reservar" pelo selo — a
+    // action já revalida a rota, mas essa lista é estado local.
+    const termo = busca.trim();
+
+    if (termo) {
+      const resultadoBusca =
+        await buscarProdutosParaBalcao(termo);
+
+      setResultados(
+        resultadoBusca.ok
+          ? resultadoBusca.produtos
+          : []
+      );
+    }
+  }
+
   const telefoneInvalido =
     telefoneCliente.trim().length > 0 &&
     !celularValido(telefoneCliente);
+
+  const formaPagamentoEfetiva =
+    parcelas > 1 ? "CREDITO" : formaPagamento;
 
   const podeConfirmar =
     nomeCliente.trim().length > 0 &&
     carrinho.length > 0 &&
     !telefoneInvalido &&
     !descontoInvalido &&
+    !!formaPagamentoEfetiva &&
     !confirmando;
 
   async function handleConfirmarVenda() {
@@ -311,6 +409,8 @@ export function BalcaoView() {
         descontoTipo ?? undefined,
       descontoEntrada: descontoEntradaNumero,
       parcelas,
+      formaPagamento:
+        formaPagamentoEfetiva ?? undefined,
       produtoIds: carrinho.map(
         (produto) => produto.id
       ),
@@ -338,6 +438,7 @@ export function BalcaoView() {
     setDescontoTipo(null);
     setDescontoValor("");
     setParcelas(1);
+    setFormaPagamento(null);
     setBusca("");
     setResultados([]);
     inputBuscaRef.current?.focus();
@@ -378,6 +479,10 @@ export function BalcaoView() {
               const jaNoCarrinho = carrinho.some(
                 (item) => item.id === produto.id
               );
+
+              const reservandoEssa =
+                reservandoProdutoId ===
+                produto.id;
 
               return (
                 <li
@@ -425,22 +530,146 @@ export function BalcaoView() {
                         produto.preco
                       )}
                     </span>
+
+                    {produto.status ===
+                      "RESERVADO" && (
+                      <span
+                        className={
+                          styles.seloReservado
+                        }
+                      >
+                        Reservado para{" "}
+                        {produto.reservadoPara}
+                      </span>
+                    )}
+
+                    {reservandoEssa && (
+                      <div
+                        className={
+                          styles.reservaInline
+                        }
+                      >
+                        <input
+                          type="text"
+                          placeholder="Nome do cliente"
+                          value={
+                            nomeReservaInline
+                          }
+                          onChange={(event) =>
+                            setNomeReservaInline(
+                              event.target
+                                .value
+                            )
+                          }
+                        />
+
+                        <input
+                          type="tel"
+                          placeholder="Celular (opcional)"
+                          value={
+                            telefoneReservaInline
+                          }
+                          onChange={(event) =>
+                            setTelefoneReservaInline(
+                              formatarCelular(
+                                event.target
+                                  .value
+                              )
+                            )
+                          }
+                        />
+
+                        {erroReservaInline && (
+                          <p
+                            className={
+                              styles.avisoErro
+                            }
+                          >
+                            {erroReservaInline}
+                          </p>
+                        )}
+
+                        <div
+                          className={
+                            styles.reservaInlineAcoes
+                          }
+                        >
+                          <button
+                            type="button"
+                            onClick={
+                              cancelarReservaInline
+                            }
+                            disabled={
+                              salvandoReserva
+                            }
+                          >
+                            Cancelar
+                          </button>
+
+                          <button
+                            type="button"
+                            className={
+                              styles.adicionarButton
+                            }
+                            disabled={
+                              salvandoReserva
+                            }
+                            onClick={() =>
+                              confirmarReservaInline(
+                                produto.id
+                              )
+                            }
+                          >
+                            {salvandoReserva
+                              ? "Salvando..."
+                              : "Confirmar reserva"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <button
-                    type="button"
-                    className={
-                      styles.adicionarButton
-                    }
-                    disabled={jaNoCarrinho}
-                    onClick={() =>
-                      adicionarAoCarrinho(produto)
-                    }
-                  >
-                    {jaNoCarrinho
-                      ? "Adicionado"
-                      : "Adicionar"}
-                  </button>
+                  {!reservandoEssa && (
+                    <div
+                      className={
+                        styles.resultadoAcoes
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={
+                          styles.adicionarButton
+                        }
+                        disabled={jaNoCarrinho}
+                        onClick={() =>
+                          adicionarAoCarrinho(
+                            produto
+                          )
+                        }
+                      >
+                        {jaNoCarrinho
+                          ? "Adicionado"
+                          : "Adicionar"}
+                      </button>
+
+                      {produto.status ===
+                        "DISPONIVEL" && (
+                        <button
+                          type="button"
+                          className={
+                            styles.reservarButton
+                          }
+                          onClick={() =>
+                            abrirReservaInline(
+                              produto.id
+                            )
+                          }
+                        >
+                          Reservar
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </li>
               );
             })}
@@ -519,6 +748,75 @@ export function BalcaoView() {
               })}
             </tbody>
           </table>
+
+          <div
+            className={
+              styles.formaPagamentoWrap
+            }
+          >
+            <span
+              className={
+                styles.parcelasLabel
+              }
+            >
+              Forma de pagamento
+            </span>
+
+            {parcelas > 1 ? (
+              <p
+                className={
+                  styles.formaPagamentoFixa
+                }
+              >
+                Crédito (parcelamento na
+                maquininha)
+              </p>
+            ) : (
+              <div
+                className={
+                  styles.formaPagamentoOpcoes
+                }
+              >
+                {FORMAS_PAGAMENTO.map(
+                  (opcao) => (
+                    <button
+                      key={opcao.valor}
+                      type="button"
+                      className={
+                        formaPagamento ===
+                        opcao.valor
+                          ? `${styles.formaPagamentoBotao} ${styles.formaPagamentoBotaoAtivo}`
+                          : styles.formaPagamentoBotao
+                      }
+                      aria-pressed={
+                        formaPagamento ===
+                        opcao.valor
+                      }
+                      onClick={() =>
+                        setFormaPagamento(
+                          opcao.valor
+                        )
+                      }
+                    >
+                      {opcao.label}
+                    </button>
+                  )
+                )}
+              </div>
+            )}
+
+            {parcelas === 1 &&
+              !formaPagamento && (
+                <p
+                  className={
+                    styles.avisoErro
+                  }
+                >
+                  Escolha a forma de pagamento
+                  pra confirmar a venda.
+                </p>
+              )}
+          </div>
         </section>
       </div>
 

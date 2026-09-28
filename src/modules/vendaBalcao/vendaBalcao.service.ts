@@ -50,6 +50,12 @@ export class VendaBalcaoService {
       tamanho: produto.tamanho ?? "",
       imagemUrl:
         produto.imagens[0]?.url ?? null,
+      status: produto.status as
+        | "DISPONIVEL"
+        | "RESERVADO",
+      reservadoPara:
+        produto.reservas?.[0]?.nomeCliente ??
+        null,
     }));
   }
 
@@ -141,9 +147,12 @@ export class VendaBalcaoService {
         );
       }
 
-      if (produto.status !== "DISPONIVEL") {
+      if (
+        produto.status !== "DISPONIVEL" &&
+        produto.status !== "RESERVADO"
+      ) {
         throw new Error(
-          `A peça "${produto.nome}" já foi vendida ou reservada. Remova-a do carrinho e tente novamente.`
+          `A peça "${produto.nome}" já foi vendida. Remova-a do carrinho e tente novamente.`
         );
       }
     }
@@ -179,6 +188,14 @@ export class VendaBalcaoService {
       dadosValidados.parcelas
     );
 
+    // Parcelado só existe na maquininha via crédito — trava sozinho,
+    // sem depender do que foi enviado (o schema só exige escolha
+    // manual quando parcelas === 1).
+    const formaPagamento =
+      dadosValidados.parcelas > 1
+        ? "CREDITO"
+        : dadosValidados.formaPagamento!;
+
     const venda =
       await this.vendaBalcaoRepository.create({
         nomeCliente: dadosValidados.nomeCliente,
@@ -198,6 +215,7 @@ export class VendaBalcaoService {
             : undefined,
         total,
         totalComJuros,
+        formaPagamento,
         itens: produtoIdsUnicos.map(
           (produtoId) => {
             const produto =
@@ -320,6 +338,7 @@ export class VendaBalcaoService {
     descontoAplicado: unknown;
     total: unknown;
     totalComJuros: unknown;
+    formaPagamento: string | null;
     createdAt: Date;
     itens: {
       id: string;
@@ -368,6 +387,13 @@ export class VendaBalcaoService {
         venda.totalComJuros === null
           ? null
           : Number(venda.totalComJuros),
+      formaPagamento:
+        venda.formaPagamento as
+          | "DINHEIRO"
+          | "PIX"
+          | "DEBITO"
+          | "CREDITO"
+          | null,
       createdAt: venda.createdAt,
       itens: venda.itens.map((item) => {
         const devolucao = item.devolucoes[0];

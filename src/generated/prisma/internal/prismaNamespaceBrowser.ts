@@ -68,7 +68,8 @@ export const ModelName = {
   InspiracaoSemana: 'InspiracaoSemana',
   VendaBalcao: 'VendaBalcao',
   VendaBalcaoItem: 'VendaBalcaoItem',
-  DevolucaoBalcao: 'DevolucaoBalcao'
+  DevolucaoBalcao: 'DevolucaoBalcao',
+  Reserva: 'Reserva'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -175,6 +176,7 @@ export const PedidoScalarFieldEnum = {
   status: 'status',
   frete: 'frete',
   total: 'total',
+  formaPagamento: 'formaPagamento',
   createdAt: 'createdAt'
 } as const
 
@@ -298,6 +300,7 @@ export const VendaBalcaoScalarFieldEnum = {
   descontoAplicado: 'descontoAplicado',
   total: 'total',
   totalComJuros: 'totalComJuros',
+  formaPagamento: 'formaPagamento',
   createdAt: 'createdAt'
 } as const
 
@@ -328,6 +331,21 @@ export const DevolucaoBalcaoScalarFieldEnum = {
 } as const
 
 export type DevolucaoBalcaoScalarFieldEnum = (typeof DevolucaoBalcaoScalarFieldEnum)[keyof typeof DevolucaoBalcaoScalarFieldEnum]
+
+
+export const ReservaScalarFieldEnum = {
+  id: 'id',
+  produtoId: 'produtoId',
+  nomeCliente: 'nomeCliente',
+  telefoneCliente: 'telefoneCliente',
+  canal: 'canal',
+  status: 'status',
+  vendaBalcaoId: 'vendaBalcaoId',
+  createdAt: 'createdAt',
+  atualizadoEm: 'atualizadoEm'
+} as const
+
+export type ReservaScalarFieldEnum = (typeof ReservaScalarFieldEnum)[keyof typeof ReservaScalarFieldEnum]
 
 
 export const SortOrder = {

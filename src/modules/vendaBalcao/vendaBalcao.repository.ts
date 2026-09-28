@@ -17,6 +17,7 @@ export type VendaBalcaoWriteData = {
   descontoAplicado?: number;
   total: number;
   totalComJuros: number | null;
+  formaPagamento: string;
   itens: VendaBalcaoItemWriteData[];
 };
 
@@ -28,11 +29,14 @@ export type VendaBalcaoListFilters = {
 
 export class VendaBalcaoRepository {
   /**
-   * `updateMany` com `where: { status: "DISPONIVEL" }` dentro da mesma
-   * transação é o que de fato fecha a corrida entre dois atendimentos
-   * simultâneos: se outra venda já tiver marcado a peça como VENDIDO
-   * entre a revalidação do service e este ponto, `count` vem 0 e a
-   * transação inteira é desfeita — nenhuma venda parcial fica registrada.
+   * `updateMany` com `where: { status: { in: [DISPONIVEL, RESERVADO] } }`
+   * dentro da mesma transação é o que de fato fecha a corrida entre dois
+   * atendimentos simultâneos: se outra venda já tiver marcado a peça como
+   * VENDIDO entre a revalidação do service e este ponto, `count` vem 0 e
+   * a transação inteira é desfeita — nenhuma venda parcial fica
+   * registrada. Aceita RESERVADO também porque é assim que se fecha a
+   * venda de uma peça reservada (Balcão ou Produtos/site) — sempre pelo
+   * Balcão.
    */
   async create(data: VendaBalcaoWriteData) {
     return prisma.$transaction(async (tx) => {
@@ -40,7 +44,9 @@ export class VendaBalcaoRepository {
         const resultado = await tx.produto.updateMany({
           where: {
             id: item.produtoId,
-            status: "DISPONIVEL",
+            status: {
+              in: ["DISPONIVEL", "RESERVADO"],
+            },
           },
           data: {
             status: "VENDIDO",
@@ -54,7 +60,7 @@ export class VendaBalcaoRepository {
         }
       }
 
-      return tx.vendaBalcao.create({
+      const venda = await tx.vendaBalcao.create({
         data: {
           nomeCliente: data.nomeCliente,
           emailCliente: data.emailCliente,
@@ -66,6 +72,7 @@ export class VendaBalcaoRepository {
           descontoAplicado: data.descontoAplicado,
           total: data.total,
           totalComJuros: data.totalComJuros,
+          formaPagamento: data.formaPagamento,
           itens: {
             create: data.itens.map((item) => ({
               produtoId: item.produtoId,
@@ -76,6 +83,26 @@ export class VendaBalcaoRepository {
         },
         include: this.includeRelations(),
       });
+
+      // Se alguma das peças vendidas tinha reserva ativa, essa venda é
+      // exatamente o que converte ela — não bloqueia por nome do
+      // cliente (decisão já validada na especificação).
+      await tx.reserva.updateMany({
+        where: {
+          produtoId: {
+            in: data.itens.map(
+              (item) => item.produtoId
+            ),
+          },
+          status: "ATIVA",
+        },
+        data: {
+          status: "CONVERTIDA",
+          vendaBalcaoId: venda.id,
+        },
+      });
+
+      return venda;
     });
   }
 

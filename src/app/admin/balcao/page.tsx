@@ -13,12 +13,21 @@ export default async function BalcaoPage() {
       <header className={styles.header}>
         <h1>Balcão — Venda presencial</h1>
 
-        <Link
-          href="/admin/balcao/historico"
-          className={styles.historicoLink}
-        >
-          Ver histórico de vendas
-        </Link>
+        <div className={styles.headerLinks}>
+          <Link
+            href="/admin/balcao/historico"
+            className={styles.historicoLink}
+          >
+            Ver histórico de vendas
+          </Link>
+
+          <Link
+            href="/admin/reservas"
+            className={styles.historicoLink}
+          >
+            Ver reservas
+          </Link>
+        </div>
       </header>
 
       <BalcaoView />

@@ -6,6 +6,7 @@ import type {
   FiltroPeriodoBI,
   ResultadoBI,
 } from "@/modules/bi/bi.types";
+import { ReservaService } from "@/modules/reserva/reserva.service";
 import { formatarPreco } from "@/lib/formatarPreco";
 
 import styles from "./page.module.css";
@@ -208,11 +209,38 @@ export default async function DesempenhoPage({
       "Não foi possível calcular o desempenho agora. Tente novamente em instantes.";
   }
 
+  let reservasAtivas: number | null = null;
+
+  try {
+    const reservaService = new ReservaService();
+    reservasAtivas =
+      await reservaService.contarAtivas();
+  } catch (error) {
+    console.error(
+      "[admin/desempenho] reservas ativas",
+      error
+    );
+  }
+
   return (
     <main>
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <h1>Desempenho</h1>
+
+          {reservasAtivas !== null && (
+            <Link
+              href="/admin/reservas"
+              className={
+                styles.reservasAtivasLink
+              }
+            >
+              Reservas ativas:{" "}
+              <strong>
+                {reservasAtivas}
+              </strong>
+            </Link>
+          )}
         </header>
 
         <form

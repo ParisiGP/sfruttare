@@ -383,11 +383,16 @@ export class ProdutoRepository {
    * Mesmo filtro de `findPublicoPorBusca`, estendido com `cor` e
    * `tamanho` — usado no balcão de venda presencial (Bazar), onde achar
    * a peça rápido por essas características é mais útil do que no site.
+   * Também traz peças `RESERVADO` (com o nome de quem reservou) — é
+   * assim que o Balcão fecha a venda de uma peça reservada, seja a
+   * reserva do próprio Balcão ou dos Produtos/site.
    */
   async findDisponiveisParaBalcao(busca: string) {
     return prisma.produto.findMany({
       where: {
-        status: "DISPONIVEL",
+        status: {
+          in: ["DISPONIVEL", "RESERVADO"],
+        },
         OR: [
           {
             nome: {
@@ -427,7 +432,14 @@ export class ProdutoRepository {
           },
         ],
       },
-      include: this.includeRelations(),
+      include: {
+        ...this.includeRelations(),
+        reservas: {
+          where: { status: "ATIVA" },
+          select: { nomeCliente: true },
+          take: 1,
+        },
+      },
       orderBy: [
         {
           ordem: "asc",

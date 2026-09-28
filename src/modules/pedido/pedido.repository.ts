@@ -13,6 +13,7 @@ export type PedidoWriteData = {
   status: PedidoStatus;
   frete: number;
   total: number;
+  formaPagamento?: string;
   itens: PedidoItemWriteData[];
 };
 
@@ -26,6 +27,7 @@ export class PedidoRepository {
           status: data.status,
           frete: data.frete,
           total: data.total,
+          formaPagamento: data.formaPagamento,
           itens: {
             create: data.itens.map((item) => ({
               produtoId: item.produtoId,
