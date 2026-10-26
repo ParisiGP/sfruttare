@@ -6,18 +6,29 @@ export type VendaBalcaoItemWriteData = {
   precoUnitario: number;
 };
 
+export type PagamentoBalcaoWriteData = {
+  forma: string;
+  valor: number;
+  parcelas: number;
+  valorComJuros: number | null;
+};
+
 export type VendaBalcaoWriteData = {
   nomeCliente: string;
   emailCliente?: string;
   telefoneCliente?: string;
+  /** Resumo (maior nº de parcelas entre as linhas) — mantém histórico/relatórios atuais. */
   parcelas: number;
   subtotal: number;
   descontoTipo?: "VALOR" | "PERCENTUAL";
   descontoEntrada?: number;
   descontoAplicado?: number;
   total: number;
+  /** Resumo (soma de `valorComJuros ?? valor` das linhas). */
   totalComJuros: number | null;
+  /** Resumo: a forma da única linha, ou "MISTO". */
   formaPagamento: string;
+  pagamentos: PagamentoBalcaoWriteData[];
   itens: VendaBalcaoItemWriteData[];
 };
 
@@ -60,6 +71,12 @@ export class VendaBalcaoRepository {
         }
       }
 
+      const agora = Date.now();
+
+      // As linhas de pagamento entram na mesma transação que cria a
+      // venda e marca as peças como vendidas — nada de gravação
+      // parcial. O `createdAt` escalonado em 1ms por linha preserva a
+      // ordem em que o caixa lançou (a última é sempre "o resto").
       const venda = await tx.vendaBalcao.create({
         data: {
           nomeCliente: data.nomeCliente,
@@ -79,6 +96,20 @@ export class VendaBalcaoRepository {
               nomeProduto: item.nomeProduto,
               precoUnitario: item.precoUnitario,
             })),
+          },
+          pagamentos: {
+            create: data.pagamentos.map(
+              (pagamento, index) => ({
+                forma: pagamento.forma,
+                valor: pagamento.valor,
+                parcelas: pagamento.parcelas,
+                valorComJuros:
+                  pagamento.valorComJuros,
+                createdAt: new Date(
+                  agora + index
+                ),
+              })
+            ),
           },
         },
         include: this.includeRelations(),
@@ -202,6 +233,9 @@ export class VendaBalcaoRepository {
 
   private includeRelations() {
     return {
+      pagamentos: {
+        orderBy: { createdAt: "asc" as const },
+      },
       itens: {
         include: {
           produto: {

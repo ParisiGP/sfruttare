@@ -308,6 +308,27 @@
   outline: none;
 }
 
+.campo select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.campo select:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.campo input.campoSomenteLeitura {
+  color: var(--color-text-muted);
+  font-weight: 700;
+  cursor: default;
+}
+
 .campo input:disabled {
   background: var(--color-border);
   color: var(--color-text-muted);
@@ -450,11 +471,87 @@
   font-weight: 700;
 }
 
-.formaPagamentoWrap {
+.pagamentoLinhas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pagamentoLinha {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.pagamentoLinhaTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pagamentoLinhaTitulo {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.removerLinhaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: -8px -8px -8px 0;
+  border: none;
+  background: transparent;
+  color: var(--color-danger);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.removerLinhaButton:hover {
+  opacity: 0.7;
+}
+
+.dividirButton {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dividirButton:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.dividirButton:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.tabelaParcelas {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 8px;
+}
+
+.tabelaParcelasEsmaecida .parcelasTable {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 .formaPagamentoFixa {

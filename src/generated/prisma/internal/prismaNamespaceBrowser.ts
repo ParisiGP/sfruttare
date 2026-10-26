@@ -67,6 +67,7 @@ export const ModelName = {
   IntegracaoFrete: 'IntegracaoFrete',
   InspiracaoSemana: 'InspiracaoSemana',
   VendaBalcao: 'VendaBalcao',
+  PagamentoBalcao: 'PagamentoBalcao',
   VendaBalcaoItem: 'VendaBalcaoItem',
   DevolucaoBalcao: 'DevolucaoBalcao',
   Reserva: 'Reserva'
@@ -305,6 +306,19 @@ export const VendaBalcaoScalarFieldEnum = {
 } as const
 
 export type VendaBalcaoScalarFieldEnum = (typeof VendaBalcaoScalarFieldEnum)[keyof typeof VendaBalcaoScalarFieldEnum]
+
+
+export const PagamentoBalcaoScalarFieldEnum = {
+  id: 'id',
+  vendaBalcaoId: 'vendaBalcaoId',
+  forma: 'forma',
+  valor: 'valor',
+  parcelas: 'parcelas',
+  valorComJuros: 'valorComJuros',
+  createdAt: 'createdAt'
+} as const
+
+export type PagamentoBalcaoScalarFieldEnum = (typeof PagamentoBalcaoScalarFieldEnum)[keyof typeof PagamentoBalcaoScalarFieldEnum]
 
 
 export const VendaBalcaoItemScalarFieldEnum = {

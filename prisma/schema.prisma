@@ -299,11 +299,23 @@ model VendaBalcao {
   descontoAplicado    Decimal? @db.Decimal(10,2)
   total               Decimal  @db.Decimal(10,2)
   totalComJuros       Decimal? @db.Decimal(10,2)
-  formaPagamento      String? // "DINHEIRO" | "PIX" | "DEBITO" | "CREDITO"
+  formaPagamento      String? // "DINHEIRO" | "PIX" | "DEBITO" | "CREDITO" | "MISTO"
   itens               VendaBalcaoItem[]
+  pagamentos          PagamentoBalcao[]
   devolucaoComoTroca  DevolucaoBalcao?
   reservasConvertidas Reserva[]
   createdAt           DateTime @default(now())
+}
+
+model PagamentoBalcao {
+  id            String      @id @default(cuid())
+  vendaBalcaoId String
+  vendaBalcao   VendaBalcao @relation(fields: [vendaBalcaoId], references: [id])
+  forma         String      // "DINHEIRO" | "PIX" | "DEBITO" | "CREDITO"
+  valor         Decimal     @db.Decimal(10,2) // parte do total (já com desconto, sem juros) paga nesta forma
+  parcelas      Int         @default(1)       // > 1 só quando forma = "CREDITO"
+  valorComJuros Decimal?    @db.Decimal(10,2) // só em CREDITO parcelado: valor * (1 + taxa)
+  createdAt     DateTime    @default(now())
 }
 
 model VendaBalcaoItem {

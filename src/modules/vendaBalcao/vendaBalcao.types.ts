@@ -12,11 +12,34 @@ export type ProdutoBalcaoResumo = {
 
 export type DescontoTipo = "VALOR" | "PERCENTUAL";
 
-export type FormaPagamentoBalcao =
+/** As 4 formas que uma linha de pagamento pode ter. */
+export type FormaPagamentoLinha =
   | "DINHEIRO"
   | "PIX"
   | "DEBITO"
   | "CREDITO";
+
+/**
+ * Tipo de leitura de `VendaBalcao.formaPagamento`: as 4 formas, ou
+ * `"MISTO"` quando a venda foi dividida em mais de uma forma diferente.
+ */
+export type FormaPagamentoBalcao =
+  | FormaPagamentoLinha
+  | "MISTO";
+
+export type PagamentoInput = {
+  forma: FormaPagamentoLinha;
+  valor: number;
+  parcelas: number;
+};
+
+export type PagamentoBalcaoResumo = {
+  /** `null` só em venda antiga sem forma registrada e sem parcelamento. */
+  forma: FormaPagamentoLinha | null;
+  valor: number;
+  parcelas: number;
+  valorComJuros: number | null;
+};
 
 export type ConfirmarVendaBalcaoInput = {
   nomeCliente: string;
@@ -24,8 +47,7 @@ export type ConfirmarVendaBalcaoInput = {
   telefoneCliente?: string;
   descontoTipo?: DescontoTipo;
   descontoEntrada?: number;
-  parcelas: number;
-  formaPagamento?: FormaPagamentoBalcao;
+  pagamentos: PagamentoInput[];
   produtoIds: string[];
 };
 
@@ -67,6 +89,8 @@ export type VendaBalcaoResumo = {
   total: number;
   totalComJuros: number | null;
   formaPagamento: FormaPagamentoBalcao | null;
+  /** Sempre resolvido por `obterPagamentosDaVenda` — a UI não distingue venda antiga de nova. */
+  pagamentos: PagamentoBalcaoResumo[];
   itens: VendaBalcaoItemResumo[];
   createdAt: Date;
 };

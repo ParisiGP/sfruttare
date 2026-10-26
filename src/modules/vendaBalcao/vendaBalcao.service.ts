@@ -6,10 +6,15 @@ import type { VendaBalcaoListFilters } from "./vendaBalcao.repository";
 import { confirmarVendaBalcaoSchema } from "./vendaBalcao.schema";
 import { calcularTotalComJuros } from "./tabelaJurosMaquininha";
 import { calcularDescontoAplicado } from "./desconto";
+import {
+  obterPagamentosDaVenda,
+  resumirPagamentos,
+} from "./pagamentos";
 import type {
   ClienteBalcaoResumo,
   ConfirmarVendaBalcaoInput,
   FiltroHistoricoBalcao,
+  FormaPagamentoBalcao,
   HistoricoBalcaoResultado,
   ProdutoBalcaoResumo,
   VendaBalcaoCandidataResumo,
@@ -181,20 +186,52 @@ export class VendaBalcaoService {
 
     const total = subtotal - descontoAplicado;
 
-    // Os juros da maquininha incidem sobre o valor que será de fato
-    // cobrado do cliente — ou seja, já com o desconto aplicado.
-    const totalComJuros = calcularTotalComJuros(
-      total,
-      dadosValidados.parcelas
+    // O total vem sempre do servidor — nunca se confia no valor que o
+    // cliente (a tela) calculou. A soma das linhas de pagamento tem
+    // que bater com ele em centavos, senão a venda é recusada.
+    const somaPagamentosEmCentavos =
+      dadosValidados.pagamentos.reduce(
+        (soma, pagamento) =>
+          soma + Math.round(pagamento.valor * 100),
+        0
+      );
+
+    if (
+      somaPagamentosEmCentavos !==
+      Math.round(total * 100)
+    ) {
+      throw new Error(
+        "A soma dos pagamentos não bate com o total da venda."
+      );
+    }
+
+    // Os juros da maquininha incidem só na parte paga no crédito
+    // parcelado — nunca sobre Pix/Dinheiro/Débito — e sobre o próprio
+    // valor da linha (já com o desconto aplicado). Arredonda em
+    // centavos por linha pra a soma gravada bater com as linhas.
+    const pagamentos = dadosValidados.pagamentos.map(
+      (pagamento) => ({
+        forma: pagamento.forma,
+        valor: pagamento.valor,
+        parcelas: pagamento.parcelas,
+        valorComJuros:
+          pagamento.forma === "CREDITO" &&
+          pagamento.parcelas > 1
+            ? Math.round(
+                calcularTotalComJuros(
+                  pagamento.valor,
+                  pagamento.parcelas
+                ) * 100
+              ) / 100
+            : null,
+      })
     );
 
-    // Parcelado só existe na maquininha via crédito — trava sozinho,
-    // sem depender do que foi enviado (o schema só exige escolha
-    // manual quando parcelas === 1).
-    const formaPagamento =
-      dadosValidados.parcelas > 1
-        ? "CREDITO"
-        : dadosValidados.formaPagamento!;
+    const {
+      formaPagamento,
+      parcelas,
+      totalComJuros,
+    } = resumirPagamentos(pagamentos);
 
     const venda =
       await this.vendaBalcaoRepository.create({
@@ -204,7 +241,7 @@ export class VendaBalcaoService {
         telefoneCliente:
           dadosValidados.telefoneCliente ||
           undefined,
-        parcelas: dadosValidados.parcelas,
+        parcelas,
         subtotal,
         descontoTipo: dadosValidados.descontoTipo,
         descontoEntrada:
@@ -216,6 +253,7 @@ export class VendaBalcaoService {
         total,
         totalComJuros,
         formaPagamento,
+        pagamentos,
         itens: produtoIdsUnicos.map(
           (produtoId) => {
             const produto =
@@ -339,6 +377,12 @@ export class VendaBalcaoService {
     total: unknown;
     totalComJuros: unknown;
     formaPagamento: string | null;
+    pagamentos: {
+      forma: string;
+      valor: unknown;
+      parcelas: number;
+      valorComJuros: unknown;
+    }[];
     createdAt: Date;
     itens: {
       id: string;
@@ -389,11 +433,9 @@ export class VendaBalcaoService {
           : Number(venda.totalComJuros),
       formaPagamento:
         venda.formaPagamento as
-          | "DINHEIRO"
-          | "PIX"
-          | "DEBITO"
-          | "CREDITO"
+          | FormaPagamentoBalcao
           | null,
+      pagamentos: obterPagamentosDaVenda(venda),
       createdAt: venda.createdAt,
       itens: venda.itens.map((item) => {
         const devolucao = item.devolucoes[0];

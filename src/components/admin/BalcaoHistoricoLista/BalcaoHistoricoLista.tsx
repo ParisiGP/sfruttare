@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { formatarPreco } from "@/lib/formatarPreco";
+import { descreverPagamentos } from "@/modules/vendaBalcao/pagamentos";
 import type { VendaBalcaoResumo } from "@/modules/vendaBalcao/vendaBalcao.types";
 import { DevolucaoModal } from "@/components/admin/DevolucaoModal/DevolucaoModal";
 
@@ -128,7 +129,7 @@ export function BalcaoHistoricoLista({
                     <th>Celular</th>
                     <th>Itens</th>
                     <th>Desconto</th>
-                    <th>Parcelas</th>
+                    <th>Pagamento</th>
                     <th>Total</th>
                   </tr>
                 </thead>
@@ -286,7 +287,11 @@ export function BalcaoHistoricoLista({
                           : "—"}
                       </td>
 
-                      <td>{venda.parcelas}x</td>
+                      <td>
+                        {descreverPagamentos(
+                          venda.pagamentos
+                        )}
+                      </td>
 
                       <td>
                         <strong>

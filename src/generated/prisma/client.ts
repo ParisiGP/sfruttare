@@ -122,6 +122,11 @@ export type InspiracaoSemana = Prisma.InspiracaoSemanaModel
  */
 export type VendaBalcao = Prisma.VendaBalcaoModel
 /**
+ * Model PagamentoBalcao
+ * 
+ */
+export type PagamentoBalcao = Prisma.PagamentoBalcaoModel
+/**
  * Model VendaBalcaoItem
  * 
  */

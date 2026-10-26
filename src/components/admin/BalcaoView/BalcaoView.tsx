@@ -15,10 +15,14 @@ import {
 import { criarReserva } from "@/modules/reserva/actions";
 import { calcularTotalComJuros } from "@/modules/vendaBalcao/tabelaJurosMaquininha";
 import { calcularDescontoAplicado } from "@/modules/vendaBalcao/desconto";
+import {
+  FORMAS_PAGAMENTO,
+  MAXIMO_LINHAS_PAGAMENTO,
+} from "@/modules/vendaBalcao/pagamentos";
 import type {
   ClienteBalcaoResumo,
   DescontoTipo,
-  FormaPagamentoBalcao,
+  FormaPagamentoLinha,
   ProdutoBalcaoResumo,
 } from "@/modules/vendaBalcao/vendaBalcao.types";
 import { formatarPreco } from "@/lib/formatarPreco";
@@ -34,17 +38,44 @@ const PARCELAS_DISPONIVEIS = Array.from(
   (_, index) => index + 1
 );
 
-const FORMAS_PAGAMENTO: {
-  valor: FormaPagamentoBalcao;
-  label: string;
-}[] = [
-  { valor: "DINHEIRO", label: "Dinheiro" },
-  { valor: "PIX", label: "Pix" },
-  { valor: "DEBITO", label: "Débito" },
-  { valor: "CREDITO", label: "Crédito" },
-];
-
 const DEBOUNCE_MS = 300;
+
+/**
+ * Uma linha de pagamento na tela. `valor` é o texto digitado e só vale
+ * pra linhas que NÃO são a última — a última é sempre "o resto"
+ * (total − soma das anteriores) e se calcula sozinha.
+ */
+type LinhaPagamento = {
+  id: string;
+  forma: FormaPagamentoLinha | null;
+  valor: string;
+  parcelas: number;
+};
+
+let contadorLinhas = 0;
+
+function novaLinha(valor = ""): LinhaPagamento {
+  contadorLinhas += 1;
+
+  return {
+    id: `linha-${contadorLinhas}`,
+    forma: null,
+    valor,
+    parcelas: 1,
+  };
+}
+
+function paraCentavos(valor: number) {
+  return Math.round(valor * 100);
+}
+
+function textoParaCentavos(texto: string) {
+  const numero = Number(texto);
+
+  return Number.isFinite(numero)
+    ? paraCentavos(numero)
+    : 0;
+}
 
 export function BalcaoView() {
   const inputBuscaRef =
@@ -94,11 +125,11 @@ export function BalcaoView() {
     useState<DescontoTipo | null>(null);
   const [descontoValor, setDescontoValor] =
     useState("");
-  const [parcelas, setParcelas] = useState(1);
-  const [formaPagamento, setFormaPagamento] =
-    useState<FormaPagamentoBalcao | null>(
-      null
-    );
+  const [linhas, setLinhas] = useState<
+    LinhaPagamento[]
+  >(() => [novaLinha()]);
+  const [linhaFocoId, setLinhaFocoId] =
+    useState<string | null>(null);
 
   const [confirmando, setConfirmando] =
     useState(false);
@@ -286,14 +317,210 @@ export function BalcaoView() {
     ? subtotal
     : subtotal - descontoAplicado;
 
-  const totalComJuros = useMemo(
-    () =>
-      calcularTotalComJuros(
-        totalFinal,
-        parcelas
-      ),
-    [totalFinal, parcelas]
+  // Tudo em centavos inteiros pra soma das linhas bater exatamente com
+  // o total (o servidor confere igual, em centavos).
+  const totalCentavos = paraCentavos(totalFinal);
+
+  const somaAnterioresCentavos = linhas
+    .slice(0, -1)
+    .reduce(
+      (soma, linha) =>
+        soma + textoParaCentavos(linha.valor),
+      0
+    );
+
+  const restoCentavos =
+    totalCentavos - somaAnterioresCentavos;
+
+  const linhasCalculadas = linhas.map(
+    (linha, index) => {
+      const ehUltima = index === linhas.length - 1;
+
+      const valorCentavos = ehUltima
+        ? restoCentavos
+        : textoParaCentavos(linha.valor);
+
+      const valor = valorCentavos / 100;
+
+      const parcelado =
+        linha.forma === "CREDITO" &&
+        linha.parcelas > 1;
+
+      return {
+        ...linha,
+        ehUltima,
+        valorCentavos,
+        valor,
+        // Juros só na parte paga no crédito parcelado.
+        valorComJuros: parcelado
+          ? Math.round(
+              calcularTotalComJuros(
+                valor,
+                linha.parcelas
+              ) * 100
+            ) / 100
+          : null,
+      };
+    }
   );
+
+  const temJuros = linhasCalculadas.some(
+    (linha) => linha.valorComJuros !== null
+  );
+
+  const totalCobradoComJuros =
+    linhasCalculadas.reduce(
+      (soma, linha) =>
+        soma +
+        paraCentavos(
+          linha.valorComJuros ?? linha.valor
+        ),
+      0
+    ) / 100;
+
+  // Linha de crédito "em foco" — a última que o caixa tocou; por
+  // padrão a primeira de crédito. A tabela 1x–12x usa o valor dela.
+  const linhaCreditoFoco =
+    linhasCalculadas.find(
+      (linha) =>
+        linha.id === linhaFocoId &&
+        linha.forma === "CREDITO"
+    ) ??
+    linhasCalculadas.find(
+      (linha) => linha.forma === "CREDITO"
+    ) ??
+    null;
+
+  // Uma linha só e ela não é Crédito: a tabela continua servindo de
+  // atalho (clicar numa parcela > 1 troca a linha pra Crédito).
+  const linhaTabela =
+    linhaCreditoFoco ??
+    (linhas.length === 1
+      ? linhasCalculadas[0]
+      : null);
+
+  const linhaSemForma = linhas.some(
+    (linha) => !linha.forma
+  );
+
+  const valorAnteriorInvalido =
+    linhasCalculadas
+      .slice(0, -1)
+      .some((linha) => linha.valorCentavos <= 0);
+
+  const restoInvalido = restoCentavos <= 0;
+
+  const avisoCobreTotal =
+    linhas.length > 1 &&
+    totalCentavos > 0 &&
+    restoInvalido;
+
+  const pagamentosValidos =
+    !linhaSemForma &&
+    !valorAnteriorInvalido &&
+    !restoInvalido;
+
+  function atualizarLinha(
+    id: string,
+    mudancas: Partial<LinhaPagamento>
+  ) {
+    setLinhas((atual) =>
+      atual.map((linha) =>
+        linha.id === id
+          ? { ...linha, ...mudancas }
+          : linha
+      )
+    );
+  }
+
+  function escolherForma(
+    id: string,
+    forma: FormaPagamentoLinha
+  ) {
+    setLinhas((atual) =>
+      atual.map((linha) =>
+        linha.id === id
+          ? {
+              ...linha,
+              forma,
+              parcelas:
+                forma === "CREDITO"
+                  ? linha.parcelas
+                  : 1,
+            }
+          : linha
+      )
+    );
+
+    if (forma === "CREDITO") {
+      setLinhaFocoId(id);
+    }
+  }
+
+  function escolherParcelasDaLinha(
+    id: string,
+    parcelas: number
+  ) {
+    atualizarLinha(id, { parcelas });
+    setLinhaFocoId(id);
+  }
+
+  function escolherParcelaNaTabela(
+    parcelas: number
+  ) {
+    if (!linhaTabela) {
+      return;
+    }
+
+    if (linhaTabela.forma !== "CREDITO") {
+      if (parcelas <= 1) {
+        return;
+      }
+
+      atualizarLinha(linhaTabela.id, {
+        forma: "CREDITO",
+        parcelas,
+      });
+      setLinhaFocoId(linhaTabela.id);
+      return;
+    }
+
+    escolherParcelasDaLinha(
+      linhaTabela.id,
+      parcelas
+    );
+  }
+
+  function adicionarLinha() {
+    if (
+      linhas.length >= MAXIMO_LINHAS_PAGAMENTO ||
+      restoCentavos <= 0
+    ) {
+      return;
+    }
+
+    // A linha nova vira a última ("o resto"); a que era a última passa
+    // a ser editável já com o valor que tinha (o resto atual).
+    setLinhas((atual) => [
+      ...atual.map((linha, index) =>
+        index === atual.length - 1
+          ? {
+              ...linha,
+              valor: (restoCentavos / 100).toFixed(2),
+            }
+          : linha
+      ),
+      novaLinha(),
+    ]);
+  }
+
+  function removerLinha(id: string) {
+    setLinhas((atual) =>
+      atual.length > 1
+        ? atual.filter((linha) => linha.id !== id)
+        : atual
+    );
+  }
 
   function adicionarAoCarrinho(
     produto: ProdutoBalcaoResumo
@@ -380,15 +607,12 @@ export function BalcaoView() {
     telefoneCliente.trim().length > 0 &&
     !celularValido(telefoneCliente);
 
-  const formaPagamentoEfetiva =
-    parcelas > 1 ? "CREDITO" : formaPagamento;
-
   const podeConfirmar =
     nomeCliente.trim().length > 0 &&
     carrinho.length > 0 &&
     !telefoneInvalido &&
     !descontoInvalido &&
-    !!formaPagamentoEfetiva &&
+    pagamentosValidos &&
     !confirmando;
 
   async function handleConfirmarVenda() {
@@ -408,9 +632,16 @@ export function BalcaoView() {
       descontoTipo:
         descontoTipo ?? undefined,
       descontoEntrada: descontoEntradaNumero,
-      parcelas,
-      formaPagamento:
-        formaPagamentoEfetiva ?? undefined,
+      pagamentos: linhasCalculadas.map(
+        (linha) => ({
+          forma: linha.forma as FormaPagamentoLinha,
+          valor: linha.valor,
+          parcelas:
+            linha.forma === "CREDITO"
+              ? linha.parcelas
+              : 1,
+        })
+      ),
       produtoIds: carrinho.map(
         (produto) => produto.id
       ),
@@ -437,8 +668,8 @@ export function BalcaoView() {
     setTelefoneCliente("");
     setDescontoTipo(null);
     setDescontoValor("");
-    setParcelas(1);
-    setFormaPagamento(null);
+    setLinhas([novaLinha()]);
+    setLinhaFocoId(null);
     setBusca("");
     setResultados([]);
     inputBuscaRef.current?.focus();
@@ -678,144 +909,279 @@ export function BalcaoView() {
 
         <section className={styles.parcelasPainel}>
           <span className={styles.parcelasLabel}>
-            Parcelas
+            Pagamento
           </span>
 
-          <table className={styles.parcelasTable}>
-            <thead>
-              <tr>
-                <th>Parcela</th>
-                <th>Sem juros</th>
-                <th>Com juros</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {PARCELAS_DISPONIVEIS.map((n) => {
-                const valorSemJuros =
-                  totalFinal > 0
-                    ? totalFinal / n
-                    : 0;
-
-                const valorComJuros =
-                  totalFinal > 0
-                    ? calcularTotalComJuros(
-                        totalFinal,
-                        n
-                      ) / n
-                    : 0;
-
-                const selecionada =
-                  n === parcelas;
-
-                return (
-                  <tr
-                    key={n}
-                    className={
-                      selecionada
-                        ? `${styles.parcelaRow} ${styles.parcelaRowAtiva}`
-                        : styles.parcelaRow
-                    }
-                    role="button"
-                    tabIndex={0}
-                    aria-pressed={selecionada}
-                    onClick={() =>
-                      setParcelas(n)
-                    }
-                    onKeyDown={(event) => {
-                      if (
-                        event.key === "Enter" ||
-                        event.key === " "
-                      ) {
-                        event.preventDefault();
-                        setParcelas(n);
-                      }
-                    }}
-                  >
-                    <td>{n}x</td>
-                    <td>
-                      {formatarPreco(
-                        valorSemJuros
-                      )}
-                    </td>
-                    <td>
-                      {formatarPreco(
-                        valorComJuros
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-
-          <div
-            className={
-              styles.formaPagamentoWrap
-            }
-          >
-            <span
-              className={
-                styles.parcelasLabel
-              }
-            >
-              Forma de pagamento
-            </span>
-
-            {parcelas > 1 ? (
-              <p
-                className={
-                  styles.formaPagamentoFixa
-                }
-              >
-                Crédito (parcelamento na
-                maquininha)
-              </p>
-            ) : (
+          <div className={styles.pagamentoLinhas}>
+            {linhasCalculadas.map((linha, index) => (
               <div
-                className={
-                  styles.formaPagamentoOpcoes
-                }
+                key={linha.id}
+                className={styles.pagamentoLinha}
+                onClick={() => {
+                  if (linha.forma === "CREDITO") {
+                    setLinhaFocoId(linha.id);
+                  }
+                }}
+                onFocus={() => {
+                  if (linha.forma === "CREDITO") {
+                    setLinhaFocoId(linha.id);
+                  }
+                }}
               >
-                {FORMAS_PAGAMENTO.map(
-                  (opcao) => (
+                <div
+                  className={styles.pagamentoLinhaTopo}
+                >
+                  <span
+                    className={
+                      styles.pagamentoLinhaTitulo
+                    }
+                  >
+                    {linhas.length > 1
+                      ? `Pagamento ${index + 1}`
+                      : "Forma de pagamento"}
+                  </span>
+
+                  {linhas.length > 1 && (
+                    <button
+                      type="button"
+                      className={
+                        styles.removerLinhaButton
+                      }
+                      aria-label={`Remover pagamento ${
+                        index + 1
+                      }`}
+                      onClick={() =>
+                        removerLinha(linha.id)
+                      }
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className={
+                    styles.formaPagamentoOpcoes
+                  }
+                >
+                  {FORMAS_PAGAMENTO.map((opcao) => (
                     <button
                       key={opcao.valor}
                       type="button"
                       className={
-                        formaPagamento ===
-                        opcao.valor
+                        linha.forma === opcao.valor
                           ? `${styles.formaPagamentoBotao} ${styles.formaPagamentoBotaoAtivo}`
                           : styles.formaPagamentoBotao
                       }
                       aria-pressed={
-                        formaPagamento ===
-                        opcao.valor
+                        linha.forma === opcao.valor
                       }
                       onClick={() =>
-                        setFormaPagamento(
+                        escolherForma(
+                          linha.id,
                           opcao.valor
                         )
                       }
                     >
                       {opcao.label}
                     </button>
-                  )
+                  ))}
+                </div>
+
+                {linhas.length > 1 && (
+                  <label className={styles.campo}>
+                    <span>
+                      {linha.ehUltima
+                        ? "Valor — o resto"
+                        : "Valor (R$)"}
+                    </span>
+
+                    {linha.ehUltima ? (
+                      <input
+                        type="text"
+                        readOnly
+                        className={
+                          styles.campoSomenteLeitura
+                        }
+                        value={formatarPreco(
+                          linha.valor
+                        )}
+                      />
+                    ) : (
+                      <input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        inputMode="decimal"
+                        value={linha.valor}
+                        onChange={(event) =>
+                          atualizarLinha(linha.id, {
+                            valor:
+                              event.target.value,
+                          })
+                        }
+                      />
+                    )}
+                  </label>
+                )}
+
+                {linha.forma === "CREDITO" && (
+                  <label className={styles.campo}>
+                    <span>Parcelas</span>
+
+                    <select
+                      value={linha.parcelas}
+                      onChange={(event) =>
+                        escolherParcelasDaLinha(
+                          linha.id,
+                          Number(event.target.value)
+                        )
+                      }
+                    >
+                      {PARCELAS_DISPONIVEIS.map((n) => (
+                        <option key={n} value={n}>
+                          {n}x de{" "}
+                          {formatarPreco(
+                            linha.valor > 0
+                              ? calcularTotalComJuros(
+                                  linha.valor,
+                                  n
+                                ) / n
+                              : 0
+                          )}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 )}
               </div>
+            ))}
+          </div>
+
+          {linhaSemForma && (
+            <p className={styles.avisoErro}>
+              Escolha a forma de cada pagamento.
+            </p>
+          )}
+
+          {avisoCobreTotal && (
+            <p className={styles.avisoErro}>
+              Os valores informados já cobrem o total;
+              remova ou reduza uma linha.
+            </p>
+          )}
+
+          {!avisoCobreTotal &&
+            valorAnteriorInvalido && (
+              <p className={styles.avisoErro}>
+                Informe um valor maior que zero em
+                cada pagamento.
+              </p>
             )}
 
-            {parcelas === 1 &&
-              !formaPagamento && (
-                <p
-                  className={
-                    styles.avisoErro
-                  }
-                >
-                  Escolha a forma de pagamento
-                  pra confirmar a venda.
-                </p>
-              )}
+          {linhas.length < MAXIMO_LINHAS_PAGAMENTO && (
+            <button
+              type="button"
+              className={styles.dividirButton}
+              disabled={restoCentavos <= 0}
+              onClick={adicionarLinha}
+            >
+              + Dividir em outra forma
+            </button>
+          )}
+
+          <div
+            className={
+              linhaTabela
+                ? styles.tabelaParcelas
+                : `${styles.tabelaParcelas} ${styles.tabelaParcelasEsmaecida}`
+            }
+          >
+            <span className={styles.parcelasLabel}>
+              Parcelas
+              {linhaTabela && linhas.length > 1
+                ? ` — Pagamento ${
+                    linhas.findIndex(
+                      (linha) =>
+                        linha.id === linhaTabela.id
+                    ) + 1
+                  } (${formatarPreco(
+                    linhaTabela.valor
+                  )})`
+                : ""}
+            </span>
+
+            {!linhaTabela && (
+              <p className={styles.formaPagamentoFixa}>
+                Escolha Crédito em uma das formas
+                para parcelar.
+              </p>
+            )}
+
+            <table className={styles.parcelasTable}>
+              <thead>
+                <tr>
+                  <th>Parcela</th>
+                  <th>Sem juros</th>
+                  <th>Com juros</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {PARCELAS_DISPONIVEIS.map((n) => {
+                  const base = linhaTabela?.valor ?? 0;
+
+                  const valorSemJuros =
+                    base > 0 ? base / n : 0;
+
+                  const valorComJuros =
+                    base > 0
+                      ? calcularTotalComJuros(base, n) /
+                        n
+                      : 0;
+
+                  const selecionada =
+                    !!linhaTabela &&
+                    n === linhaTabela.parcelas &&
+                    linhaTabela.forma === "CREDITO";
+
+                  return (
+                    <tr
+                      key={n}
+                      className={
+                        selecionada
+                          ? `${styles.parcelaRow} ${styles.parcelaRowAtiva}`
+                          : styles.parcelaRow
+                      }
+                      role="button"
+                      tabIndex={linhaTabela ? 0 : -1}
+                      aria-pressed={selecionada}
+                      aria-disabled={!linhaTabela}
+                      onClick={() =>
+                        escolherParcelaNaTabela(n)
+                      }
+                      onKeyDown={(event) => {
+                        if (
+                          event.key === "Enter" ||
+                          event.key === " "
+                        ) {
+                          event.preventDefault();
+                          escolherParcelaNaTabela(n);
+                        }
+                      }}
+                    >
+                      <td>{n}x</td>
+                      <td>
+                        {formatarPreco(valorSemJuros)}
+                      </td>
+                      <td>
+                        {formatarPreco(valorComJuros)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </section>
       </div>
@@ -1065,11 +1431,13 @@ export function BalcaoView() {
             </strong>
           </div>
 
-          {totalComJuros !== totalFinal && (
+          {temJuros && (
             <div className={styles.totalLinha}>
-              <span>Com juros ({parcelas}x)</span>
+              <span>Total cobrado com juros</span>
               <strong>
-                {formatarPreco(totalComJuros)}
+                {formatarPreco(
+                  totalCobradoComJuros
+                )}
               </strong>
             </div>
           )}
