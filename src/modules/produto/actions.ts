@@ -17,9 +17,16 @@ import type {
   ProdutoTipo,
 } from "./produto.types";
 
+/** O que foi salvo — quem abriu o formulário pode reagir a isso (ex.: o Balcão busca a peça nova). */
+export type ProdutoSalvoResumo = {
+  nome: string;
+  referencia: string;
+};
+
 export type ProdutoActionState = {
   ok: boolean;
   message: string;
+  produto?: ProdutoSalvoResumo;
 };
 
 export type ProdutoImportActionState =
@@ -353,6 +360,16 @@ function resolveFormData(
   return stateOrFormData as FormData;
 }
 
+function resumirProdutoSalvo(produto: {
+  nome: string;
+  referencia: string | null;
+}): ProdutoSalvoResumo {
+  return {
+    nome: produto.nome,
+    referencia: produto.referencia ?? "",
+  };
+}
+
 export async function criarProduto(
   stateOrFormData: ProdutoActionState | FormData,
   formData?: FormData
@@ -362,7 +379,7 @@ export async function criarProduto(
       resolveFormData(stateOrFormData, formData);
 
     await requireAdmin();
-    await produtoService.criarProduto(
+    const produto = await produtoService.criarProduto(
       await buildProdutoPayload(data)
     );
     revalidatePath("/admin/produtos");
@@ -371,6 +388,7 @@ export async function criarProduto(
     return {
       ...initialSuccess,
       message: "Produto criado com sucesso.",
+      produto: resumirProdutoSalvo(produto),
     };
   } catch (error) {
     return handleError("criarProduto", error);
@@ -387,7 +405,7 @@ export async function editarProduto(
 
     await requireAdmin();
 
-    await produtoService.editarProduto({
+    const produto = await produtoService.editarProduto({
       id: getText(data, "id"),
       ...(await buildProdutoPayload(data)),
     });
@@ -397,6 +415,7 @@ export async function editarProduto(
     return {
       ...initialSuccess,
       message: "Produto atualizado com sucesso.",
+      produto: resumirProdutoSalvo(produto),
     };
   } catch (error) {
     return handleError("editarProduto", error);

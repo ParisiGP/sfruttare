@@ -1,7 +1,7 @@
 .lista {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .vazio {
@@ -20,18 +20,81 @@
   font-size: 13px;
 }
 
-.tableWrap {
-  width: 100%;
-  overflow-x: auto;
+/* Um cartão por cliente: cabeçalho com subtotal + as reservas dele. */
+.grupo {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
+  overflow: hidden;
+}
+
+.grupoCabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.grupoCliente {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: auto;
+}
+
+.grupoCliente h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.grupoCliente span {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.grupoResumo {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .table {
   width: 100%;
-  min-width: 900px;
   border-collapse: collapse;
+  /* Larguras fixas em % pra as colunas alinharem de um grupo pro outro. */
+  table-layout: fixed;
+}
+
+.table th:nth-child(1) {
+  width: 28%;
+}
+
+.table th:nth-child(2) {
+  width: 11%;
+}
+
+.table th:nth-child(3) {
+  width: 9%;
+}
+
+.table th:nth-child(4) {
+  width: 15%;
+}
+
+.table th:nth-child(5) {
+  width: 13%;
+}
+
+.table th:nth-child(6) {
+  width: 24%;
 }
 
 .table th,
@@ -39,8 +102,12 @@
   padding: 12px 16px;
   border-bottom: 1px solid var(--color-border);
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
   font-size: 14px;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .table th {
@@ -53,10 +120,12 @@
 
 .table td {
   color: var(--color-text);
+  overflow-wrap: anywhere;
 }
 
 .badge {
   display: inline-block;
+  white-space: nowrap;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 11px;
@@ -80,10 +149,36 @@
   color: var(--color-text-muted);
 }
 
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.converterButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.converterButton:hover {
+  background: rgba(139, 107, 63, 0.08);
+}
+
 .cancelarButton {
+  min-height: 40px;
   border: 1px solid rgba(168, 92, 74, 0.34);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: 0 12px;
   background: transparent;
   color: var(--color-danger);
   font-size: 12px;
@@ -103,7 +198,7 @@
 }
 
 .confirmacao button {
-  min-height: 36px;
+  min-height: 40px;
   padding: 0 10px;
   border-radius: var(--radius-sm);
   font-size: 12px;
@@ -122,4 +217,81 @@
   border: 1px solid var(--color-danger);
   background: var(--color-danger);
   color: #fffaf1;
+}
+
+/* Celular: o grupo é um cartão e cada reserva vira um bloco empilhado
+   (rótulo + valor), sem rolagem lateral. */
+@media (max-width: 900px) {
+  .grupoCabecalho {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grupoCliente {
+    margin-right: 0;
+  }
+
+  .converterButton {
+    min-height: 44px;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 4px 0;
+    border-bottom: none;
+    text-align: right;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .table td[data-label="Ação"] {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .table td[data-label="Ação"]::before {
+    display: none;
+  }
+
+  /* Botões com a mesma largura e toque de 44px. */
+  .acoes {
+    flex-direction: column;
+  }
+
+  .acoes > *,
+  .confirmacao > * {
+    width: 100%;
+    min-height: 44px;
+  }
 }

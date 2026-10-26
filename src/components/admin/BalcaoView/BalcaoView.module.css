@@ -16,7 +16,7 @@
 
 .buscaColuna,
 .carrinhoColuna,
-.parcelasPainel {
+.pagamentoPainel {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
@@ -335,140 +335,24 @@
   cursor: not-allowed;
 }
 
-.campoComSugestoes {
-  position: relative;
-}
-
-.sugestoesLista {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: 20;
-  margin: 0;
-  padding: 6px;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-height: 280px;
-  overflow-y: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
-}
-
-.sugestaoItem {
-  width: 100%;
-  min-height: 44px;
-  padding: 6px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-text);
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.sugestaoItem strong {
-  font-size: 14px;
-}
-
-.sugestaoItem span {
-  color: var(--color-text-muted);
-  font-size: 12px;
-}
-
-.sugestaoItem:hover,
-.sugestaoItemAtiva {
-  background: var(--color-background);
-}
-
-.sugestaoItemAtiva span {
-  color: var(--color-text-muted);
-}
-
 .descontoGrupo {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 10px;
 }
 
-.parcelasPainel {
+.pagamentoPainel {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.parcelasLabel {
+.pagamentoLabel {
   color: var(--color-text-muted);
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-}
-
-.parcelasTable {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-.parcelasTable th,
-.parcelasTable td {
-  padding: 5px 10px;
-  font-size: 13px;
-  text-align: left;
-}
-
-.parcelasTable thead th {
-  color: var(--color-text-muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: var(--color-background);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.parcelaRow {
-  cursor: pointer;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.parcelaRow:last-child {
-  border-bottom: none;
-}
-
-.parcelaRow td {
-  color: var(--color-text);
-}
-
-.parcelaRow:hover {
-  background: var(--color-background);
-}
-
-.parcelaRow:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: -2px;
-}
-
-.parcelaRowAtiva,
-.parcelaRowAtiva:hover {
-  background: var(--color-primary);
-}
-
-.parcelaRowAtiva td {
-  color: #fffaf1;
-  font-weight: 700;
 }
 
 .pagamentoLinhas {
@@ -540,29 +424,6 @@
 .dividirButton:disabled {
   color: var(--color-text-muted);
   cursor: not-allowed;
-}
-
-.tabelaParcelas {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.tabelaParcelasEsmaecida .parcelasTable {
-  opacity: 0.45;
-  pointer-events: none;
-}
-
-.formaPagamentoFixa {
-  margin: 0;
-  padding: 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-background);
-  color: var(--color-text);
-  font-size: 14px;
-  font-weight: 700;
 }
 
 .formaPagamentoOpcoes {
@@ -666,6 +527,71 @@
   cursor: not-allowed;
 }
 
+/* Busca + "Novo produto": o botão fica ao lado do campo. */
+.buscaTopo {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.buscaTopo .buscaInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.novoProdutoButton {
+  min-height: 52px;
+  padding: 0 18px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fffaf1;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.novoProdutoButton:hover {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+}
+
+/* Avisos de conversão de reserva, no topo da tela. */
+.avisosConversao {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avisoConversao {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid rgba(139, 107, 63, 0.3);
+  border-radius: var(--radius-sm);
+  background: rgba(139, 107, 63, 0.08);
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.avisoConversaoAtencao {
+  border-color: rgba(196, 148, 68, 0.4);
+  background: rgba(196, 148, 68, 0.12);
+  color: var(--color-warning);
+}
+
+/* Linha de resumo abaixo do combo de parcelas. */
+.resumoCartao {
+  margin: -4px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
@@ -673,5 +599,11 @@
 
   .carrinhoColuna {
     position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .buscaTopo {
+    flex-direction: column;
   }
 }

@@ -134,10 +134,64 @@ export class ReservaRepository {
     });
   }
 
+  /**
+   * Só as reservas que ainda estão `ATIVA` — uma reserva cancelada ou
+   * convertida desde que a tela de Reservas foi aberta simplesmente não
+   * volta aqui. Traz a peça já no que o carrinho do Balcão precisa.
+   */
+  async findAtivasPorIds(ids: string[]) {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    return prisma.reserva.findMany({
+      where: {
+        id: { in: ids },
+        status: "ATIVA",
+      },
+      include: {
+        produto: {
+          include: {
+            imagens: {
+              orderBy: { ordem: "asc" },
+              take: 1,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  /**
+   * Fonte de clientes do autocomplete, lado Reserva: quem só reservou e
+   * nunca comprou também precisa aparecer. Qualquer status conta.
+   */
+  async findClientesPorNome(termo: string) {
+    return prisma.reserva.findMany({
+      where: {
+        nomeCliente: {
+          contains: termo,
+          mode: "insensitive",
+        },
+      },
+      select: {
+        nomeCliente: true,
+        telefoneCliente: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 30,
+    });
+  }
+
   private includeRelations() {
     return {
       produto: {
-        select: { nome: true, referencia: true },
+        select: {
+          nome: true,
+          referencia: true,
+          preco: true,
+        },
       },
     };
   }

@@ -13,6 +13,49 @@
   font-weight: 800;
 }
 
+.totais {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.totaisCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 260px));
+  gap: 12px;
+}
+
+.totalCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.totalCard strong {
+  color: var(--color-text);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.totalCard span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.totaisSecundario {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
 .filtros {
   display: flex;
   flex-wrap: wrap;
@@ -88,5 +131,18 @@
   .filtros {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .totaisCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .totalCard {
+    padding: 12px 14px;
+  }
+
+  .totalCard strong {
+    font-size: 22px;
   }
 }

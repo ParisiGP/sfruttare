@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { formatarPreco } from "@/lib/formatarPreco";
 import { ReservaService } from "@/modules/reserva/reserva.service";
 import type { FiltroReservas } from "@/modules/reserva/reserva.types";
 import { ReservasLista } from "@/components/admin/ReservasLista/ReservasLista";
@@ -46,8 +47,8 @@ export default async function ReservasPage({
     !!filtros.dataFinal;
 
   const reservaService = new ReservaService();
-  const reservas =
-    await reservaService.listarReservas(
+  const { totais, grupos } =
+    await reservaService.obterPainelReservas(
       filtros
     );
 
@@ -57,6 +58,28 @@ export default async function ReservasPage({
         <header className={styles.header}>
           <h1>Reservas</h1>
         </header>
+
+        {/* Os totais respeitam canal e período, mas não o filtro de status. */}
+        <section className={styles.totais}>
+          <div className={styles.totaisCards}>
+            <article className={styles.totalCard}>
+              <strong>{totais.ativas}</strong>
+              <span>Reservas ativas</span>
+            </article>
+
+            <article className={styles.totalCard}>
+              <strong>
+                {formatarPreco(totais.valorReservado)}
+              </strong>
+              <span>Valor reservado</span>
+            </article>
+          </div>
+
+          <p className={styles.totaisSecundario}>
+            Convertidas: {totais.convertidas} ·
+            Canceladas: {totais.canceladas}
+          </p>
+        </section>
 
         <form
           method="GET"
@@ -138,7 +161,7 @@ export default async function ReservasPage({
           )}
         </form>
 
-        <ReservasLista reservas={reservas} />
+        <ReservasLista grupos={grupos} />
       </div>
     </main>
   );

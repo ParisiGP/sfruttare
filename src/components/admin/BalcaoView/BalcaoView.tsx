@@ -6,13 +6,17 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
 
+import { ClienteAutocomplete } from "@/components/admin/ClienteAutocomplete/ClienteAutocomplete";
+import { NovoProdutoModal } from "@/components/admin/NovoProdutoModal/NovoProdutoModal";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
-  buscarClientesParaBalcao,
   buscarProdutosParaBalcao,
   confirmarVendaBalcao,
 } from "@/modules/vendaBalcao/actions";
 import { criarReserva } from "@/modules/reserva/actions";
+import type { ConversaoReservas } from "@/modules/reserva/reserva.types";
 import { calcularTotalComJuros } from "@/modules/vendaBalcao/tabelaJurosMaquininha";
 import { calcularDescontoAplicado } from "@/modules/vendaBalcao/desconto";
 import {
@@ -77,7 +81,90 @@ function textoParaCentavos(texto: string) {
     : 0;
 }
 
-export function BalcaoView() {
+/**
+ * Texto de uma opção do combo de parcelas: as duas parcelas (sem e com
+ * juros), pro caixa ter o comparativo na hora de falar com o cliente.
+ * Em tela estreita o rótulo fica só com a parcela com juros; o
+ * comparativo completo vai pra linha de resumo abaixo do combo.
+ */
+function rotuloDaParcela(
+  valor: number,
+  parcelas: number,
+  resumido: boolean
+) {
+  const semJuros = valor > 0 ? valor / parcelas : 0;
+
+  const comJuros =
+    valor > 0
+      ? calcularTotalComJuros(valor, parcelas) /
+        parcelas
+      : 0;
+
+  if (parcelas === 1) {
+    return `1x de ${formatarPreco(semJuros)}`;
+  }
+
+  if (resumido) {
+    return `${parcelas}x de ${formatarPreco(comJuros)}`;
+  }
+
+  return `${parcelas}x de ${formatarPreco(
+    semJuros
+  )}  (com juros: ${parcelas}x de ${formatarPreco(
+    comJuros
+  )})`;
+}
+
+/**
+ * Linha de resumo abaixo do combo (só em parcelado). O "total no cartão"
+ * é o que o cliente de fato paga naquela linha, com juros.
+ */
+function resumoDoCartao(
+  valor: number,
+  parcelas: number,
+  totalComJuros: number,
+  resumido: boolean
+) {
+  const total = `Total no cartão: ${formatarPreco(
+    totalComJuros
+  )}`;
+
+  if (!resumido) {
+    return total;
+  }
+
+  return `Sem juros: ${parcelas}x de ${formatarPreco(
+    valor / parcelas
+  )} · Com juros: ${parcelas}x de ${formatarPreco(
+    calcularTotalComJuros(valor, parcelas) / parcelas
+  )} · ${total}`;
+}
+
+type Categoria = {
+  id: string;
+  nome: string;
+};
+
+type BalcaoViewProps = {
+  categorias: Categoria[];
+  /**
+   * Reservas pedidas em `?reservas=`, já resolvidas no servidor (só as
+   * ainda ativas e de um mesmo cliente). `null` fora de uma conversão.
+   * Vale só como estado inicial — nada é buscado ao carregar.
+   */
+  conversaoInicial: ConversaoReservas | null;
+};
+
+export function BalcaoView({
+  categorias,
+  conversaoInicial,
+}: BalcaoViewProps) {
+  const router = useRouter();
+
+  const telaEstreita = useMediaQuery(
+    "(max-width: 640px)"
+  );
+
   const inputBuscaRef =
     useRef<HTMLInputElement>(null);
 
@@ -104,23 +191,34 @@ export function BalcaoView() {
 
   const [carrinho, setCarrinho] = useState<
     ProdutoBalcaoResumo[]
-  >([]);
+  >(() => conversaoInicial?.produtos ?? []);
 
-  const [nomeCliente, setNomeCliente] =
-    useState("");
-  const [sugestoesClientes, setSugestoesClientes] =
-    useState<ClienteBalcaoResumo[]>([]);
-  const [
-    indiceDestacadoCliente,
-    setIndiceDestacadoCliente,
-  ] = useState(-1);
-  const suprimirBuscaClienteRef = useRef(false);
-  const clienteWrapRef =
-    useRef<HTMLDivElement>(null);
-  const [emailCliente, setEmailCliente] =
-    useState("");
+  const [nomeCliente, setNomeCliente] = useState(
+    () => conversaoInicial?.cliente?.nomeCliente ?? ""
+  );
+  const [emailCliente, setEmailCliente] = useState(
+    () => conversaoInicial?.cliente?.emailCliente ?? ""
+  );
   const [telefoneCliente, setTelefoneCliente] =
-    useState("");
+    useState(
+      () =>
+        conversaoInicial?.cliente?.telefoneCliente ??
+        ""
+    );
+
+  // Avisos da conversão de reserva (topo da tela). Somem quando a venda
+  // é confirmada.
+  const [convertendoDe, setConvertendoDe] = useState<
+    string | null
+  >(() =>
+    conversaoInicial?.cliente &&
+    conversaoInicial.produtos.length > 0
+      ? conversaoInicial.cliente.nomeCliente
+      : null
+  );
+  const [reservasNaoCarregadas, setReservasNaoCarregadas] =
+    useState(() => conversaoInicial?.naoCarregadas ?? 0);
+
   const [descontoTipo, setDescontoTipo] =
     useState<DescontoTipo | null>(null);
   const [descontoValor, setDescontoValor] =
@@ -128,8 +226,6 @@ export function BalcaoView() {
   const [linhas, setLinhas] = useState<
     LinhaPagamento[]
   >(() => [novaLinha()]);
-  const [linhaFocoId, setLinhaFocoId] =
-    useState<string | null>(null);
 
   const [confirmando, setConfirmando] =
     useState(false);
@@ -173,113 +269,31 @@ export function BalcaoView() {
     };
   }, [busca]);
 
-  useEffect(() => {
-    if (suprimirBuscaClienteRef.current) {
-      suprimirBuscaClienteRef.current = false;
-      setSugestoesClientes([]);
-      return;
-    }
-
-    const termo = nomeCliente.trim();
-
-    if (termo.length < 2) {
-      setSugestoesClientes([]);
-      return;
-    }
-
-    let cancelado = false;
-
-    const timer = setTimeout(async () => {
-      const resultado =
-        await buscarClientesParaBalcao(termo);
-
-      if (cancelado) {
-        return;
-      }
-
-      setSugestoesClientes(
-        resultado.ok ? resultado.clientes : []
-      );
-      setIndiceDestacadoCliente(-1);
-    }, DEBOUNCE_MS);
-
-    return () => {
-      cancelado = true;
-      clearTimeout(timer);
-    };
-  }, [nomeCliente]);
-
-  useEffect(() => {
-    function handleClickFora(
-      event: MouseEvent
-    ) {
-      if (
-        clienteWrapRef.current &&
-        !clienteWrapRef.current.contains(
-          event.target as Node
-        )
-      ) {
-        setSugestoesClientes([]);
-      }
-    }
-
-    document.addEventListener(
-      "mousedown",
-      handleClickFora
-    );
-
-    return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickFora
-      );
-    };
-  }, []);
-
   function selecionarCliente(
     cliente: ClienteBalcaoResumo
   ) {
-    suprimirBuscaClienteRef.current = true;
     setNomeCliente(cliente.nomeCliente);
     setEmailCliente(cliente.emailCliente);
     setTelefoneCliente(cliente.telefoneCliente);
-    setSugestoesClientes([]);
-    setIndiceDestacadoCliente(-1);
   }
 
-  function handleNomeClienteKeyDown(
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) {
-    if (sugestoesClientes.length === 0) {
+  // Peça recém-cadastrada: joga a referência (ou o nome, se não tiver)
+  // na busca pra ela aparecer no topo, com "Adicionar" e "Reservar".
+  // Não entra no carrinho sozinha — o cadastro pode ser só isso.
+  function buscarPecaCadastrada(produto?: {
+    nome: string;
+    referencia: string;
+  }) {
+    const termo =
+      produto?.referencia.trim() ||
+      produto?.nome.trim();
+
+    if (!termo) {
       return;
     }
 
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      setIndiceDestacadoCliente(
-        (atual) =>
-          (atual + 1) % sugestoesClientes.length
-      );
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      setIndiceDestacadoCliente((atual) =>
-        atual <= 0
-          ? sugestoesClientes.length - 1
-          : atual - 1
-      );
-    } else if (event.key === "Enter") {
-      if (indiceDestacadoCliente >= 0) {
-        event.preventDefault();
-        selecionarCliente(
-          sugestoesClientes[
-            indiceDestacadoCliente
-          ]
-        );
-      }
-    } else if (event.key === "Escape") {
-      setSugestoesClientes([]);
-      setIndiceDestacadoCliente(-1);
-    }
+    setBusca(termo);
+    inputBuscaRef.current?.focus();
   }
 
   const subtotal = useMemo(
@@ -378,26 +392,13 @@ export function BalcaoView() {
       0
     ) / 100;
 
-  // Linha de crédito "em foco" — a última que o caixa tocou; por
-  // padrão a primeira de crédito. A tabela 1x–12x usa o valor dela.
-  const linhaCreditoFoco =
-    linhasCalculadas.find(
-      (linha) =>
-        linha.id === linhaFocoId &&
-        linha.forma === "CREDITO"
-    ) ??
-    linhasCalculadas.find(
+  // Dois cartões na mesma venda: cada linha de Crédito ganha título
+  // próprio pra ficar óbvio que são cartões diferentes. (Não se registra
+  // qual cartão/bandeira — não há campo pra isso.)
+  const doisCartoes =
+    linhasCalculadas.filter(
       (linha) => linha.forma === "CREDITO"
-    ) ??
-    null;
-
-  // Uma linha só e ela não é Crédito: a tabela continua servindo de
-  // atalho (clicar numa parcela > 1 troca a linha pra Crédito).
-  const linhaTabela =
-    linhaCreditoFoco ??
-    (linhas.length === 1
-      ? linhasCalculadas[0]
-      : null);
+    ).length >= 2;
 
   const linhaSemForma = linhas.some(
     (linha) => !linha.forma
@@ -450,44 +451,6 @@ export function BalcaoView() {
             }
           : linha
       )
-    );
-
-    if (forma === "CREDITO") {
-      setLinhaFocoId(id);
-    }
-  }
-
-  function escolherParcelasDaLinha(
-    id: string,
-    parcelas: number
-  ) {
-    atualizarLinha(id, { parcelas });
-    setLinhaFocoId(id);
-  }
-
-  function escolherParcelaNaTabela(
-    parcelas: number
-  ) {
-    if (!linhaTabela) {
-      return;
-    }
-
-    if (linhaTabela.forma !== "CREDITO") {
-      if (parcelas <= 1) {
-        return;
-      }
-
-      atualizarLinha(linhaTabela.id, {
-        forma: "CREDITO",
-        parcelas,
-      });
-      setLinhaFocoId(linhaTabela.id);
-      return;
-    }
-
-    escolherParcelasDaLinha(
-      linhaTabela.id,
-      parcelas
     );
   }
 
@@ -660,35 +623,75 @@ export function BalcaoView() {
       )} confirmada para ${nomeCliente.trim()}.`
     );
 
+    const eraConversao = convertendoDe !== null;
+
     setCarrinho([]);
     setNomeCliente("");
-    setSugestoesClientes([]);
-    setIndiceDestacadoCliente(-1);
     setEmailCliente("");
     setTelefoneCliente("");
     setDescontoTipo(null);
     setDescontoValor("");
     setLinhas([novaLinha()]);
-    setLinhaFocoId(null);
+    setConvertendoDe(null);
+    setReservasNaoCarregadas(0);
     setBusca("");
     setResultados([]);
     inputBuscaRef.current?.focus();
+
+    // Sai de `?reservas=…`: a reserva já virou Convertida e recarregar
+    // a tela não deve tentar converter de novo.
+    if (eraConversao) {
+      router.replace("/admin/balcao");
+    }
   }
 
   return (
     <div className={styles.layout}>
+      {(convertendoDe ||
+        reservasNaoCarregadas > 0) && (
+        <div
+          className={styles.avisosConversao}
+          role="status"
+        >
+          {convertendoDe && (
+            <p className={styles.avisoConversao}>
+              Convertendo reserva de{" "}
+              <strong>{convertendoDe}</strong>
+            </p>
+          )}
+
+          {reservasNaoCarregadas > 0 && (
+            <p
+              className={`${styles.avisoConversao} ${styles.avisoConversaoAtencao}`}
+            >
+              {reservasNaoCarregadas} reserva(s) não
+              puderam ser carregadas (já convertidas
+              ou canceladas).
+            </p>
+          )}
+        </div>
+      )}
+
       <div className={styles.colunaEsquerda}>
         <section className={styles.buscaColuna}>
-          <input
-            ref={inputBuscaRef}
-            type="search"
-            className={styles.buscaInput}
-            placeholder="Buscar por nome, marca, referência, cor, tamanho..."
-            value={busca}
-            onChange={(event) =>
-              setBusca(event.target.value)
-            }
-          />
+          <div className={styles.buscaTopo}>
+            <input
+              ref={inputBuscaRef}
+              type="search"
+              className={styles.buscaInput}
+              placeholder="Buscar por nome, marca, referência, cor, tamanho..."
+              value={busca}
+              onChange={(event) =>
+                setBusca(event.target.value)
+              }
+            />
+
+            <NovoProdutoModal
+              categorias={categorias}
+              className={styles.novoProdutoButton}
+              onSaved={buscarPecaCadastrada}
+            />
+          </div>
 
           {buscando && (
             <p className={styles.mensagemNeutra}>
@@ -780,18 +783,25 @@ export function BalcaoView() {
                           styles.reservaInline
                         }
                       >
-                        <input
-                          type="text"
+                        <ClienteAutocomplete
+                          variante="embutida"
                           placeholder="Nome do cliente"
                           value={
                             nomeReservaInline
                           }
-                          onChange={(event) =>
-                            setNomeReservaInline(
-                              event.target
-                                .value
-                            )
+                          onChange={
+                            setNomeReservaInline
                           }
+                          onSelecionar={(cliente) => {
+                            setNomeReservaInline(
+                              cliente.nomeCliente
+                            );
+                            setTelefoneReservaInline(
+                              formatarCelular(
+                                cliente.telefoneCliente
+                              )
+                            );
+                          }}
                         />
 
                         <input
@@ -907,8 +917,8 @@ export function BalcaoView() {
           </ul>
         </section>
 
-        <section className={styles.parcelasPainel}>
-          <span className={styles.parcelasLabel}>
+        <section className={styles.pagamentoPainel}>
+          <span className={styles.pagamentoLabel}>
             Pagamento
           </span>
 
@@ -917,16 +927,6 @@ export function BalcaoView() {
               <div
                 key={linha.id}
                 className={styles.pagamentoLinha}
-                onClick={() => {
-                  if (linha.forma === "CREDITO") {
-                    setLinhaFocoId(linha.id);
-                  }
-                }}
-                onFocus={() => {
-                  if (linha.forma === "CREDITO") {
-                    setLinhaFocoId(linha.id);
-                  }
-                }}
               >
                 <div
                   className={styles.pagamentoLinhaTopo}
@@ -936,9 +936,12 @@ export function BalcaoView() {
                       styles.pagamentoLinhaTitulo
                     }
                   >
-                    {linhas.length > 1
-                      ? `Pagamento ${index + 1}`
-                      : "Forma de pagamento"}
+                    {linhas.length === 1
+                      ? "Forma de pagamento"
+                      : doisCartoes &&
+                          linha.forma === "CREDITO"
+                        ? `Pagamento ${index + 1} — Cartão de crédito`
+                        : `Pagamento ${index + 1}`}
                   </span>
 
                   {linhas.length > 1 && (
@@ -1026,33 +1029,49 @@ export function BalcaoView() {
                 )}
 
                 {linha.forma === "CREDITO" && (
-                  <label className={styles.campo}>
-                    <span>Parcelas</span>
+                  <>
+                    <label className={styles.campo}>
+                      <span>Parcelas</span>
 
-                    <select
-                      value={linha.parcelas}
-                      onChange={(event) =>
-                        escolherParcelasDaLinha(
-                          linha.id,
-                          Number(event.target.value)
-                        )
-                      }
-                    >
-                      {PARCELAS_DISPONIVEIS.map((n) => (
-                        <option key={n} value={n}>
-                          {n}x de{" "}
-                          {formatarPreco(
-                            linha.valor > 0
-                              ? calcularTotalComJuros(
-                                  linha.valor,
-                                  n
-                                ) / n
-                              : 0
+                      <select
+                        value={linha.parcelas}
+                        onChange={(event) =>
+                          atualizarLinha(linha.id, {
+                            parcelas: Number(
+                              event.target.value
+                            ),
+                          })
+                        }
+                      >
+                        {PARCELAS_DISPONIVEIS.map(
+                          (n) => (
+                            <option key={n} value={n}>
+                              {rotuloDaParcela(
+                                linha.valor,
+                                n,
+                                telaEstreita
+                              )}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </label>
+
+                    {linha.parcelas > 1 &&
+                      linha.valor > 0 && (
+                        <p
+                          className={styles.resumoCartao}
+                        >
+                          {resumoDoCartao(
+                            linha.valor,
+                            linha.parcelas,
+                            linha.valorComJuros ??
+                              linha.valor,
+                            telaEstreita
                           )}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                        </p>
+                      )}
+                  </>
                 )}
               </div>
             ))}
@@ -1089,100 +1108,6 @@ export function BalcaoView() {
               + Dividir em outra forma
             </button>
           )}
-
-          <div
-            className={
-              linhaTabela
-                ? styles.tabelaParcelas
-                : `${styles.tabelaParcelas} ${styles.tabelaParcelasEsmaecida}`
-            }
-          >
-            <span className={styles.parcelasLabel}>
-              Parcelas
-              {linhaTabela && linhas.length > 1
-                ? ` — Pagamento ${
-                    linhas.findIndex(
-                      (linha) =>
-                        linha.id === linhaTabela.id
-                    ) + 1
-                  } (${formatarPreco(
-                    linhaTabela.valor
-                  )})`
-                : ""}
-            </span>
-
-            {!linhaTabela && (
-              <p className={styles.formaPagamentoFixa}>
-                Escolha Crédito em uma das formas
-                para parcelar.
-              </p>
-            )}
-
-            <table className={styles.parcelasTable}>
-              <thead>
-                <tr>
-                  <th>Parcela</th>
-                  <th>Sem juros</th>
-                  <th>Com juros</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {PARCELAS_DISPONIVEIS.map((n) => {
-                  const base = linhaTabela?.valor ?? 0;
-
-                  const valorSemJuros =
-                    base > 0 ? base / n : 0;
-
-                  const valorComJuros =
-                    base > 0
-                      ? calcularTotalComJuros(base, n) /
-                        n
-                      : 0;
-
-                  const selecionada =
-                    !!linhaTabela &&
-                    n === linhaTabela.parcelas &&
-                    linhaTabela.forma === "CREDITO";
-
-                  return (
-                    <tr
-                      key={n}
-                      className={
-                        selecionada
-                          ? `${styles.parcelaRow} ${styles.parcelaRowAtiva}`
-                          : styles.parcelaRow
-                      }
-                      role="button"
-                      tabIndex={linhaTabela ? 0 : -1}
-                      aria-pressed={selecionada}
-                      aria-disabled={!linhaTabela}
-                      onClick={() =>
-                        escolherParcelaNaTabela(n)
-                      }
-                      onKeyDown={(event) => {
-                        if (
-                          event.key === "Enter" ||
-                          event.key === " "
-                        ) {
-                          event.preventDefault();
-                          escolherParcelaNaTabela(n);
-                        }
-                      }}
-                    >
-                      <td>{n}x</td>
-                      <td>
-                        {formatarPreco(valorSemJuros)}
-                      </td>
-                      <td>
-                        {formatarPreco(valorComJuros)}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
         </section>
       </div>
 
@@ -1223,77 +1148,13 @@ export function BalcaoView() {
           </ul>
         )}
 
-        <div
-          className={styles.campoComSugestoes}
-          ref={clienteWrapRef}
-        >
-          <label className={styles.campo}>
-            <span>Nome do cliente *</span>
-            <input
-              type="text"
-              autoComplete="off"
-              value={nomeCliente}
-              onChange={(event) =>
-                setNomeCliente(
-                  event.target.value
-                )
-              }
-              onKeyDown={
-                handleNomeClienteKeyDown
-              }
-            />
-          </label>
-
-          {sugestoesClientes.length > 0 && (
-            <ul
-              className={styles.sugestoesLista}
-            >
-              {sugestoesClientes.map(
-                (cliente, index) => (
-                  <li
-                    key={
-                      cliente.nomeCliente +
-                      index
-                    }
-                  >
-                    <button
-                      type="button"
-                      className={
-                        index ===
-                        indiceDestacadoCliente
-                          ? `${styles.sugestaoItem} ${styles.sugestaoItemAtiva}`
-                          : styles.sugestaoItem
-                      }
-                      onClick={() =>
-                        selecionarCliente(
-                          cliente
-                        )
-                      }
-                      onMouseEnter={() =>
-                        setIndiceDestacadoCliente(
-                          index
-                        )
-                      }
-                    >
-                      <strong>
-                        {cliente.nomeCliente}
-                      </strong>
-                      {cliente.telefoneCliente && (
-                        <span>
-                          {" "}
-                          —{" "}
-                          {
-                            cliente.telefoneCliente
-                          }
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                )
-              )}
-            </ul>
-          )}
-        </div>
+        <ClienteAutocomplete
+          rotulo="Nome do cliente *"
+          classeCampo={styles.campo}
+          value={nomeCliente}
+          onChange={setNomeCliente}
+          onSelecionar={selecionarCliente}
+        />
 
         <label className={styles.campo}>
           <span>E-mail do cliente</span>

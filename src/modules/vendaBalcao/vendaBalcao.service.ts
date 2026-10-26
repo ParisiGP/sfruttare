@@ -1,4 +1,5 @@
 import { ProdutoRepository } from "@/modules/produto/produto.repository";
+import { ReservaRepository } from "@/modules/reserva/reserva.repository";
 import { converterPeriodo } from "@/lib/periodo";
 
 import { VendaBalcaoRepository } from "./vendaBalcao.repository";
@@ -6,6 +7,11 @@ import type { VendaBalcaoListFilters } from "./vendaBalcao.repository";
 import { confirmarVendaBalcaoSchema } from "./vendaBalcao.schema";
 import { calcularTotalComJuros } from "./tabelaJurosMaquininha";
 import { calcularDescontoAplicado } from "./desconto";
+import {
+  chaveDoCliente,
+  mesclarClientes,
+} from "./clientes";
+import { paraProdutoBalcaoResumo } from "./produtoBalcao.mapper";
 import {
   obterPagamentosDaVenda,
   resumirPagamentos,
@@ -29,7 +35,9 @@ export class VendaBalcaoService {
     private vendaBalcaoRepository =
       new VendaBalcaoRepository(),
     private produtoRepository =
-      new ProdutoRepository()
+      new ProdutoRepository(),
+    private reservaRepository =
+      new ReservaRepository()
   ) { }
 
   async buscarProdutosDisponiveis(
@@ -46,29 +54,15 @@ export class VendaBalcaoService {
         termo
       );
 
-    return produtos.map((produto) => ({
-      id: produto.id,
-      nome: produto.nome,
-      referencia: produto.referencia ?? "",
-      preco: Number(produto.preco),
-      cor: produto.cor ?? "",
-      tamanho: produto.tamanho ?? "",
-      imagemUrl:
-        produto.imagens[0]?.url ?? null,
-      status: produto.status as
-        | "DISPONIVEL"
-        | "RESERVADO",
-      reservadoPara:
-        produto.reservas?.[0]?.nomeCliente ??
-        null,
-    }));
+    return produtos.map(paraProdutoBalcaoResumo);
   }
 
   /**
-   * Autocomplete de cliente a partir do próprio histórico de
-   * `VendaBalcao` — não existe model `Cliente` dedicado. Deduplica por
-   * nome normalizado mantendo a venda mais recente de cada cliente
-   * (a query já vem ordenada por `createdAt desc`).
+   * Autocomplete de cliente. Não existe model `Cliente` dedicado: a
+   * fonte é o histórico de `VendaBalcao` **e** de `Reserva` (quem só
+   * reservou e nunca comprou também aparece), juntados por nome
+   * normalizado — ver `mesclarClientes` pra regra de "valor mais
+   * recente" por campo.
    */
   async buscarClientes(
     termo: string
@@ -81,41 +75,55 @@ export class VendaBalcaoService {
       return [];
     }
 
-    const vendas =
-      await this.vendaBalcaoRepository.findClientesPorNome(
-        termoLimpo
-      );
+    const clientes =
+      await this.carregarClientes(termoLimpo);
 
-    const nomesVistos = new Set<string>();
-    const resultado: ClienteBalcaoResumo[] = [];
+    return clientes.slice(0, MAXIMO_SUGESTOES_CLIENTE);
+  }
 
-    for (const venda of vendas) {
-      const chave = venda.nomeCliente
-        .trim()
-        .toLowerCase();
+  /**
+   * Cliente com exatamente esse nome (normalizado), com os dados mais
+   * recentes de todas as origens — usado pra completar o e-mail quando
+   * uma reserva é convertida em venda.
+   */
+  async obterClientePorNome(
+    nome: string
+  ): Promise<ClienteBalcaoResumo | null> {
+    const chave = chaveDoCliente(nome);
 
-      if (nomesVistos.has(chave)) {
-        continue;
-      }
-
-      nomesVistos.add(chave);
-
-      resultado.push({
-        nomeCliente: venda.nomeCliente,
-        emailCliente: venda.emailCliente ?? "",
-        telefoneCliente:
-          venda.telefoneCliente ?? "",
-      });
-
-      if (
-        resultado.length >=
-        MAXIMO_SUGESTOES_CLIENTE
-      ) {
-        break;
-      }
+    if (!chave) {
+      return null;
     }
 
-    return resultado;
+    const clientes = await this.carregarClientes(
+      nome.trim()
+    );
+
+    return (
+      clientes.find(
+        (cliente) =>
+          chaveDoCliente(cliente.nomeCliente) === chave
+      ) ?? null
+    );
+  }
+
+  private async carregarClientes(termo: string) {
+    const [vendas, reservas] = await Promise.all([
+      this.vendaBalcaoRepository.findClientesPorNome(
+        termo
+      ),
+      this.reservaRepository.findClientesPorNome(
+        termo
+      ),
+    ]);
+
+    return mesclarClientes([
+      ...vendas,
+      ...reservas.map((reserva) => ({
+        ...reserva,
+        emailCliente: null,
+      })),
+    ]);
   }
 
   async confirmarVenda(

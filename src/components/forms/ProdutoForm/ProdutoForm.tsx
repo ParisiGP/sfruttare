@@ -15,6 +15,7 @@ import {
   criarProduto,
   editarProduto,
   type ProdutoActionState,
+  type ProdutoSalvoResumo,
 } from "@/modules/produto/actions";
 import type { ProdutoAdminItem } from "@/modules/produto/produto.types";
 
@@ -28,7 +29,8 @@ type Categoria = {
 type ProdutoFormProps = {
   categorias: Categoria[];
   produto?: ProdutoAdminItem;
-  onSaved?: () => void;
+  /** Chamado depois de salvar, com o nome e a referência do que foi salvo. Quem não precisa disso pode ignorar o argumento. */
+  onSaved?: (produto?: ProdutoSalvoResumo) => void;
 };
 
 type ImageRow = {
@@ -140,7 +142,7 @@ export function ProdutoForm({
   useEffect(() => {
     if (state.ok && state.message) {
       router.refresh();
-      onSaved?.();
+      onSaved?.(state.produto);
     }
   }, [state, onSaved, router]);
 

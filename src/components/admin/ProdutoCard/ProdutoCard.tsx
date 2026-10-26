@@ -15,6 +15,7 @@ import {
 } from "@/modules/reserva/actions";
 
 import { Modal } from "@/components/ui/Modal/Modal";
+import { ClienteAutocomplete } from "@/components/admin/ClienteAutocomplete/ClienteAutocomplete";
 
 import { PhotoEditor } from "@/components/admin/PhotoEditor/PhotoEditor"
 
@@ -503,20 +504,22 @@ export function ProdutoCard({
                 styles.reservaInline
               }
             >
-              <label>
-                <span>
-                  Nome do cliente *
-                </span>
-                <input
-                  type="text"
-                  value={nomeReserva}
-                  onChange={(event) =>
-                    setNomeReserva(
-                      event.target.value
+              <ClienteAutocomplete
+                rotulo="Nome do cliente *"
+                variante="embutida"
+                value={nomeReserva}
+                onChange={setNomeReserva}
+                onSelecionar={(cliente) => {
+                  setNomeReserva(
+                    cliente.nomeCliente
+                  );
+                  setTelefoneReserva(
+                    formatarCelular(
+                      cliente.telefoneCliente
                     )
-                  }
-                />
-              </label>
+                  );
+                }}
+              />
 
               <label>
                 <span>

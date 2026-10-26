@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { ProdutoForm } from "@/components/forms/ProdutoForm/ProdutoForm";
 import { Modal } from "@/components/ui/Modal/Modal";
+import { NovoProdutoModal } from "@/components/admin/NovoProdutoModal/NovoProdutoModal";
 import { ProdutoDeleteModal } from "@/components/admin/ProdutoDeleteModal/ProdutoDeleteModal";
 import { ProdutoGrid } from "@/components/admin/ProdutoGrid/ProdutoGrid";
 import { ProdutoTable } from "@/components/admin/ProdutoTable/ProdutoTable"
@@ -72,11 +73,6 @@ export function ProdutosAdmin({
     useState(produtos);
 
   const router = useRouter();
-
-  function abrirNovoProduto() {
-    setProdutoEmEdicao(null);
-    setModalProdutoAberto(true);
-  }
 
   function abrirEdicao(produto: ProdutoAdminItem) {
     setProdutoEmEdicao(produto);
@@ -199,15 +195,10 @@ export function ProdutosAdmin({
                 Ver reservas
               </Link>
 
-              <button
-                type="button"
+              <NovoProdutoModal
+                categorias={categorias}
                 className={styles.newButton}
-                onClick={
-                  abrirNovoProduto
-                }
-              >
-                Novo produto
-              </button>
+              />
             </>
           )}
         </div>
