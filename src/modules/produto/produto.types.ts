@@ -129,8 +129,6 @@ export type ProdutoListFilters = {
   estoque?: "TODOS" | "COM_ESTOQUE" | "SEM_ESTOQUE";
   ordem?: "vitrine" | "recentes" | "nome" | "preco" | "estoque";
   apenasReferenciasDuplicadas?: boolean;
-  pagina?: number;
-  limite?: number;
 };
 
 export type ProdutoImportRowStatus =
@@ -160,7 +158,7 @@ export type ProdutoImportPreviewRow = {
   mensagem: string;
 };
 
-export type ProdutoImportAdjustment = {
+export type ProdutoImportAdjustmentLinha = {
   linha: number;
   referencia: string;
   descricao: string;
@@ -172,6 +170,21 @@ export type ProdutoImportAdjustment = {
   status: ProdutoStatus;
   quantidade: number;
 };
+
+/**
+ * Linha descartada na revisão. Vai só com o número da linha, de
+ * propósito: os demais campos de uma linha ruim (ex.: `preco: null`)
+ * não passariam na validação e travariam a importação por causa de
+ * uma peça que o admin já deixou de fora.
+ */
+export type ProdutoImportAdjustmentIgnorada = {
+  linha: number;
+  ignorada: true;
+};
+
+export type ProdutoImportAdjustment =
+  | ProdutoImportAdjustmentLinha
+  | ProdutoImportAdjustmentIgnorada;
 
 export type ProdutoImportSummary = {
   total: number;

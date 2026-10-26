@@ -58,8 +58,6 @@ function buildFilters(
         params,
         "apenasReferenciasDuplicadas"
       ) === "true",
-    pagina: Number(getParam(params, "pagina") ?? 1),
-    limite: 12,
   };
 }
 
@@ -82,7 +80,7 @@ export default async function ProdutosPage({
 
   const [
     categorias,
-    produtosPaginados,
+    resultado,
     metricas,
   ] = await Promise.all([
     categoriaService.listarCategorias(),
@@ -91,7 +89,7 @@ export default async function ProdutosPage({
   ]);
 
   const produtos =
-    produtosPaginados.produtos.map((produto) =>
+    resultado.produtos.map((produto) =>
       produtoService.serializeProduto(produto)
     );
 
@@ -116,13 +114,7 @@ export default async function ProdutosPage({
             filters.apenasReferenciasDuplicadas ??
             false,
         }}
-        paginacao={{
-          pagina: produtosPaginados.pagina,
-          limite: produtosPaginados.limite,
-          total: produtosPaginados.total,
-          totalPaginas:
-            produtosPaginados.totalPaginas,
-        }}
+        total={resultado.total}
       />
     </main>
   );

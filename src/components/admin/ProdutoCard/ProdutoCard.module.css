@@ -1,4 +1,11 @@
 .card {
+  /* A listagem renderiza todos os produtos; o navegador só monta o que
+     está perto da tela. `auto` no tamanho intrínseco lembra a altura
+     real de cada card depois que ele foi visto, então a barra de
+     rolagem não pula. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 860px;
+
   overflow: hidden;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--color-border);

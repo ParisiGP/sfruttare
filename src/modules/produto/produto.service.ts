@@ -13,6 +13,7 @@ import {
   type EditarProdutoInput,
   type ProdutoInput,
 } from "./produto.schema";
+import { TAMANHO_MAXIMO_REFERENCIA } from "./importacao.validacao";
 import type {
   CondicaoProduto,
   ProdutoImagem,
@@ -27,7 +28,6 @@ import type {
 } from "./produto.types";
 
 const TAMANHO_MINIMO_BUSCA = 2;
-const TAMANHO_MAXIMO_REFERENCIA = 15;
 
 type ProdutoImportavel = ProdutoImportCreateData & {
   linha: number;
@@ -83,7 +83,13 @@ const columnAliases: Record<string, string[]> = {
   ],
 };
 
-const produtoImportAdjustmentSchema =
+const produtoImportAjusteIgnoradoSchema =
+  z.object({
+    linha: z.coerce.number().int().min(2),
+    ignorada: z.literal(true),
+  });
+
+const produtoImportAjusteLinhaSchema =
   z.object({
     linha: z.coerce.number().int().min(2),
     referencia: z
@@ -110,6 +116,39 @@ const produtoImportAdjustmentSchema =
       .int()
       .min(0, "Quantidade deve ser um inteiro maior ou igual a zero."),
   });
+
+type AjusteLinha = z.infer<
+  typeof produtoImportAjusteLinhaSchema
+>;
+
+type AjusteIgnorado = z.infer<
+  typeof produtoImportAjusteIgnoradoSchema
+>;
+
+function ehAjusteIgnorado(
+  ajuste: AjusteLinha | AjusteIgnorado
+): ajuste is AjusteIgnorado {
+  return "ignorada" in ajuste;
+}
+
+/**
+ * O ramo é escolhido na mão (e não com `z.union`) para que o erro de
+ * uma linha normal continue apontando o campo que falhou, em vez de um
+ * "invalid_union" genérico.
+ */
+function parseAjusteImportacao(
+  ajuste: ProdutoImportAdjustment
+): AjusteLinha | AjusteIgnorado {
+  const ignorada =
+    typeof ajuste === "object" &&
+    ajuste !== null &&
+    "ignorada" in ajuste &&
+    ajuste.ignorada === true;
+
+  return ignorada
+    ? produtoImportAjusteIgnoradoSchema.parse(ajuste)
+    : produtoImportAjusteLinhaSchema.parse(ajuste);
+}
 
 function normalizeText(value: unknown) {
   return String(value ?? "")
@@ -349,7 +388,7 @@ export class ProdutoService {
   async listarProdutos(
     filters: ProdutoListFilters = {}
   ) {
-    return this.produtoRepository.findManyPaginated(
+    return this.produtoRepository.findManyFiltered(
       filters
     );
   }
@@ -472,24 +511,44 @@ export class ProdutoService {
       );
 
     const ajustesValidados =
-      ajustes.map((ajuste) =>
-        produtoImportAdjustmentSchema.parse(ajuste)
+      ajustes.map(parseAjusteImportacao);
+
+    // A linha ignorada continua "presente na revisão" — é o que mantém
+    // a checagem de que toda linha do arquivo foi tratada —, mas não
+    // passa por nenhuma validação de campo e nunca é importada. Se a
+    // mesma linha chegar como ignorada e como normal, vale a ignorada:
+    // nada marcado como descartado pode entrar no banco.
+    const linhasIgnoradas =
+      new Set(
+        ajustesValidados
+          .filter(ehAjusteIgnorado)
+          .map((ajuste) => ajuste.linha)
+      );
+
+    const ajustesAtivos =
+      ajustesValidados.filter(
+        (ajuste): ajuste is AjusteLinha =>
+          !ehAjusteIgnorado(ajuste) &&
+          !linhasIgnoradas.has(ajuste.linha)
       );
 
     const linhasOriginais =
-      new Set(
-        resultado.linhas.map((linha) => linha.linha)
+      new Map(
+        resultado.linhas.map((linha) => [
+          linha.linha,
+          linha,
+        ])
       );
 
     const ajustesPorLinha = new Map<
       number,
-      (typeof ajustesValidados)[number] & {
+      AjusteLinha & {
         referenciaNormalizada: string;
         nome: string;
       }
     >();
 
-    ajustesValidados.forEach((ajuste) => {
+    ajustesAtivos.forEach((ajuste) => {
       const referenciaNormalizada =
         normalizeReferencia(ajuste.referencia);
 
@@ -499,6 +558,12 @@ export class ProdutoService {
       const modelo =
         normalizeText(ajuste.modelo);
 
+      // Mesma regra da pré-visualização: a coluna Peça é o título do
+      // produto; só quando ela não existe o nome sai de descrição +
+      // modelo.
+      const peca =
+        linhasOriginais.get(ajuste.linha)?.peca ?? "";
+
       ajustesPorLinha.set(ajuste.linha, {
         ...ajuste,
         referenciaNormalizada,
@@ -506,14 +571,16 @@ export class ProdutoService {
         modelo,
         cor: normalizeText(ajuste.cor),
         tamanho: normalizeText(ajuste.tamanho),
-        nome: [descricao, modelo]
-          .filter(Boolean)
-          .join(" - "),
+        nome:
+          peca ||
+          [descricao, modelo]
+            .filter(Boolean)
+            .join(" - "),
       });
     });
 
     const erros =
-      ajustesValidados
+      ajustesAtivos
         .map((ajusteOriginal) => {
           const ajuste =
             ajustesPorLinha.get(ajusteOriginal.linha);
@@ -571,8 +638,19 @@ export class ProdutoService {
         })
         .filter(Boolean);
 
+    linhasIgnoradas.forEach((linha) => {
+      if (!linhasOriginais.has(linha)) {
+        erros.push(
+          `Linha ${linha}: linha nao encontrada na planilha.`
+        );
+      }
+    });
+
     resultado.linhas.forEach((linha) => {
-      if (!ajustesPorLinha.has(linha.linha)) {
+      if (
+        !ajustesPorLinha.has(linha.linha) &&
+        !linhasIgnoradas.has(linha.linha)
+      ) {
         erros.push(
           `Linha ${linha.linha}: item ausente na revisao.`
         );
@@ -585,7 +663,7 @@ export class ProdutoService {
       );
     }
 
-    if (ajustesValidados.length === 0) {
+    if (ajustesPorLinha.size === 0) {
       throw new Error(
         "Nenhum produto valido para importar."
       );
@@ -652,79 +730,53 @@ export class ProdutoService {
         }))
       );
 
+    // Relatório final: as importadas voltam como VALIDO e as ignoradas
+    // como IGNORADO — nunca "importado com sucesso" para uma peça que
+    // ficou de fora.
+    const linhasRelatorio =
+      resultado.linhas.map(
+        (linha): ProdutoImportPreviewRow => {
+          if (linhasIgnoradas.has(linha.linha)) {
+            return {
+              ...linha,
+              status: "IGNORADO",
+              mensagem: "Linha ignorada na revisão.",
+            };
+          }
+
+          const ajuste =
+            ajustesPorLinha.get(linha.linha);
+
+          return {
+            ...linha,
+            referencia:
+              ajuste?.referenciaNormalizada ??
+              linha.referencia,
+            descricao:
+              ajuste?.descricao ?? linha.descricao,
+            modelo:
+              ajuste?.modelo ?? linha.modelo,
+            nome: ajuste?.nome ?? linha.nome,
+            cor: ajuste?.cor ?? linha.cor,
+            tamanho:
+              ajuste?.tamanho ?? linha.tamanho,
+            categoriaId: ajuste?.categoriaId ?? "",
+            preco: ajuste?.preco ?? linha.preco,
+            produtoStatus:
+              ajuste?.status ?? linha.produtoStatus,
+            quantidade:
+              ajuste?.quantidade ?? linha.quantidade,
+            status: "VALIDO",
+            mensagem: "Produto importado com sucesso.",
+          };
+        }
+      );
+
     return {
       importados,
       preview: {
-        resumo: buildResumo(
-          resultado.linhas.map((linha) => ({
-            ...linha,
-            referencia:
-              ajustesPorLinha.get(linha.linha)?.referenciaNormalizada ??
-              linha.referencia,
-            descricao:
-              ajustesPorLinha.get(linha.linha)?.descricao ??
-              linha.descricao,
-            modelo:
-              ajustesPorLinha.get(linha.linha)?.modelo ??
-              linha.modelo,
-            nome:
-              ajustesPorLinha.get(linha.linha)?.nome ??
-              linha.nome,
-            cor:
-              ajustesPorLinha.get(linha.linha)?.cor ??
-              linha.cor,
-            tamanho:
-              ajustesPorLinha.get(linha.linha)?.tamanho ??
-              linha.tamanho,
-            categoriaId:
-              ajustesPorLinha.get(linha.linha)?.categoriaId ?? "",
-            preco:
-              ajustesPorLinha.get(linha.linha)?.preco ??
-              linha.preco,
-            produtoStatus:
-              ajustesPorLinha.get(linha.linha)?.status ??
-              linha.produtoStatus,
-            quantidade:
-              ajustesPorLinha.get(linha.linha)?.quantidade ??
-              linha.quantidade,
-            status: "VALIDO" as const,
-            mensagem: "Produto importado com sucesso.",
-          }))
-        ),
-        linhas: resultado.linhas.map((linha) => ({
-          ...linha,
-          referencia:
-            ajustesPorLinha.get(linha.linha)?.referenciaNormalizada ??
-            linha.referencia,
-          descricao:
-            ajustesPorLinha.get(linha.linha)?.descricao ??
-            linha.descricao,
-          modelo:
-            ajustesPorLinha.get(linha.linha)?.modelo ??
-            linha.modelo,
-          nome:
-            ajustesPorLinha.get(linha.linha)?.nome ??
-            linha.nome,
-          cor:
-            ajustesPorLinha.get(linha.linha)?.cor ??
-            linha.cor,
-          tamanho:
-            ajustesPorLinha.get(linha.linha)?.tamanho ??
-            linha.tamanho,
-          categoriaId:
-            ajustesPorLinha.get(linha.linha)?.categoriaId ?? "",
-          preco:
-            ajustesPorLinha.get(linha.linha)?.preco ??
-            linha.preco,
-          produtoStatus:
-            ajustesPorLinha.get(linha.linha)?.status ??
-            linha.produtoStatus,
-          quantidade:
-            ajustesPorLinha.get(linha.linha)?.quantidade ??
-            linha.quantidade,
-          status: "VALIDO" as const,
-          mensagem: "Produto importado com sucesso.",
-        })),
+        resumo: buildResumo(linhasRelatorio),
+        linhas: linhasRelatorio,
       },
     };
   }

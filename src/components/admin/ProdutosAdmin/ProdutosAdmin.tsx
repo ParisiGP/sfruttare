@@ -43,42 +43,15 @@ type ProdutosAdminProps = {
       | "apenasReferenciasDuplicadas"
     >
   >;
-  paginacao: {
-    pagina: number;
-    limite: number;
-    total: number;
-    totalPaginas: number;
-  };
+  total: number;
 };
-
-function buildPageHref(
-  page: number,
-  filtros: ProdutosAdminProps["filtros"]
-) {
-  const params =
-    new URLSearchParams();
-
-  Object.entries(filtros).forEach(([key, value]) => {
-    if (
-      value &&
-      value !== "TODOS" &&
-      value !== "vitrine"
-    ) {
-      params.set(key, String(value));
-    }
-  });
-
-  params.set("pagina", String(page));
-
-  return `/admin/produtos?${params.toString()}`;
-}
 
 export function ProdutosAdmin({
   produtos,
   categorias,
   metricas,
   filtros,
-  paginacao,
+  total,
 }: ProdutosAdminProps) {
   const [modalProdutoAberto, setModalProdutoAberto] =
     useState(false);
@@ -396,16 +369,16 @@ export function ProdutosAdmin({
               </select>
             </label>
 
-            <input
-              type="hidden"
-              name="pagina"
-              value="1"
-            />
-
             <button type="submit">
               Filtrar
             </button>
           </form>
+
+          <p className={styles.resultCount}>
+            {total === 1
+              ? "1 produto encontrado"
+              : `${total} produtos encontrados`}
+          </p>
         </>
       )}
       {modoOrdenacao ? (
@@ -428,43 +401,6 @@ export function ProdutosAdmin({
           onEditar={abrirEdicao}
           onExcluir={setProdutoParaExcluir}
         />
-      )}
-      {!modoOrdenacao && (
-        <footer className={styles.pagination}>
-          <span>
-            {paginacao.total} produtos encontrados
-          </span>
-
-          <div className={styles.pageActions}>
-            {paginacao.pagina > 1 && (
-              <Link
-                href={buildPageHref(
-                  paginacao.pagina - 1,
-                  filtros
-                )}
-              >
-                Anterior
-              </Link>
-            )}
-
-            <strong>
-              Pagina {paginacao.pagina} de{" "}
-              {paginacao.totalPaginas}
-            </strong>
-
-            {paginacao.pagina <
-              paginacao.totalPaginas && (
-                <Link
-                  href={buildPageHref(
-                    paginacao.pagina + 1,
-                    filtros
-                  )}
-                >
-                  Proxima
-                </Link>
-              )}
-          </div>
-        </footer>
       )}
 
       <Modal

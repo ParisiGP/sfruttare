@@ -36,6 +36,22 @@ body {
   overflow-x: hidden;
 }
 
+/*
+ * Com `overflow-x: hidden` no html E no body, o body vira um contêiner
+ * de rolagem (que nunca rola, pois não tem altura fixa) e é a ele que
+ * todo `position: sticky` se prende — então nenhum sticky gruda na
+ * janela. `clip` esconde o excesso horizontal do mesmo jeito sem criar
+ * contêiner de rolagem.
+ *
+ * Trocar isso para todo o site mudaria telas que já declaram sticky e
+ * hoje não grudam (resumo do carrinho/checkout, coluna do Balcão), então
+ * só as telas que precisam de sticky na janela optam, marcando um
+ * elemento com `data-sticky-na-janela`.
+ */
+body:has([data-sticky-na-janela]) {
+  overflow-x: clip;
+}
+
 
 
 html {

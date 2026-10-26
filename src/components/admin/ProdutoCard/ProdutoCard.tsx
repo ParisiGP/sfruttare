@@ -216,26 +216,60 @@ export function ProdutoCard({
     touchEnd.current = null;
   }
 
+  // A listagem do admin mostra todos os produtos de uma vez; sem isso
+  // seriam centenas de timers atualizando estado de cards fora da tela.
+  // O avanço automático só roda enquanto o card está visível.
+  const cardRef =
+    useRef<HTMLElement>(null);
+
+  const [cardVisivel, setCardVisivel] =
+    useState(false);
+
+  const totalImagens =
+    produto.imagens.length;
+
   useEffect(() => {
-    if (
-      produto.imagens.length <= 1
-    ) {
+    const card = cardRef.current;
+
+    if (!card || totalImagens <= 1) {
+      return;
+    }
+
+    const observer =
+      new IntersectionObserver(([entrada]) => {
+        setCardVisivel(entrada.isIntersecting);
+      });
+
+    observer.observe(card);
+
+    return () => observer.disconnect();
+  }, [totalImagens]);
+
+  useEffect(() => {
+    if (!cardVisivel || totalImagens <= 1) {
       return;
     }
 
     const interval =
       setInterval(() => {
-        proximaImagem();
+        setImagemAtual((current) =>
+          current + 1 >= totalImagens
+            ? 0
+            : current + 1
+        );
       }, 30000);
 
     return () =>
       clearInterval(interval);
-  }, [produto.imagens.length]);
+  }, [cardVisivel, totalImagens]);
 
   return (
 
     <>
-      <article className={styles.card}>
+      <article
+        ref={cardRef}
+        className={styles.card}
+      >
         {imagemPrincipal ? (
           <div
             className={
@@ -259,6 +293,8 @@ export function ProdutoCard({
               className={styles.image}
               src={imagemPrincipal.url}
               alt={produto.nome}
+              loading="lazy"
+              decoding="async"
               style={{
                 transform: `
       translate(${imagemPrincipal.offsetX}px, ${imagemPrincipal.offsetY}px)

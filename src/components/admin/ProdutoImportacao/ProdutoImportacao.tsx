@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   useMemo,
   useRef,
   useState,
@@ -13,13 +14,18 @@ import {
   preVisualizarImportacaoProdutos,
   type ProdutoImportActionState,
 } from "@/modules/produto/actions";
+import {
+  obterProblemasDaLinha,
+  obterStatusVisualDaLinha,
+} from "@/modules/produto/importacao.validacao";
 import type {
+  ProdutoImportAdjustment,
   ProdutoImportPreviewRow,
-  ProdutoStatus,
 } from "@/modules/produto/produto.types";
 
 import { Modal } from "@/components/ui/Modal/Modal";
 import { Button } from "@/components/ui/Button/Button";
+import { ProdutoImportacaoLinha } from "@/components/admin/ProdutoImportacaoLinha/ProdutoImportacaoLinha";
 
 import styles from "./ProdutoImportacao.module.css";
 
@@ -39,114 +45,20 @@ const initialState: ProdutoImportActionState = {
   message: "",
 };
 
-const statusLabels = {
-  VALIDO: "Valido",
-  INVALIDO: "Invalido",
-  DUPLICADO: "Duplicado",
-  IGNORADO: "Ignorado",
-};
+const MENSAGEM_TODAS_IGNORADAS =
+  "Todas as linhas foram ignoradas. Restaure ao menos uma para importar.";
 
-const produtoStatusLabels: Record<ProdutoStatus, string> = {
-  DISPONIVEL: "Disponivel",
-  RESERVADO: "Reservado",
-  VENDIDO: "Vendido",
-};
-
-function isProdutoStatus(
-  value: string
-): value is ProdutoStatus {
-  return (
-    value === "DISPONIVEL" ||
-    value === "RESERVADO" ||
-    value === "VENDIDO"
-  );
-}
-
-function normalizeReferenciaInput(value: string) {
-  return value.trim().slice(0, 15);
-}
-
-function isReferenceValid(value: string) {
-  return value.length <= 15;
-}
-
-function getRowIssues(row: EditableRow) {
-  const issues: string[] = [];
-
-  if (!isReferenceValid(row.referencia)) {
-    issues.push(
-      "Refer\u00eancia muito longa (m\u00e1x. 15 caracteres)."
-    );
-  }
-
-  if (!row.descricao && !row.modelo) {
-    issues.push("Informe descricao ou modelo.");
-  }
-
-  if (!row.categoriaId) {
-    issues.push("Categoria obrigatoria.");
-  }
-
-  if (row.preco === null || row.preco <= 0) {
-    issues.push("Preco invalido.");
-  }
-
-  if (
-    row.quantidade === null ||
-    !Number.isInteger(row.quantidade) ||
-    row.quantidade < 0
-  ) {
-    issues.push("Quantidade invalida.");
-  }
-
-  if (!isProdutoStatus(row.produtoStatus)) {
-    issues.push("Status invalido.");
-  }
-
-  return issues;
-}
-
-function getRowWarnings(
-  row: EditableRow,
-  duplicateReferences: Set<string>,
-  existingReferences: Set<string>
-) {
-  const warnings: string[] = [];
-
-  if (
-    row.referencia &&
-    duplicateReferences.has(row.referencia)
-  ) {
-    warnings.push(
-      "Refer\u00eancia j\u00e1 usada nesta planilha."
-    );
-  }
-
-  if (
-    row.referencia &&
-    existingReferences.has(row.referencia)
-  ) {
-    warnings.push(
-      "Refer\u00eancia j\u00e1 cadastrada no banco."
-    );
-  }
-
-  if (row.categoriaSugerida) {
-    warnings.push(
-      `Sugest\u00e3o de categoria: "${row.categoriaSugerida}" (n\u00e3o cadastrada).`
-    );
-  }
-
-  return warnings;
-}
-
-function getVisualStatus(row: EditableRow) {
-  const issues =
-    getRowIssues(row);
-
-  return issues.length > 0
-    ? "INVALIDO"
-    : "VALIDO";
+function comNomeAtualizado(
+  row: EditableRow
+): EditableRow {
+  return {
+    ...row,
+    nome:
+      row.peca ||
+      [row.descricao, row.modelo]
+        .filter(Boolean)
+        .join(" - "),
+  };
 }
 
 export function ProdutoImportacao({
@@ -160,6 +72,11 @@ export function ProdutoImportacao({
 
   const [rows, setRows] =
     useState<EditableRow[]>([]);
+
+  // Números das linhas descartadas na revisão. A linha continua na
+  // tela (dá para restaurar); só sai das contas e da importação.
+  const [ignoradas, setIgnoradas] =
+    useState<Set<number>>(new Set());
 
   const [existingReferences, setExistingReferences] =
     useState<Set<string>>(new Set());
@@ -182,10 +99,20 @@ export function ProdutoImportacao({
       [rows]
     );
 
+  const linhasAtivas =
+    useMemo(
+      () =>
+        rows.filter(
+          (row) => !ignoradas.has(row.linha)
+        ),
+      [rows, ignoradas]
+    );
+
+  // Só linhas não ignoradas contam para o aviso de referência repetida.
   const duplicateReferences =
     useMemo(() => {
       const counts =
-        rows.reduce<Record<string, number>>(
+        linhasAtivas.reduce<Record<string, number>>(
           (acc, row) => {
             if (!row.referencia) {
               return acc;
@@ -204,20 +131,22 @@ export function ProdutoImportacao({
           .filter(([, total]) => total > 1)
           .map(([referencia]) => referencia)
       );
-    }, [rows]);
+    }, [linhasAtivas]);
 
   const resumo =
     useMemo(() => {
       const statuses =
-        rows.map((row) => getVisualStatus(row));
+        linhasAtivas.map((row) =>
+          obterStatusVisualDaLinha(row, false)
+        );
 
       return {
         total: rows.length,
         validos: statuses.filter(
           (status) => status === "VALIDO"
         ).length,
-        ignorados: 0,
-        duplicados: rows.filter(
+        ignorados: rows.length - linhasAtivas.length,
+        duplicados: linhasAtivas.filter(
           (row) =>
             duplicateReferences.has(row.referencia) ||
             existingReferences.has(row.referencia)
@@ -226,7 +155,12 @@ export function ProdutoImportacao({
           (status) => status === "INVALIDO"
         ).length,
       };
-    }, [rows, duplicateReferences, existingReferences]);
+    }, [
+      rows,
+      linhasAtivas,
+      duplicateReferences,
+      existingReferences,
+    ]);
 
   async function handlePreview(
     event: FormEvent<HTMLFormElement>
@@ -240,6 +174,7 @@ export function ProdutoImportacao({
     setLoading("preview");
     setState(initialState);
     setRows([]);
+    setIgnoradas(new Set());
     setExistingReferences(new Set());
 
     const result =
@@ -266,35 +201,47 @@ export function ProdutoImportacao({
     setLoading(null);
   }
 
-  function updateRow(
-    linha: number,
-    values: Partial<EditableRow>
-  ) {
-    setRows((current) =>
-      current.map((row) =>
-        row.linha === linha
-          ? (() => {
-              const updated = {
+  const atualizarLinha = useCallback(
+    (
+      linha: number,
+      values: Partial<EditableRow>
+    ) => {
+      setRows((current) =>
+        current.map((row) =>
+          row.linha === linha
+            ? comNomeAtualizado({
                 ...row,
                 ...values,
-              };
+              })
+            : row
+        )
+      );
+    },
+    []
+  );
 
-              return {
-                ...updated,
-                nome:
-                  updated.peca ||
-                  [
-                    updated.descricao,
-                    updated.modelo,
-                  ]
-                    .filter(Boolean)
-                    .join(" - "),
-              };
-            })()
-          : row
-      )
-    );
-  }
+  const alternarIgnorada = useCallback(
+    (linha: number) => {
+      setIgnoradas((atual) => {
+        const proxima = new Set(atual);
+
+        if (proxima.has(linha)) {
+          proxima.delete(linha);
+        } else {
+          proxima.add(linha);
+        }
+
+        return proxima;
+      });
+
+      // O aviso de "todas ignoradas" (ou de linhas com problema) perde o
+      // sentido assim que o conjunto muda.
+      setState((atual) =>
+        atual.ok ? atual : initialState
+      );
+    },
+    []
+  );
 
   function applyCategoriaToAll() {
     if (!bulkCategoriaId) {
@@ -307,10 +254,14 @@ export function ProdutoImportacao({
     }
 
     setRows((current) =>
-      current.map((row) => ({
-        ...row,
-        categoriaId: bulkCategoriaId,
-      }))
+      current.map((row) =>
+        ignoradas.has(row.linha)
+          ? row
+          : {
+              ...row,
+              categoriaId: bulkCategoriaId,
+            }
+      )
     );
 
     setState({
@@ -324,9 +275,18 @@ export function ProdutoImportacao({
       return;
     }
 
+    if (linhasAtivas.length === 0) {
+      setState({
+        ok: false,
+        message: MENSAGEM_TODAS_IGNORADAS,
+      });
+      return;
+    }
+
     const rowsWithIssues =
-      rows.filter(
-        (row) => getRowIssues(row).length > 0
+      linhasAtivas.filter(
+        (row) =>
+          obterProblemasDaLinha(row).length > 0
       );
 
     if (rowsWithIssues.length > 0) {
@@ -352,22 +312,34 @@ export function ProdutoImportacao({
     const formData =
       new FormData(formRef.current);
 
+    // A linha ignorada vai só como { linha, ignorada: true }: mandar os
+    // outros campos de uma linha inválida (ex.: preço vazio) travaria a
+    // importação por causa de uma peça que já foi descartada.
+    const ajustes: ProdutoImportAdjustment[] =
+      rows.map((row) =>
+        ignoradas.has(row.linha)
+          ? { linha: row.linha, ignorada: true }
+          : {
+              linha: row.linha,
+              referencia: row.referencia,
+              descricao: row.descricao,
+              modelo: row.modelo,
+              cor: row.cor,
+              tamanho: row.tamanho,
+              categoriaId: row.categoriaId,
+              preco: row.preco as number,
+              status:
+                row.produtoStatus as Exclude<
+                  EditableRow["produtoStatus"],
+                  ""
+                >,
+              quantidade: row.quantidade as number,
+            }
+      );
+
     formData.set(
       "ajustes",
-      JSON.stringify(
-        rows.map((row) => ({
-          linha: row.linha,
-          referencia: row.referencia,
-          descricao: row.descricao,
-          modelo: row.modelo,
-          cor: row.cor,
-          tamanho: row.tamanho,
-          categoriaId: row.categoriaId,
-          preco: row.preco,
-          status: row.produtoStatus,
-          quantidade: row.quantidade,
-        }))
-      )
+      JSON.stringify(ajustes)
     );
 
     setLoading("confirm");
@@ -376,12 +348,33 @@ export function ProdutoImportacao({
       await confirmarImportacaoProdutos(formData);
 
     setState(result);
-    setRows(result.preview?.linhas ?? rows);
+
+    // O relatório devolve as ignoradas como IGNORADO; refaz o conjunto a
+    // partir dele para a tela não mostrar peça descartada como importada.
+    const linhasRetornadas =
+      result.preview?.linhas;
+
+    if (linhasRetornadas) {
+      setRows(linhasRetornadas);
+      setIgnoradas(
+        new Set(
+          linhasRetornadas
+            .filter(
+              (linha) => linha.status === "IGNORADO"
+            )
+            .map((linha) => linha.linha)
+        )
+      );
+    }
+
     setLoading(null);
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={styles.wrapper}
+      data-sticky-na-janela
+    >
       <header className={styles.header}>
         <div>
           <p className={styles.eyebrow}>
@@ -421,6 +414,7 @@ export function ProdutoImportacao({
                 event.target.files?.[0]?.name ?? ""
               );
               setRows([]);
+              setIgnoradas(new Set());
               setExistingReferences(new Set());
               setState(initialState);
             }}
@@ -546,282 +540,47 @@ export function ProdutoImportacao({
             </div>
 
             <div className={styles.tableWrap}>
-              <table className={styles.table}>
+              <table
+                className={
+                  hasModelo
+                    ? `${styles.table} ${styles.tableComModelo}`
+                    : styles.table
+                }
+              >
                 <thead>
                   <tr>
                     <th>Linha</th>
-                    <th>Referencia</th>
-                    <th>Descricao</th>
+                    <th>Referência</th>
+                    <th>Descrição</th>
                     {hasModelo && <th>Modelo</th>}
                     <th>Cor</th>
-                    <th>Tamanho</th>
+                    <th>Tam.</th>
                     <th>Categoria</th>
-                    <th>Preco</th>
+                    <th>Preço</th>
                     <th>Status</th>
                     <th>Qtd.</th>
-                    <th>Situacao</th>
-                    <th>Mensagem</th>
+                    <th>Ação</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((row) => {
-                    const visualStatus =
-                      getVisualStatus(row);
-
-                    const issues =
-                      getRowIssues(row);
-
-                    const warnings =
-                      getRowWarnings(
-                        row,
-                        duplicateReferences,
-                        existingReferences
-                      );
-
-                    return (
-                      <tr
-                        key={row.linha}
-                        className={
-                          styles[
-                            `row${visualStatus}`
-                          ]
-                        }
-                        >
-                        <td>{row.linha}</td>
-                        <td>
-                          <input
-                            className={
-                              !isReferenceValid(
-                                row.referencia
-                              )
-                                ? styles.invalidField
-                                : duplicateReferences.has(
-                                    row.referencia
-                                  ) ||
-                                  existingReferences.has(
-                                    row.referencia
-                                  )
-                                ? styles.warningField
-                                : ""
-                            }
-                            type="text"
-                            value={row.referencia}
-                            maxLength={15}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                referencia:
-                                  normalizeReferenciaInput(
-                                    event.target.value
-                                  ),
-                              })
-                            }
-                          />
-                        </td>
-                        <td>
-                          <textarea
-                            className={
-                              !row.descricao &&
-                              !row.modelo
-                                ? styles.invalidField
-                                : ""
-                            }
-                            value={row.descricao}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                descricao:
-                                  event.target.value,
-                              })
-                            }
-                          />
-                        </td>
-                        {hasModelo && (
-                          <td>
-                            <input
-                              className={
-                                !row.descricao &&
-                                !row.modelo
-                                  ? styles.invalidField
-                                  : ""
-                              }
-                              type="text"
-                              value={row.modelo}
-                              onChange={(event) =>
-                                updateRow(row.linha, {
-                                  modelo:
-                                    event.target.value,
-                                })
-                              }
-                            />
-                          </td>
-                        )}
-                        <td>
-                          <input
-                            type="text"
-                            value={row.cor}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                cor: event.target.value,
-                              })
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            value={row.tamanho}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                tamanho:
-                                  event.target.value,
-                              })
-                            }
-                          />
-                        </td>
-                        <td>
-                          <select
-                            className={
-                              !row.categoriaId
-                                ? styles.warningField
-                                : ""
-                            }
-                            value={row.categoriaId}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                categoriaId:
-                                  event.target.value,
-                              })
-                            }
-                          >
-                            <option value="">
-                              Selecione
-                            </option>
-                            {categorias.map((categoria) => (
-                              <option
-                                key={categoria.id}
-                                value={categoria.id}
-                              >
-                                {categoria.nome}
-                              </option>
-                            ))}
-                          </select>
-
-                          {row.categoriaSugerida &&
-                            !row.categoriaId && (
-                            <small
-                              className={
-                                styles.categoriaSugerida
-                              }
-                            >
-                              Sugestão: &ldquo;
-                              {row.categoriaSugerida}
-                              &rdquo; (nova categoria)
-                            </small>
-                          )}
-                        </td>
-                        <td>
-                          <input
-                            className={
-                              row.preco === null ||
-                              row.preco <= 0
-                                ? styles.invalidField
-                                : ""
-                            }
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value={row.preco ?? ""}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                preco:
-                                  event.target.value === ""
-                                    ? null
-                                    : Number(
-                                        event.target.value
-                                      ),
-                              })
-                            }
-                          />
-                        </td>
-                        <td>
-                          <select
-                            className={
-                              !isProdutoStatus(
-                                row.produtoStatus
-                              )
-                                ? styles.invalidField
-                                : ""
-                            }
-                            value={row.produtoStatus}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                produtoStatus:
-                                  event.target.value as ProdutoStatus,
-                              })
-                            }
-                          >
-                            <option value="">
-                              Selecione
-                            </option>
-                            {Object.entries(
-                              produtoStatusLabels
-                            ).map(([value, label]) => (
-                              <option
-                                key={value}
-                                value={value}
-                              >
-                                {label}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                        <td>
-                          <input
-                            className={
-                              row.quantidade === null ||
-                              row.quantidade < 0 ||
-                              !Number.isInteger(
-                                row.quantidade
-                              )
-                                ? styles.invalidField
-                                : ""
-                            }
-                            type="number"
-                            min="0"
-                            step="1"
-                            value={row.quantidade ?? ""}
-                            onChange={(event) =>
-                              updateRow(row.linha, {
-                                quantidade:
-                                  event.target.value === ""
-                                    ? null
-                                    : Number(
-                                        event.target.value
-                                      ),
-                              })
-                            }
-                          />
-                        </td>
-                        <td>
-                          <span
-                            className={`${styles.badge} ${
-                              styles[
-                                visualStatus.toLowerCase()
-                              ]
-                            }`}
-                          >
-                            {statusLabels[visualStatus]}
-                          </span>
-                        </td>
-                        <td>
-                          {issues.length > 0
-                            ? issues.join(" ")
-                            : warnings.length > 0
-                              ? warnings.join(" ")
-                              : "Produto pronto para importacao."}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {rows.map((row) => (
+                    <ProdutoImportacaoLinha
+                      key={row.linha}
+                      row={row}
+                      categorias={categorias}
+                      mostrarModelo={hasModelo}
+                      ignorada={ignoradas.has(row.linha)}
+                      referenciaRepetida={duplicateReferences.has(
+                        row.referencia
+                      )}
+                      referenciaJaCadastrada={existingReferences.has(
+                        row.referencia
+                      )}
+                      desabilitado={loading !== null}
+                      onAtualizar={atualizarLinha}
+                      onAlternarIgnorada={alternarIgnorada}
+                    />
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -843,6 +602,8 @@ export function ProdutoImportacao({
           <p className={styles.confirmMessage}>
             Confirmar importação de {resumo.validos}{" "}
             produto(s)?
+            {resumo.ignorados > 0 &&
+              ` ${resumo.ignorados} linha(s) ignorada(s) ficará(ão) de fora.`}
           </p>
 
           <div className={styles.confirmActions}>

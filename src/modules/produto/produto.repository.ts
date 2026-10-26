@@ -277,15 +277,14 @@ export class ProdutoRepository {
     });
   }
 
-  async findManyPaginated(
+  /**
+   * Lista tudo o que bate com os filtros, sem paginar — é a listagem
+   * do admin (`/admin/produtos`). A busca pública e a ordenação têm
+   * caminhos próprios.
+   */
+  async findManyFiltered(
     filters: ProdutoListFilters
   ) {
-    const pagina =
-      filters.pagina ?? 1;
-
-    const limite =
-      filters.limite ?? 12;
-
     const referenciasDuplicadas =
       filters.apenasReferenciasDuplicadas
         ? (
@@ -302,8 +301,6 @@ export class ProdutoRepository {
           where,
           include: this.includeRelations(),
           orderBy: buildOrderBy(filters.ordem),
-          skip: (pagina - 1) * limite,
-          take: limite,
         }),
         prisma.produto.count({
           where,
@@ -313,12 +310,6 @@ export class ProdutoRepository {
     return {
       produtos,
       total,
-      pagina,
-      limite,
-      totalPaginas: Math.max(
-        1,
-        Math.ceil(total / limite)
-      ),
     };
   }
 

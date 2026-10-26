@@ -174,41 +174,10 @@
   font-size: 13px;
 }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+.resultCount {
+  margin: 0;
   color: var(--color-text-muted);
   font-size: 14px;
-}
-
-.pageActions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.pageActions strong {
-  color: var(--color-text);
-  font-weight: 500;
-}
-
-.pageActions a {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.62);
-  color: var(--color-text);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.pageActions a:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
 }
 
 .secondaryButton {
@@ -244,8 +213,7 @@
     gap: 20px;
   }
 
-  .header,
-  .pagination {
+  .header {
     align-items: stretch;
     flex-direction: column;
   }

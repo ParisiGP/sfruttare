@@ -636,9 +636,16 @@ export async function confirmarImportacaoProdutos(
     revalidatePath("/admin/produtos/importar");
     revalidatePath("/admin/categorias");
 
+    const ignorados =
+      resultado.preview.resumo.ignorados;
+
     return {
       ok: true,
-      message: `${resultado.importados} produto(s) importado(s) com sucesso.`,
+      message: `${resultado.importados} produto(s) importado(s) com sucesso.${
+        ignorados > 0
+          ? ` ${ignorados} linha(s) ignorada(s) na revisão.`
+          : ""
+      }`,
       importados: resultado.importados,
       preview: resultado.preview,
     };
