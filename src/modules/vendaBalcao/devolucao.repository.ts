@@ -1,4 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { ConsignacaoRepository } from "@/modules/consignacao/consignacao.repository";
+
+const consignacaoRepository =
+  new ConsignacaoRepository();
 
 export type DevolucaoBalcaoWriteData = {
   vendaBalcaoItemId: string;
@@ -68,6 +72,13 @@ export class DevolucaoBalcaoRepository {
         where: { id: data.produtoOriginalId },
         data: { status: "DISPONIVEL" },
       });
+
+      // Peça consignada já repassada que volta pro estoque: o registro
+      // de repasse é zerado (o acerto com o consignante é por fora).
+      await consignacaoRepository.zerarRepasse(
+        data.produtoOriginalId,
+        tx
+      );
 
       return tx.devolucaoBalcao.create({
         data: {

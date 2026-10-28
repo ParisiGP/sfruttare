@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { CategoriaService } from "@/modules/categoria/categoria.service";
+import { ConsignacaoService } from "@/modules/consignacao/consignacao.service";
 import { ProdutoService } from "@/modules/produto/produto.service";
 import { ProdutosAdmin } from "@/components/admin/ProdutosAdmin/ProdutosAdmin";
 import type { ProdutoListFilters } from "@/modules/produto/produto.types";
@@ -58,6 +59,8 @@ function buildFilters(
         params,
         "apenasReferenciasDuplicadas"
       ) === "true",
+    consignante:
+      getParam(params, "consignante") ?? "",
   };
 }
 
@@ -82,16 +85,26 @@ export default async function ProdutosPage({
     categorias,
     resultado,
     metricas,
+    consignantes,
   ] = await Promise.all([
     categoriaService.listarCategorias(),
     produtoService.listarProdutos(filters),
     produtoService.obterMetricas(),
+    produtoService.listarConsignantes(),
   ]);
 
-  const produtos =
-    resultado.produtos.map((produto) =>
-      produtoService.serializeProduto(produto)
+  // Valor a repassar das consignadas vendidas (base da venda × %):
+  // uma consulta só, e só pras poucas peças a que isso se aplica.
+  const repassesAPagar =
+    await new ConsignacaoService().resolverRepassesAPagar(
+      resultado.produtos
     );
+
+  const produtos =
+    resultado.produtos.map((produto) => ({
+      ...produtoService.serializeProduto(produto),
+      repasseAPagar: repassesAPagar.get(produto.id) ?? null,
+    }));
 
   return (
     <main>
@@ -113,7 +126,9 @@ export default async function ProdutosPage({
           apenasReferenciasDuplicadas:
             filters.apenasReferenciasDuplicadas ??
             false,
+          consignante: filters.consignante ?? "",
         }}
+        consignantes={consignantes}
         total={resultado.total}
       />
     </main>

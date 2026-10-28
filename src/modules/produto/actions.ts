@@ -302,6 +302,8 @@ async function buildProdutoPayload(
       getTipo(formData),
     status:
       getStatus(formData),
+    percentualRepasse:
+      getPercentualRepasse(formData),
 
     imagens: [
       ...imagensExistentes,
@@ -358,6 +360,33 @@ function resolveFormData(
   }
 
   return stateOrFormData as FormData;
+}
+
+/**
+ * `undefined` quando o campo nem veio no formulário (seção "Consignação"
+ * escondida ou desabilitada — não mexe no valor gravado); `""` quando
+ * foi esvaziado (vira `null` no schema).
+ */
+function getPercentualRepasse(
+  formData: FormData
+): number | null | undefined {
+  if (!formData.has("percentualRepasse")) {
+    return undefined;
+  }
+
+  const texto = getText(formData, "percentualRepasse")
+    .trim()
+    .replace(",", ".");
+
+  if (texto === "") {
+    return null;
+  }
+
+  const numero = Number(texto);
+
+  // Ilegível vira um valor inválido (e não NaN) para o schema mostrar a
+  // mensagem de "% de repasse" em vez de um erro genérico de número.
+  return Number.isFinite(numero) ? numero : -1;
 }
 
 function resumirProdutoSalvo(produto: {

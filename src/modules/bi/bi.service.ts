@@ -1,6 +1,7 @@
 import { VendaBalcaoService } from "@/modules/vendaBalcao/vendaBalcao.service";
 import { PedidoRepository } from "@/modules/pedido/pedido.repository";
 import { converterPeriodo } from "@/lib/periodo";
+import { ehConsignado } from "@/modules/consignacao/consignacao";
 
 import { identificarTipoPeca } from "./tiposPeca";
 import type {
@@ -30,13 +31,6 @@ function montarMetricas(
         ? faturamento / numeroVendas
         : 0,
   };
-}
-
-function ehConsignado(referencia: string) {
-  return referencia
-    .trim()
-    .toUpperCase()
-    .startsWith("CS");
 }
 
 export class BiService {

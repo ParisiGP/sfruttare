@@ -34,6 +34,8 @@ export type ProdutoAvgAggregateOutputType = {
   larguraCm: number | null
   comprimentoCm: number | null
   ordem: number | null
+  percentualRepasse: runtime.Decimal | null
+  valorRepassado: runtime.Decimal | null
 }
 
 export type ProdutoSumAggregateOutputType = {
@@ -44,6 +46,8 @@ export type ProdutoSumAggregateOutputType = {
   larguraCm: number | null
   comprimentoCm: number | null
   ordem: number | null
+  percentualRepasse: runtime.Decimal | null
+  valorRepassado: runtime.Decimal | null
 }
 
 export type ProdutoMinAggregateOutputType = {
@@ -67,6 +71,10 @@ export type ProdutoMinAggregateOutputType = {
   larguraCm: number | null
   comprimentoCm: number | null
   ordem: number | null
+  consignante: string | null
+  percentualRepasse: runtime.Decimal | null
+  repassadoEm: Date | null
+  valorRepassado: runtime.Decimal | null
   categoriaId: string | null
   updatedAt: Date | null
   createdAt: Date | null
@@ -93,6 +101,10 @@ export type ProdutoMaxAggregateOutputType = {
   larguraCm: number | null
   comprimentoCm: number | null
   ordem: number | null
+  consignante: string | null
+  percentualRepasse: runtime.Decimal | null
+  repassadoEm: Date | null
+  valorRepassado: runtime.Decimal | null
   categoriaId: string | null
   updatedAt: Date | null
   createdAt: Date | null
@@ -119,6 +131,10 @@ export type ProdutoCountAggregateOutputType = {
   larguraCm: number
   comprimentoCm: number
   ordem: number
+  consignante: number
+  percentualRepasse: number
+  repassadoEm: number
+  valorRepassado: number
   categoriaId: number
   updatedAt: number
   createdAt: number
@@ -134,6 +150,8 @@ export type ProdutoAvgAggregateInputType = {
   larguraCm?: true
   comprimentoCm?: true
   ordem?: true
+  percentualRepasse?: true
+  valorRepassado?: true
 }
 
 export type ProdutoSumAggregateInputType = {
@@ -144,6 +162,8 @@ export type ProdutoSumAggregateInputType = {
   larguraCm?: true
   comprimentoCm?: true
   ordem?: true
+  percentualRepasse?: true
+  valorRepassado?: true
 }
 
 export type ProdutoMinAggregateInputType = {
@@ -167,6 +187,10 @@ export type ProdutoMinAggregateInputType = {
   larguraCm?: true
   comprimentoCm?: true
   ordem?: true
+  consignante?: true
+  percentualRepasse?: true
+  repassadoEm?: true
+  valorRepassado?: true
   categoriaId?: true
   updatedAt?: true
   createdAt?: true
@@ -193,6 +217,10 @@ export type ProdutoMaxAggregateInputType = {
   larguraCm?: true
   comprimentoCm?: true
   ordem?: true
+  consignante?: true
+  percentualRepasse?: true
+  repassadoEm?: true
+  valorRepassado?: true
   categoriaId?: true
   updatedAt?: true
   createdAt?: true
@@ -219,6 +247,10 @@ export type ProdutoCountAggregateInputType = {
   larguraCm?: true
   comprimentoCm?: true
   ordem?: true
+  consignante?: true
+  percentualRepasse?: true
+  repassadoEm?: true
+  valorRepassado?: true
   categoriaId?: true
   updatedAt?: true
   createdAt?: true
@@ -332,6 +364,10 @@ export type ProdutoGroupByOutputType = {
   larguraCm: number | null
   comprimentoCm: number | null
   ordem: number
+  consignante: string | null
+  percentualRepasse: runtime.Decimal | null
+  repassadoEm: Date | null
+  valorRepassado: runtime.Decimal | null
   categoriaId: string
   updatedAt: Date
   createdAt: Date
@@ -381,6 +417,10 @@ export type ProdutoWhereInput = {
   larguraCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   comprimentoCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   ordem?: Prisma.IntFilter<"Produto"> | number
+  consignante?: Prisma.StringNullableFilter<"Produto"> | string | null
+  percentualRepasse?: Prisma.DecimalNullableFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.DateTimeNullableFilter<"Produto"> | Date | string | null
+  valorRepassado?: Prisma.DecimalNullableFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -414,6 +454,10 @@ export type ProdutoOrderByWithRelationInput = {
   larguraCm?: Prisma.SortOrderInput | Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrderInput | Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  consignante?: Prisma.SortOrderInput | Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrderInput | Prisma.SortOrder
+  repassadoEm?: Prisma.SortOrderInput | Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrderInput | Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -450,6 +494,10 @@ export type ProdutoWhereUniqueInput = Prisma.AtLeast<{
   larguraCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   comprimentoCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   ordem?: Prisma.IntFilter<"Produto"> | number
+  consignante?: Prisma.StringNullableFilter<"Produto"> | string | null
+  percentualRepasse?: Prisma.DecimalNullableFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.DateTimeNullableFilter<"Produto"> | Date | string | null
+  valorRepassado?: Prisma.DecimalNullableFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -483,6 +531,10 @@ export type ProdutoOrderByWithAggregationInput = {
   larguraCm?: Prisma.SortOrderInput | Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrderInput | Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  consignante?: Prisma.SortOrderInput | Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrderInput | Prisma.SortOrder
+  repassadoEm?: Prisma.SortOrderInput | Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrderInput | Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -517,6 +569,10 @@ export type ProdutoScalarWhereWithAggregatesInput = {
   larguraCm?: Prisma.IntNullableWithAggregatesFilter<"Produto"> | number | null
   comprimentoCm?: Prisma.IntNullableWithAggregatesFilter<"Produto"> | number | null
   ordem?: Prisma.IntWithAggregatesFilter<"Produto"> | number
+  consignante?: Prisma.StringNullableWithAggregatesFilter<"Produto"> | string | null
+  percentualRepasse?: Prisma.DecimalNullableWithAggregatesFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.DateTimeNullableWithAggregatesFilter<"Produto"> | Date | string | null
+  valorRepassado?: Prisma.DecimalNullableWithAggregatesFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringWithAggregatesFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Produto"> | Date | string
@@ -543,6 +599,10 @@ export type ProdutoCreateInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -575,6 +635,10 @@ export type ProdutoUncheckedCreateInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -607,6 +671,10 @@ export type ProdutoUpdateInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -639,6 +707,10 @@ export type ProdutoUncheckedUpdateInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -671,6 +743,10 @@ export type ProdutoCreateManyInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -697,6 +773,10 @@ export type ProdutoUpdateManyMutationInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -722,6 +802,10 @@ export type ProdutoUncheckedUpdateManyInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -758,6 +842,10 @@ export type ProdutoCountOrderByAggregateInput = {
   larguraCm?: Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  consignante?: Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrder
+  repassadoEm?: Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -771,6 +859,8 @@ export type ProdutoAvgOrderByAggregateInput = {
   larguraCm?: Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrder
 }
 
 export type ProdutoMaxOrderByAggregateInput = {
@@ -794,6 +884,10 @@ export type ProdutoMaxOrderByAggregateInput = {
   larguraCm?: Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  consignante?: Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrder
+  repassadoEm?: Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -820,6 +914,10 @@ export type ProdutoMinOrderByAggregateInput = {
   larguraCm?: Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  consignante?: Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrder
+  repassadoEm?: Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrder
   categoriaId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -833,6 +931,8 @@ export type ProdutoSumOrderByAggregateInput = {
   larguraCm?: Prisma.SortOrder
   comprimentoCm?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
+  percentualRepasse?: Prisma.SortOrder
+  valorRepassado?: Prisma.SortOrder
 }
 
 export type ProdutoScalarRelationFilter = {
@@ -920,6 +1020,18 @@ export type NullableIntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type ProdutoCreateNestedOneWithoutImagensInput = {
@@ -1027,6 +1139,10 @@ export type ProdutoCreateWithoutCategoriaInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemCreateNestedManyWithoutProdutoInput
@@ -1058,6 +1174,10 @@ export type ProdutoUncheckedCreateWithoutCategoriaInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   imagens?: Prisma.ProdutoImagemUncheckedCreateNestedManyWithoutProdutoInput
@@ -1118,6 +1238,10 @@ export type ProdutoScalarWhereInput = {
   larguraCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   comprimentoCm?: Prisma.IntNullableFilter<"Produto"> | number | null
   ordem?: Prisma.IntFilter<"Produto"> | number
+  consignante?: Prisma.StringNullableFilter<"Produto"> | string | null
+  percentualRepasse?: Prisma.DecimalNullableFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.DateTimeNullableFilter<"Produto"> | Date | string | null
+  valorRepassado?: Prisma.DecimalNullableFilter<"Produto"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFilter<"Produto"> | string
   updatedAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Produto"> | Date | string
@@ -1144,6 +1268,10 @@ export type ProdutoCreateWithoutImagensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -1175,6 +1303,10 @@ export type ProdutoUncheckedCreateWithoutImagensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1222,6 +1354,10 @@ export type ProdutoUpdateWithoutImagensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -1253,6 +1389,10 @@ export type ProdutoUncheckedUpdateWithoutImagensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1284,6 +1424,10 @@ export type ProdutoCreateWithoutPedidoItensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -1315,6 +1459,10 @@ export type ProdutoUncheckedCreateWithoutPedidoItensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1362,6 +1510,10 @@ export type ProdutoUpdateWithoutPedidoItensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -1393,6 +1545,10 @@ export type ProdutoUncheckedUpdateWithoutPedidoItensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1424,6 +1580,10 @@ export type ProdutoCreateWithoutAbasInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -1455,6 +1615,10 @@ export type ProdutoUncheckedCreateWithoutAbasInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1502,6 +1666,10 @@ export type ProdutoUpdateWithoutAbasInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -1533,6 +1701,10 @@ export type ProdutoUncheckedUpdateWithoutAbasInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1564,6 +1736,10 @@ export type ProdutoCreateWithoutCarrinhoItensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -1595,6 +1771,10 @@ export type ProdutoUncheckedCreateWithoutCarrinhoItensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1642,6 +1822,10 @@ export type ProdutoUpdateWithoutCarrinhoItensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -1673,6 +1857,10 @@ export type ProdutoUncheckedUpdateWithoutCarrinhoItensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1704,6 +1892,10 @@ export type ProdutoCreateWithoutVendasBalcaoItensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -1735,6 +1927,10 @@ export type ProdutoUncheckedCreateWithoutVendasBalcaoItensInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1782,6 +1978,10 @@ export type ProdutoUpdateWithoutVendasBalcaoItensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -1813,6 +2013,10 @@ export type ProdutoUncheckedUpdateWithoutVendasBalcaoItensInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1844,6 +2048,10 @@ export type ProdutoCreateWithoutReservasInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
   categoria: Prisma.CategoriaCreateNestedOneWithoutProdutosInput
@@ -1875,6 +2083,10 @@ export type ProdutoUncheckedCreateWithoutReservasInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId: string
   updatedAt?: Date | string
   createdAt?: Date | string
@@ -1922,6 +2134,10 @@ export type ProdutoUpdateWithoutReservasInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.CategoriaUpdateOneRequiredWithoutProdutosNestedInput
@@ -1953,6 +2169,10 @@ export type ProdutoUncheckedUpdateWithoutReservasInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   categoriaId?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1984,6 +2204,10 @@ export type ProdutoCreateManyCategoriaInput = {
   larguraCm?: number | null
   comprimentoCm?: number | null
   ordem?: number
+  consignante?: string | null
+  percentualRepasse?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Date | string | null
+  valorRepassado?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Date | string
   createdAt?: Date | string
 }
@@ -2009,6 +2233,10 @@ export type ProdutoUpdateWithoutCategoriaInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUpdateManyWithoutProdutoNestedInput
@@ -2040,6 +2268,10 @@ export type ProdutoUncheckedUpdateWithoutCategoriaInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   imagens?: Prisma.ProdutoImagemUncheckedUpdateManyWithoutProdutoNestedInput
@@ -2071,6 +2303,10 @@ export type ProdutoUncheckedUpdateManyWithoutCategoriaInput = {
   larguraCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comprimentoCm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
+  consignante?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  percentualRepasse?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  repassadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  valorRepassado?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -2172,6 +2408,10 @@ export type ProdutoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   larguraCm?: boolean
   comprimentoCm?: boolean
   ordem?: boolean
+  consignante?: boolean
+  percentualRepasse?: boolean
+  repassadoEm?: boolean
+  valorRepassado?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
@@ -2206,6 +2446,10 @@ export type ProdutoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   larguraCm?: boolean
   comprimentoCm?: boolean
   ordem?: boolean
+  consignante?: boolean
+  percentualRepasse?: boolean
+  repassadoEm?: boolean
+  valorRepassado?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
@@ -2233,6 +2477,10 @@ export type ProdutoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   larguraCm?: boolean
   comprimentoCm?: boolean
   ordem?: boolean
+  consignante?: boolean
+  percentualRepasse?: boolean
+  repassadoEm?: boolean
+  valorRepassado?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
@@ -2260,12 +2508,16 @@ export type ProdutoSelectScalar = {
   larguraCm?: boolean
   comprimentoCm?: boolean
   ordem?: boolean
+  consignante?: boolean
+  percentualRepasse?: boolean
+  repassadoEm?: boolean
+  valorRepassado?: boolean
   categoriaId?: boolean
   updatedAt?: boolean
   createdAt?: boolean
 }
 
-export type ProdutoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "tamanho" | "descricao" | "cor" | "referencia" | "marca" | "preco" | "tipo" | "status" | "estoque" | "condicao" | "avarias" | "composicao" | "pesoGramas" | "alturaCm" | "larguraCm" | "comprimentoCm" | "ordem" | "categoriaId" | "updatedAt" | "createdAt", ExtArgs["result"]["produto"]>
+export type ProdutoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "tamanho" | "descricao" | "cor" | "referencia" | "marca" | "preco" | "tipo" | "status" | "estoque" | "condicao" | "avarias" | "composicao" | "pesoGramas" | "alturaCm" | "larguraCm" | "comprimentoCm" | "ordem" | "consignante" | "percentualRepasse" | "repassadoEm" | "valorRepassado" | "categoriaId" | "updatedAt" | "createdAt", ExtArgs["result"]["produto"]>
 export type ProdutoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categoria?: boolean | Prisma.CategoriaDefaultArgs<ExtArgs>
   imagens?: boolean | Prisma.Produto$imagensArgs<ExtArgs>
@@ -2315,6 +2567,10 @@ export type $ProdutoPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     larguraCm: number | null
     comprimentoCm: number | null
     ordem: number
+    consignante: string | null
+    percentualRepasse: runtime.Decimal | null
+    repassadoEm: Date | null
+    valorRepassado: runtime.Decimal | null
     categoriaId: string
     updatedAt: Date
     createdAt: Date
@@ -2768,6 +3024,10 @@ export interface ProdutoFieldRefs {
   readonly larguraCm: Prisma.FieldRef<"Produto", 'Int'>
   readonly comprimentoCm: Prisma.FieldRef<"Produto", 'Int'>
   readonly ordem: Prisma.FieldRef<"Produto", 'Int'>
+  readonly consignante: Prisma.FieldRef<"Produto", 'String'>
+  readonly percentualRepasse: Prisma.FieldRef<"Produto", 'Decimal'>
+  readonly repassadoEm: Prisma.FieldRef<"Produto", 'DateTime'>
+  readonly valorRepassado: Prisma.FieldRef<"Produto", 'Decimal'>
   readonly categoriaId: Prisma.FieldRef<"Produto", 'String'>
   readonly updatedAt: Prisma.FieldRef<"Produto", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Produto", 'DateTime'>

@@ -45,6 +45,12 @@ model Produto {
 
   ordem       Int @default(0)
 
+  // Consignação: nada disso vai pra loja pública.
+  consignante       String?                    // "CSGEO", "CSL&S"... derivado da referência; null = peça própria
+  percentualRepasse Decimal? @db.Decimal(5,2)  // 40.00 = 40%
+  repassadoEm       DateTime?                  // null = ainda não repassado
+  valorRepassado    Decimal? @db.Decimal(10,2) // quanto foi pago, congelado na hora de marcar
+
   categoriaId String
   categoria   Categoria @relation(fields: [categoriaId], references: [id])
 

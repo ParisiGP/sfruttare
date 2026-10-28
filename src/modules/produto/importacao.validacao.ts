@@ -1,3 +1,5 @@
+import { percentualValido } from "@/modules/consignacao/consignacao";
+
 import type {
   ProdutoImportPreviewRow,
   ProdutoStatus,
@@ -79,6 +81,17 @@ export function obterProblemasDaLinha(
     problemas.push("Status inválido.");
   }
 
+  // % de repasse vazio é permitido (aviso); preenchido, tem que ser válido.
+  if (
+    row.consignante &&
+    row.percentualRepasse !== null &&
+    !percentualValido(row.percentualRepasse)
+  ) {
+    problemas.push(
+      "% de repasse deve ser maior que 0 e até 100."
+    );
+  }
+
   return problemas;
 }
 
@@ -120,6 +133,12 @@ export function obterAvisosDaLinha(
 
   if (row.referencia && referencia.jaCadastrada) {
     avisos.push("Referência já cadastrada no banco.");
+  }
+
+  if (row.consignante && row.percentualRepasse === null) {
+    avisos.push(
+      "Consignado sem % de repasse — defina depois."
+    );
   }
 
   if (row.categoriaSugerida) {

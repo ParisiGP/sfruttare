@@ -14,6 +14,11 @@ import {
   type ProdutoInput,
 } from "./produto.schema";
 import { TAMANHO_MAXIMO_REFERENCIA } from "./importacao.validacao";
+import {
+  derivarPercentual,
+  obterConsignante,
+  percentualValido,
+} from "@/modules/consignacao/consignacao";
 import type {
   CondicaoProduto,
   ProdutoImagem,
@@ -91,6 +96,15 @@ const produtoImportAjusteIgnoradoSchema =
 
 const produtoImportAjusteLinhaSchema =
   z.object({
+    percentualRepasse: z
+      .number()
+      .finite()
+      .refine(percentualValido, {
+        message:
+          "% de repasse deve ser maior que 0 e até 100, com no máximo 2 casas.",
+      })
+      .nullable()
+      .optional(),
     linha: z.coerce.number().int().min(2),
     referencia: z
       .string()
@@ -277,6 +291,25 @@ function parseCondicao(
   return null;
 }
 
+/**
+ * Coluna com o % de repasse direto ("% repasse", "percentual repasse",
+ * "porcentagem repasse"...). Sem dígito no título: "Repasse consignado
+ * (40%)" tem dígito e é a coluna do valor em R$, não esta.
+ */
+function ehCabecalhoPercentualRepasse(header: unknown) {
+  const bruto = normalizeText(header).toLowerCase();
+
+  if (!bruto.includes("repasse") || /\d/.test(bruto)) {
+    return false;
+  }
+
+  return (
+    bruto.includes("%") ||
+    bruto.includes("percentual") ||
+    bruto.includes("porcentagem")
+  );
+}
+
 function buildColumnIndexes(headers: unknown[]) {
   const normalizedHeaders =
     headers.map((header) => normalizeLookup(header));
@@ -296,7 +329,40 @@ function buildColumnIndexes(headers: unknown[]) {
     }
   );
 
+  const indicePercentual = headers.findIndex(
+    ehCabecalhoPercentualRepasse
+  );
+
+  if (indicePercentual >= 0) {
+    indexes.percentualRepasse = indicePercentual;
+  }
+
+  // Repasse em R$: o título só precisa COMEÇAR com "repasse" — assim
+  // "Repasse consignado (40%)" continua valendo se virar "(35%)".
+  const indiceRepasse = normalizedHeaders.findIndex(
+    (header, index) =>
+      index !== indicePercentual &&
+      header.startsWith("repasse")
+  );
+
+  if (indiceRepasse >= 0) {
+    indexes.repasse = indiceRepasse;
+  }
+
   return indexes;
+}
+
+/** "40", "40%", "40,5" → número; vazio/ilegível → NaN. */
+function parsePercentual(value: unknown) {
+  const raw = String(value ?? "")
+    .replace(/[^\d,.]/g, "")
+    .trim();
+
+  if (!raw) {
+    return Number.NaN;
+  }
+
+  return Number(raw.replace(",", "."));
 }
 
 function getCell(
@@ -351,8 +417,18 @@ export class ProdutoService {
         dadosValidados.nome
       );
 
+    // O consignante nunca é digitado: sai da referência final.
+    // Peça própria não guarda %.
+    const consignante = obterConsignante(
+      dadosValidados.referencia
+    );
+
     return this.produtoRepository.create({
       ...dadosValidados,
+      consignante,
+      percentualRepasse: consignante
+        ? (dadosValidados.percentualRepasse ?? null)
+        : null,
       slug,
     });
   }
@@ -379,8 +455,24 @@ export class ProdutoService {
     const { id, ...produto } =
       dadosValidados;
 
+    const consignante = obterConsignante(
+      produto.referencia
+    );
+
+    // % de repasse: só muda em peça consignada, quando o campo veio no
+    // formulário e a peça ainda não foi repassada. Referência sem CS
+    // zera o consignante mas NÃO apaga o % já gravado (undefined = não mexe).
+    const percentualRepasse =
+      consignante &&
+      produto.percentualRepasse !== undefined &&
+      !produtoExistente.repassadoEm
+        ? produto.percentualRepasse
+        : undefined;
+
     return this.produtoRepository.update(id, {
       ...produto,
+      consignante,
+      percentualRepasse,
       slug,
     });
   }
@@ -391,6 +483,11 @@ export class ProdutoService {
     return this.produtoRepository.findManyFiltered(
       filters
     );
+  }
+
+  /** Valores distintos de `consignante` (filtro de /admin/produtos). */
+  async listarConsignantes() {
+    return this.produtoRepository.listarConsignantes();
   }
 
   async listarTodosProdutos() {
@@ -545,6 +642,7 @@ export class ProdutoService {
       AjusteLinha & {
         referenciaNormalizada: string;
         nome: string;
+        consignante: string | null;
       }
     >();
 
@@ -564,9 +662,19 @@ export class ProdutoService {
       const peca =
         linhasOriginais.get(ajuste.linha)?.peca ?? "";
 
+      // Consignante recalculado da referência final; o % só vale em
+      // linha consignada (nas demais é ignorado).
+      const consignante = obterConsignante(
+        referenciaNormalizada
+      );
+
       ajustesPorLinha.set(ajuste.linha, {
         ...ajuste,
         referenciaNormalizada,
+        consignante,
+        percentualRepasse: consignante
+          ? (ajuste.percentualRepasse ?? null)
+          : null,
         descricao,
         modelo,
         cor: normalizeText(ajuste.cor),
@@ -706,6 +814,8 @@ export class ProdutoService {
         categoriaId: ajuste.categoriaId,
         tipo: "BRECHO",
         status: ajuste.status,
+        consignante: ajuste.consignante,
+        percentualRepasse: ajuste.percentualRepasse,
       });
     }
 
@@ -727,6 +837,8 @@ export class ProdutoService {
           categoriaId: produto.categoriaId,
           tipo: produto.tipo,
           status: produto.status,
+          consignante: produto.consignante,
+          percentualRepasse: produto.percentualRepasse,
         }))
       );
 
@@ -766,6 +878,11 @@ export class ProdutoService {
               ajuste?.status ?? linha.produtoStatus,
             quantidade:
               ajuste?.quantidade ?? linha.quantidade,
+            consignante:
+              ajuste?.consignante ?? linha.consignante,
+            percentualRepasse: ajuste
+              ? (ajuste.percentualRepasse ?? null)
+              : linha.percentualRepasse,
             status: "VALIDO",
             mensagem: "Produto importado com sucesso.",
           };
@@ -859,6 +976,10 @@ export class ProdutoService {
     };
     tipo: "BRECHO" | "NA_ETIQUETA";
     status: "DISPONIVEL" | "RESERVADO" | "VENDIDO";
+    consignante?: string | null;
+    percentualRepasse?: unknown;
+    repassadoEm?: Date | null;
+    valorRepassado?: unknown;
     imagens: {
       id: string;
       publicId: string;
@@ -895,6 +1016,19 @@ export class ProdutoService {
       },
       tipo: produto.tipo,
       status: produto.status,
+      consignante: produto.consignante ?? null,
+      percentualRepasse:
+        produto.percentualRepasse === null ||
+        produto.percentualRepasse === undefined
+          ? null
+          : Number(produto.percentualRepasse),
+      repassadoEm:
+        produto.repassadoEm?.toISOString() ?? null,
+      valorRepassado:
+        produto.valorRepassado === null ||
+        produto.valorRepassado === undefined
+          ? null
+          : Number(produto.valorRepassado),
       imagens: produto.imagens.map((imagem) => ({
         id: imagem.id,
         publicId: imagem.publicId,
@@ -1110,6 +1244,30 @@ export class ProdutoService {
           getCell(row, indexes, "avarias")
         );
 
+      // Consignado (referência CS…): % direto da coluna de % (vale mais)
+      // ou derivado do repasse em R$ ÷ preço. Peça própria ignora repasse.
+      const consignante = obterConsignante(referencia);
+
+      let percentualRepasse: number | null = null;
+
+      if (consignante) {
+        const percentualDireto =
+          indexes.percentualRepasse !== undefined
+            ? parsePercentual(
+                getCell(row, indexes, "percentualRepasse")
+              )
+            : Number.NaN;
+
+        if (percentualValido(percentualDireto)) {
+          percentualRepasse = percentualDireto;
+        } else if (indexes.repasse !== undefined) {
+          percentualRepasse = derivarPercentual(
+            parsePreco(getCell(row, indexes, "repasse")),
+            preco
+          );
+        }
+      }
+
       const primeiraPalavraPeca =
         pecaValor.split(/\s+/)[0] ?? "";
 
@@ -1160,6 +1318,8 @@ export class ProdutoService {
         quantidade: Number.isFinite(quantidade)
           ? quantidade
           : null,
+        consignante,
+        percentualRepasse,
         categoriaId: categoriaCorrespondente?.id ?? "",
         categoriaSugerida:
           !categoriaCorrespondente && primeiraPalavraPeca

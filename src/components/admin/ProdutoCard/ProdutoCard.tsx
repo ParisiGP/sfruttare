@@ -20,6 +20,10 @@ import { ClienteAutocomplete } from "@/components/admin/ClienteAutocomplete/Clie
 import { PhotoEditor } from "@/components/admin/PhotoEditor/PhotoEditor"
 
 import { formatarPreco } from "@/lib/formatarPreco";
+import {
+  calcularRepasse,
+  obterStatusRepasse,
+} from "@/modules/consignacao/consignacao";
 import { formatarCelular } from "@/lib/telefone";
 
 import styles from "./ProdutoCard.module.css";
@@ -35,6 +39,39 @@ const statusLabel: Record<ProdutoStatus, string> = {
   RESERVADO: "Reservado",
   VENDIDO: "Vendido",
 };
+
+/** "Em estoque", "A repassar · R$ 19,96", "A repassar · sem %", "Repassado em 12/10". */
+function descreverRepasse(produto: ProdutoAdminItem) {
+  const status = obterStatusRepasse(produto);
+
+  if (status === "REPASSADO") {
+    const data = produto.repassadoEm
+      ? new Date(produto.repassadoEm).toLocaleDateString(
+          "pt-BR",
+          { day: "2-digit", month: "2-digit" }
+        )
+      : "";
+
+    return `Repassado${data ? ` em ${data}` : ""}`;
+  }
+
+  if (status === "EM_ESTOQUE") {
+    return "Em estoque";
+  }
+
+  if (produto.percentualRepasse === null) {
+    return "A repassar · sem %";
+  }
+
+  const valor =
+    produto.repasseAPagar ??
+    calcularRepasse(
+      produto.preco,
+      produto.percentualRepasse
+    );
+
+  return `A repassar · ${formatarPreco(valor)}`;
+}
 
 export function ProdutoCard({
   produto,
@@ -62,6 +99,10 @@ export function ProdutoCard({
     confirmandoLiberar,
     setConfirmandoLiberar,
   ] = useState(false);
+  const [
+    confirmandoRepasse,
+    setConfirmandoRepasse,
+  ] = useState(false);
   const [salvandoStatus, setSalvandoStatus] =
     useState(false);
   const [erroStatus, setErroStatus] =
@@ -74,6 +115,13 @@ export function ProdutoCard({
   const precisaConfirmarLiberacao =
     produto.status === "RESERVADO" &&
     statusSelecionado === "DISPONIVEL";
+
+  // Tirar de VENDIDO uma consignada já repassada zera o registro de
+  // repasse — pede confirmação antes.
+  const precisaConfirmarRepasse =
+    produto.status === "VENDIDO" &&
+    statusSelecionado !== "VENDIDO" &&
+    Boolean(produto.repassadoEm);
 
   const precisaNomeReserva =
     statusSelecionado === "RESERVADO" &&
@@ -136,6 +184,12 @@ export function ProdutoCard({
       return;
     }
 
+    if (precisaConfirmarRepasse && !confirmandoRepasse) {
+      setConfirmandoRepasse(true);
+      return;
+    }
+
+    setConfirmandoRepasse(false);
     setSalvandoStatus(true);
 
     const formData = new FormData();
@@ -395,6 +449,17 @@ export function ProdutoCard({
                 </p>
               )}
 
+              {produto.consignante && (
+                <p className={styles.etiquetaConsignado}>
+                  <span>
+                    Consignado · {produto.consignante}
+                  </span>
+                  <strong>
+                    {descreverRepasse(produto)}
+                  </strong>
+                </p>
+              )}
+
               {produto.marca && (
                 <p className={styles.brand}>
                   <span className={styles.brandLabel}>
@@ -468,6 +533,7 @@ export function ProdutoCard({
                 );
                 setErroStatus("");
                 setConfirmandoLiberar(false);
+                setConfirmandoRepasse(false);
               }}
               aria-label="Status do produto"
             >
@@ -491,8 +557,10 @@ export function ProdutoCard({
             >
               {salvandoStatus
                 ? "Salvando..."
-                : precisaConfirmarLiberacao &&
-                  confirmandoLiberar
+                : (precisaConfirmarLiberacao &&
+                    confirmandoLiberar) ||
+                  (precisaConfirmarRepasse &&
+                    confirmandoRepasse)
                 ? "Confirmar"
                 : "Atualizar"}
             </button>
@@ -563,6 +631,21 @@ export function ProdutoCard({
                 Clique em &ldquo;Confirmar&rdquo;
                 pra liberar essa peça — a
                 reserva será cancelada.
+              </p>
+            )}
+
+          {precisaConfirmarRepasse &&
+            confirmandoRepasse && (
+              <p
+                className={styles.avisoConfirmar}
+                role="alert"
+              >
+                Esta peça já foi repassada ao
+                consignante. Ao tirar de Vendido, o
+                registro de repasse será zerado; acerte
+                o valor com o consignante por fora.
+                Clique em &ldquo;Confirmar&rdquo; pra
+                continuar.
               </p>
             )}
 

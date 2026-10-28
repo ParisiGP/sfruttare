@@ -53,6 +53,13 @@ export type ProdutoAdminItem = {
   };
   tipo: ProdutoTipo;
   status: ProdutoStatus;
+  /** Consignação (só admin — nunca vai para a loja pública). */
+  consignante: string | null;
+  percentualRepasse: number | null;
+  repassadoEm: string | null;
+  valorRepassado: number | null;
+  /** Quanto falta repassar (base da venda × %); `null` = sem % ou não se aplica. Preenchido pela página. */
+  repasseAPagar?: number | null;
   imagens: ProdutoImagem[];
   createdAt: string;
   updatedAt: string;
@@ -129,6 +136,8 @@ export type ProdutoListFilters = {
   estoque?: "TODOS" | "COM_ESTOQUE" | "SEM_ESTOQUE";
   ordem?: "vitrine" | "recentes" | "nome" | "preco" | "estoque";
   apenasReferenciasDuplicadas?: boolean;
+  /** `"PROPRIOS"` = peças sem consignante; senão o valor de `Produto.consignante`. */
+  consignante?: string;
 };
 
 export type ProdutoImportRowStatus =
@@ -149,6 +158,10 @@ export type ProdutoImportPreviewRow = {
   preco: number | null;
   produtoStatus: ProdutoStatus | "";
   quantidade: number | null;
+  /** Derivado da referência (`CSL&S`...); `null` = peça própria. Recalculado quando a referência é editada. */
+  consignante: string | null;
+  /** % de repasse da linha consignada: da coluna de % ou derivado do repasse em R$; `null` = sem %. */
+  percentualRepasse: number | null;
   categoriaId: string;
   categoriaSugerida: string;
   condicao: CondicaoProduto | null;
@@ -169,6 +182,8 @@ export type ProdutoImportAdjustmentLinha = {
   preco: number;
   status: ProdutoStatus;
   quantidade: number;
+  /** Só vale em linha consignada (o servidor ignora nas demais); `null`/ausente = sem %. */
+  percentualRepasse?: number | null;
 };
 
 /**

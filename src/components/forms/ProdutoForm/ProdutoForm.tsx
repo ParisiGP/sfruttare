@@ -18,6 +18,13 @@ import {
   type ProdutoSalvoResumo,
 } from "@/modules/produto/actions";
 import type { ProdutoAdminItem } from "@/modules/produto/produto.types";
+import {
+  calcularRepasse,
+  obterConsignante,
+  obterStatusRepasse,
+  percentualValido,
+} from "@/modules/consignacao/consignacao";
+import { formatarPreco } from "@/lib/formatarPreco";
 
 import styles from "./ProdutoForm.module.css";
 
@@ -138,6 +145,16 @@ export function ProdutoForm({
     useState(
       produto?.referencia ?? ""
     );
+
+  // Consignação: o consignante sai da referência enquanto se digita; o %
+  // guardado não se perde se a referência deixar de ser CS por um instante.
+  const [percentualRepasse, setPercentualRepasse] =
+    useState(
+      produto?.percentualRepasse?.toString() ?? ""
+    );
+
+  const consignante = obterConsignante(referencia);
+  const repassado = Boolean(produto?.repassadoEm);
 
   useEffect(() => {
     if (state.ok && state.message) {
@@ -554,6 +571,74 @@ export function ProdutoForm({
         )}
       </section>
 
+      {consignante && (
+        <section className={styles.section}>
+          <h3>Consignação</h3>
+
+          <div className={styles.grid}>
+            <Field label="Consignante">
+              <input
+                type="text"
+                value={consignante}
+                readOnly
+                aria-readonly="true"
+              />
+            </Field>
+
+            <Field label="% de repasse">
+              <input
+                name="percentualRepasse"
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                inputMode="decimal"
+                value={percentualRepasse}
+                disabled={repassado}
+                placeholder="Ex.: 40"
+                onChange={(event) =>
+                  setPercentualRepasse(
+                    event.target.value
+                  )
+                }
+              />
+            </Field>
+          </div>
+
+          <p className={styles.fieldHint}>
+            {resumoDoRepasse(
+              formValues.preco,
+              percentualRepasse
+            )}
+          </p>
+
+          <p className={styles.fieldHint}>
+            Status de repasse:{" "}
+            {descreverStatusRepasse(
+              formValues.status,
+              produto?.repassadoEm ?? null
+            )}
+          </p>
+
+          {repassado && (
+            <p className={styles.fieldHint}>
+              Desfaça o repasse na tela Consignados
+              para editar o %.
+            </p>
+          )}
+
+          {repassado &&
+            formValues.status !== "VENDIDO" && (
+              <p className={styles.error} role="alert">
+                Esta peça já foi repassada ao consignante.
+                Ao salvar fora de Vendido, o registro de
+                repasse será zerado; acerte o valor com o
+                consignante por fora.
+              </p>
+            )}
+        </section>
+      )}
+
       <section className={styles.section}>
         <h3>Condição</h3>
 
@@ -762,6 +847,51 @@ export function ProdutoForm({
       </div>
     </form>
   );
+}
+
+/** "Repasse: R$ 19,96 (40% de R$ 49,90)" — ou o que falta para calcular. */
+function resumoDoRepasse(
+  preco: string,
+  percentual: string
+) {
+  const precoNumero = Number(preco);
+  const percentualNumero = Number(percentual);
+
+  if (!percentualValido(percentualNumero)) {
+    return percentual === ""
+      ? "Sem % definido — o repasse fica indefinido até você informar."
+      : "Informe um % maior que 0 e até 100.";
+  }
+
+  if (!(precoNumero > 0)) {
+    return "Informe o preço para ver o repasse.";
+  }
+
+  return `Repasse: ${formatarPreco(
+    calcularRepasse(precoNumero, percentualNumero)
+  )} (${percentualNumero}% de ${formatarPreco(
+    precoNumero
+  )})`;
+}
+
+function descreverStatusRepasse(
+  status: string,
+  repassadoEm: string | null
+) {
+  const situacao = obterStatusRepasse({
+    status,
+    repassadoEm,
+  });
+
+  if (situacao === "REPASSADO") {
+    return `Repassado em ${new Date(
+      repassadoEm as string
+    ).toLocaleDateString("pt-BR")}`;
+  }
+
+  return situacao === "A_REPASSAR"
+    ? "A repassar"
+    : "Em estoque";
 }
 
 function Field({

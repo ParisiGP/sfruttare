@@ -146,6 +146,17 @@
   text-decoration: underline;
 }
 
+.avisoRepasse {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(196, 148, 68, 0.4);
+  border-radius: var(--radius-sm);
+  background: rgba(196, 148, 68, 0.12);
+  color: var(--color-warning);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .erro {
   margin: 0;
   padding: 10px 12px;

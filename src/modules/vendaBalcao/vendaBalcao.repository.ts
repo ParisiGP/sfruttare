@@ -239,7 +239,10 @@ export class VendaBalcaoRepository {
       itens: {
         include: {
           produto: {
-            select: { referencia: true },
+            select: {
+              referencia: true,
+              repassadoEm: true,
+            },
           },
           devolucoes: {
             include: {

@@ -14,6 +14,7 @@ import {
   preVisualizarImportacaoProdutos,
   type ProdutoImportActionState,
 } from "@/modules/produto/actions";
+import { obterConsignante } from "@/modules/consignacao/consignacao";
 import {
   obterProblemasDaLinha,
   obterStatusVisualDaLinha,
@@ -58,6 +59,9 @@ function comNomeAtualizado(
       [row.descricao, row.modelo]
         .filter(Boolean)
         .join(" - "),
+    // Mexeu na referência: o consignante acompanha (o servidor
+    // recalcula de qualquer forma).
+    consignante: obterConsignante(row.referencia),
   };
 }
 
@@ -334,6 +338,9 @@ export function ProdutoImportacao({
                   ""
                 >,
               quantidade: row.quantidade as number,
+              percentualRepasse: row.consignante
+                ? row.percentualRepasse
+                : null,
             }
       );
 

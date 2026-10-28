@@ -19,6 +19,8 @@ type Props = {
   nomeProduto: string;
   precoOriginal: number;
   nomeCliente: string;
+  /** Peça consignada com repasse já pago: avisar antes de confirmar. */
+  repasseRealizado: boolean;
   onClose: () => void;
   onSucesso: () => void;
 };
@@ -32,6 +34,7 @@ export function DevolucaoModal({
   nomeProduto,
   precoOriginal,
   nomeCliente,
+  repasseRealizado,
   onClose,
   onSucesso,
 }: Props) {
@@ -124,6 +127,18 @@ export function DevolucaoModal({
         <p className={styles.peca}>
           {nomeProduto}
         </p>
+
+        {repasseRealizado && (
+          <p
+            className={styles.avisoRepasse}
+            role="alert"
+          >
+            Esta peça já foi repassada ao consignante.
+            Ao devolver, o registro de repasse será
+            zerado; acerte o valor com o consignante
+            por fora.
+          </p>
+        )}
 
         {tipo === "TROCA" && (
           <div className={styles.buscaTroca}>

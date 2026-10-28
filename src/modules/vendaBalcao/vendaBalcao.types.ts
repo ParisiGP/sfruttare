@@ -74,6 +74,8 @@ export type VendaBalcaoItemResumo = {
   referencia: string;
   precoUnitario: number;
   devolucao: DevolucaoResumo | null;
+  /** Peça consignada cujo repasse já foi pago — devolver zera esse registro. */
+  repasseRealizado: boolean;
 };
 
 export type VendaBalcaoResumo = {

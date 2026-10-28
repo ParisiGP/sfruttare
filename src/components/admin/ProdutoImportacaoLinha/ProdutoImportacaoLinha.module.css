@@ -56,6 +56,41 @@
   background: rgba(200, 155, 60, 0.1) !important;
 }
 
+/* Consignado: etiqueta + campo de % logo abaixo da referência. */
+.consignacao {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.etiquetaConsignado {
+  align-self: flex-start;
+  padding: 2px 8px;
+  border: 1px solid rgba(139, 107, 63, 0.3);
+  border-radius: 999px;
+  background: rgba(139, 107, 63, 0.08);
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+.percentualRepasse {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.percentualRepasse span {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .categoriaSugerida {
   display: block;
   margin-top: 6px;

@@ -1972,6 +1972,10 @@ export const ProdutoScalarFieldEnum = {
   larguraCm: 'larguraCm',
   comprimentoCm: 'comprimentoCm',
   ordem: 'ordem',
+  consignante: 'consignante',
+  percentualRepasse: 'percentualRepasse',
+  repassadoEm: 'repassadoEm',
+  valorRepassado: 'valorRepassado',
   categoriaId: 'categoriaId',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'

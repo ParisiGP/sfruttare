@@ -42,8 +42,11 @@ type ProdutosAdminProps = {
       | "estoque"
       | "ordem"
       | "apenasReferenciasDuplicadas"
+      | "consignante"
     >
   >;
+  /** Valores distintos de `Produto.consignante` — uma opção por consignante existente. */
+  consignantes: string[];
   total: number;
 };
 
@@ -52,6 +55,7 @@ export function ProdutosAdmin({
   categorias,
   metricas,
   filtros,
+  consignantes,
   total,
 }: ProdutosAdminProps) {
   const [modalProdutoAberto, setModalProdutoAberto] =
@@ -195,6 +199,13 @@ export function ProdutosAdmin({
                 Ver reservas
               </Link>
 
+              <Link
+                href="/admin/consignados"
+                className={styles.secondaryButton}
+              >
+                Consignados
+              </Link>
+
               <NovoProdutoModal
                 categorias={categorias}
                 className={styles.newButton}
@@ -329,6 +340,27 @@ export function ProdutosAdmin({
                 <option value="SEM_ESTOQUE">
                   Sem estoque
                 </option>
+              </select>
+            </label>
+
+            <label>
+              <span>Consignante</span>
+              <select
+                name="consignante"
+                defaultValue={filtros.consignante}
+              >
+                <option value="">Todos</option>
+                <option value="PROPRIOS">
+                  Próprios (sem consignante)
+                </option>
+                {consignantes.map((consignante) => (
+                  <option
+                    key={consignante}
+                    value={consignante}
+                  >
+                    {consignante}
+                  </option>
+                ))}
               </select>
             </label>
 

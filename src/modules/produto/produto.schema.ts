@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { percentualValido } from "@/modules/consignacao/consignacao";
+
 function campoNumericoOpcional(mensagem: string) {
   return z.preprocess(
     (valor) =>
@@ -9,6 +11,28 @@ function campoNumericoOpcional(mensagem: string) {
     z.coerce.number().int().positive(mensagem).optional()
   );
 }
+
+/**
+ * % de repasse do consignado. `undefined` = o campo não veio (não mexe no
+ * que está gravado); `""`/`null` = limpou (vira `null`); senão 0 < % ≤ 100
+ * com até 2 casas. Só vale pra peça consignada — o service ignora nas demais.
+ */
+const percentualRepasseSchema = z.preprocess(
+  (valor) =>
+    valor === undefined
+      ? undefined
+      : valor === "" || valor === null
+        ? null
+        : valor,
+  z.coerce
+    .number()
+    .refine(percentualValido, {
+      message:
+        "% de repasse deve ser maior que 0 e até 100, com no máximo 2 casas.",
+    })
+    .nullable()
+    .optional()
+);
 
 const imagemSchema = z.object({
   id: z.string().optional(),
@@ -128,6 +152,8 @@ export const produtoSchema = z.object({
       "VENDIDO",
     ])
     .default("DISPONIVEL"),
+
+  percentualRepasse: percentualRepasseSchema,
 
   imagens: z
     .array(imagemSchema)

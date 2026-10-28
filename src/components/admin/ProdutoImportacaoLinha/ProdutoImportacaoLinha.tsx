@@ -1,5 +1,6 @@
 import { memo } from "react";
 
+import { percentualValido } from "@/modules/consignacao/consignacao";
 import {
   isProdutoStatus,
   normalizarReferenciaDigitada,
@@ -171,6 +172,54 @@ function ProdutoImportacaoLinhaBase({
             })
           }
         />
+
+        {row.consignante && (
+          <div className={styles.consignacao}>
+            <span className={styles.etiquetaConsignado}>
+              Consignado · {row.consignante}
+            </span>
+
+            <label className={styles.percentualRepasse}>
+              <span>% repasse</span>
+              <input
+                className={
+                  row.percentualRepasse === null
+                    ? styles.campoAviso
+                    : !percentualValido(
+                          row.percentualRepasse
+                        )
+                      ? styles.campoInvalido
+                      : ""
+                }
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                inputMode="decimal"
+                placeholder="Ex.: 40"
+                value={row.percentualRepasse ?? ""}
+                disabled={ignorada}
+                onChange={(event) =>
+                  onAtualizar(row.linha, {
+                    percentualRepasse:
+                      event.target.value === ""
+                        ? null
+                        : Number(event.target.value),
+                  })
+                }
+              />
+            </label>
+
+            {row.percentualRepasse === null &&
+              !ignorada && (
+                <small
+                  className={styles.categoriaSugerida}
+                >
+                  sem % — defina depois
+                </small>
+              )}
+          </div>
+        )}
       </td>
 
       <td data-col="descricao" data-label="Descrição">

@@ -22,6 +22,7 @@ type ModalAlvo = {
   nomeProduto: string;
   precoOriginal: number;
   nomeCliente: string;
+  repasseRealizado: boolean;
 };
 
 const formatadorHora = new Intl.DateTimeFormat(
@@ -237,6 +238,8 @@ export function BalcaoHistoricoLista({
                                               item.precoUnitario,
                                             nomeCliente:
                                               venda.nomeCliente,
+                                            repasseRealizado:
+                                              item.repasseRealizado,
                                           }
                                         )
                                       }
@@ -260,6 +263,8 @@ export function BalcaoHistoricoLista({
                                               item.precoUnitario,
                                             nomeCliente:
                                               venda.nomeCliente,
+                                            repasseRealizado:
+                                              item.repasseRealizado,
                                           }
                                         )
                                       }
@@ -339,6 +344,9 @@ export function BalcaoHistoricoLista({
             modalAlvo.precoOriginal
           }
           nomeCliente={modalAlvo.nomeCliente}
+          repasseRealizado={
+            modalAlvo.repasseRealizado
+          }
           onClose={() => setModalAlvo(null)}
           onSucesso={handleSucesso}
         />

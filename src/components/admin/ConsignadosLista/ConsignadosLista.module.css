@@ -1,0 +1,476 @@
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.barra {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loteButton {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.loteButton:hover:not(:disabled) {
+  background: rgba(139, 107, 63, 0.08);
+}
+
+.loteButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.vazio {
+  padding: 40px 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.erro,
+.sucesso {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.erro {
+  border: 1px solid rgba(168, 92, 74, 0.24);
+  background: rgba(168, 92, 74, 0.08);
+  color: var(--color-danger);
+}
+
+.sucesso {
+  border: 1px solid rgba(122, 155, 118, 0.26);
+  background: rgba(122, 155, 118, 0.1);
+  color: var(--color-success);
+}
+
+/* Um cartão por consignante. */
+.grupo {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.grupoCabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.grupoCabecalho h2 {
+  margin: 0;
+  margin-right: auto;
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.grupoResumo {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.marcarTodasButton {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fffaf1;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.marcarTodasButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.marcarTodasButton:disabled {
+  border-color: var(--color-border);
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table th:nth-child(1) {
+  width: 12%;
+}
+
+.table th:nth-child(2) {
+  width: 22%;
+}
+
+.table th:nth-child(3) {
+  width: 9%;
+}
+
+.table th:nth-child(4) {
+  width: 11%;
+}
+
+.table th:nth-child(5) {
+  width: 9%;
+}
+
+.table th:nth-child(6) {
+  width: 10%;
+}
+
+.table th:nth-child(7) {
+  width: 12%;
+}
+
+.table th:nth-child(8) {
+  width: 15%;
+}
+
+.table th,
+.table td {
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table th {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.table td {
+  color: var(--color-text);
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.EM_ESTOQUE {
+  background: var(--color-background);
+  color: var(--color-text-muted);
+}
+
+.A_REPASSAR {
+  background: rgba(196, 148, 68, 0.14);
+  color: var(--color-warning);
+}
+
+.REPASSADO {
+  background: rgba(122, 155, 118, 0.14);
+  color: var(--color-success);
+}
+
+.percentualInput {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  background: rgba(200, 155, 60, 0.1);
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+.percentualInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.marcarButton,
+.desfazerButton {
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.marcarButton {
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.marcarButton:hover:not(:disabled) {
+  background: rgba(139, 107, 63, 0.08);
+}
+
+.desfazerButton {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.desfazerButton:hover:not(:disabled) {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.marcarButton:disabled,
+.desfazerButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.confirmacao {
+  display: flex;
+  gap: 8px;
+}
+
+.confirmacao button {
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.confirmacao .confirmarDesfazer {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: #fffaf1;
+}
+
+.confirmacao button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.semAcao {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* Modais (marcar todas / % em lote). */
+.modalConteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--color-text);
+}
+
+.modalConteudo h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.modalConteudo p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.modalTexto {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.campo select,
+.campo input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.campo select:focus,
+.campo input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.modalAcoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modalAcoes button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modalAcoes .modalConfirmar {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fffaf1;
+}
+
+.modalAcoes button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Celular/tablet: o grupo vira cartão e cada peça um bloco empilhado
+   (rótulo + valor), sem rolagem lateral; botões de 44px. */
+@media (max-width: 900px) {
+  .grupoCabecalho {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grupoCabecalho h2 {
+    margin-right: 0;
+  }
+
+  .marcarTodasButton,
+  .loteButton {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .barra {
+    justify-content: stretch;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 0;
+    border-bottom: none;
+    text-align: right;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .table td[data-label="Ação"] {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .table td[data-label="Ação"]::before {
+    display: none;
+  }
+
+  .percentualInput {
+    width: 140px;
+    min-height: 44px;
+  }
+
+  .marcarButton,
+  .desfazerButton {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .confirmacao > * {
+    flex: 1;
+    min-height: 44px;
+  }
+
+  .modalAcoes {
+    flex-direction: column-reverse;
+  }
+
+  .modalAcoes button {
+    width: 100%;
+  }
+}

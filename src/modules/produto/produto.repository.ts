@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ConsignacaoRepository } from "@/modules/consignacao/consignacao.repository";
 import type {
   CondicaoProduto,
   ProdutoImagem,
@@ -28,8 +29,15 @@ export type ProdutoWriteData = {
   categoriaId: string;
   tipo: ProdutoTipo;
   status: ProdutoStatus;
+  /** Sempre calculado pelo servidor a partir da referência final (nunca digitado). */
+  consignante?: string | null;
+  /** `undefined` = não mexe; `null` = limpa. */
+  percentualRepasse?: number | null;
   imagens?: ProdutoImagemInput[];
 };
+
+const consignacaoRepository =
+  new ConsignacaoRepository();
 
 export type ProdutoImportCreateData = Omit<
   ProdutoWriteData,
@@ -104,6 +112,12 @@ function buildWhere(
     where.referencia = {
       in: referenciasDuplicadas ?? [],
     };
+  }
+
+  if (filters.consignante === "PROPRIOS") {
+    where.consignante = null;
+  } else if (filters.consignante) {
+    where.consignante = filters.consignante;
   }
 
   return where;
@@ -183,6 +197,11 @@ export class ProdutoRepository {
         },
         data: produto,
       });
+
+      // Repasse só existe para peça vendida: saiu de VENDIDO, zera.
+      if (produto.status !== "VENDIDO") {
+        await consignacaoRepository.zerarRepasse(id, tx);
+      }
 
       await tx.produtoImagem.deleteMany({
         where: {
@@ -637,15 +656,37 @@ export class ProdutoRepository {
     id: string,
     status: ProdutoStatus
   ) {
-    return prisma.produto.update({
-      where: {
-        id,
-      },
-      data: {
-        status,
-      },
-      include: this.includeRelations(),
+    return prisma.$transaction(async (tx) => {
+      const produto = await tx.produto.update({
+        where: {
+          id,
+        },
+        data: {
+          status,
+        },
+        include: this.includeRelations(),
+      });
+
+      // Mesma regra do cadastro: saiu de VENDIDO, o repasse é zerado.
+      if (status !== "VENDIDO") {
+        await consignacaoRepository.zerarRepasse(id, tx);
+      }
+
+      return produto;
     });
+  }
+
+  /** Valores distintos de `consignante`, pro filtro de /admin/produtos. */
+  async listarConsignantes() {
+    const grupos = await prisma.produto.groupBy({
+      by: ["consignante"],
+      where: { consignante: { not: null } },
+      orderBy: { consignante: "asc" },
+    });
+
+    return grupos.flatMap((grupo) =>
+      grupo.consignante ? [grupo.consignante] : []
+    );
   }
 
   async hasPedidoItens(id: string) {
