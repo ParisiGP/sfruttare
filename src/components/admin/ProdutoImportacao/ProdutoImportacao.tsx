@@ -7,7 +7,6 @@ import {
   useState,
   type FormEvent,
 } from "react";
-import Link from "next/link";
 
 import {
   confirmarImportacaoProdutos,
@@ -395,13 +394,6 @@ export function ProdutoImportacao({
             preco, status e quantidade antes da importacao.
           </p>
         </div>
-
-        <Link
-          href="/admin/produtos"
-          className={styles.secondaryButton}
-        >
-          Listar produtos
-        </Link>
       </header>
 
       <form

@@ -1,7 +1,7 @@
 export default function InspiracoesPage() {
   return (
-    <main>
+    <div>
       <h1>Inspiracoes</h1>
-    </main>
+    </div>
   );
 }

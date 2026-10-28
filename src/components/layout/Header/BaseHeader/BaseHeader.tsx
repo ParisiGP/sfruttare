@@ -15,6 +15,10 @@ type BaseHeaderProps = {
   navLabel?: string;
   mobileExtra?: ReactNode;
   mobileTitle?: ReactNode;
+  /** Conteúdo do menu lateral do celular, quando difere do `navContent`. */
+  mobileNavContent?: ReactNode;
+  /** Mantém o header visível mesmo ao rolar para baixo. */
+  keepVisible?: boolean;
 };
 
 export function BaseHeader({
@@ -25,18 +29,20 @@ export function BaseHeader({
   mobileTitle,
   mobileExtra,
   navLabel,
+  mobileNavContent,
+  keepVisible = false,
 }: BaseHeaderProps) {
   const {
     visible,
     menuAberto,
     toggleMenu,
     closeMenu,
-  } = useHeader();
+  } = useHeader({ keepVisible });
 
   return (
     <>
       <header
-        className={`${styles.header} ${visible ? styles.visible : styles.hidden} ${menuAberto ? styles.menuOpen : ""}`}
+        className={`${styles.header} ${visible ? styles.visible : styles.hidden} ${menuAberto || keepVisible ? styles.menuOpen : ""}`}
       >
         {topBar && (
           <div className={styles.topBar}>
@@ -84,7 +90,7 @@ export function BaseHeader({
         aberto={menuAberto}
         onClose={closeMenu}
         navLabel={navLabel}
-        navContent={navContent}
+        navContent={mobileNavContent ?? navContent}
         mobileTitle={mobileTitle}
         mobileExtra={mobileExtra}
       />

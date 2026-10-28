@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { CategoriaService } from "@/modules/categoria/categoria.service";
 import { ReservaService } from "@/modules/reserva/reserva.service";
@@ -45,25 +43,9 @@ export default async function BalcaoPage({
   ]);
 
   return (
-    <main>
+    <div>
       <header className={styles.header}>
         <h1>Balcão — Venda presencial</h1>
-
-        <div className={styles.headerLinks}>
-          <Link
-            href="/admin/balcao/historico"
-            className={styles.historicoLink}
-          >
-            Ver histórico de vendas
-          </Link>
-
-          <Link
-            href="/admin/reservas"
-            className={styles.historicoLink}
-          >
-            Ver reservas
-          </Link>
-        </div>
       </header>
 
       <BalcaoView
@@ -73,6 +55,6 @@ export default async function BalcaoPage({
         }))}
         conversaoInicial={conversao}
       />
-    </main>
+    </div>
   );
 }

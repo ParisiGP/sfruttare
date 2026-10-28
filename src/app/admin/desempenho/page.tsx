@@ -223,7 +223,7 @@ export default async function DesempenhoPage({
   }
 
   return (
-    <main>
+    <div>
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <h1>Desempenho</h1>
@@ -466,6 +466,6 @@ export default async function DesempenhoPage({
             </>
           )}
       </div>
-    </main>
+    </div>
   );
 }

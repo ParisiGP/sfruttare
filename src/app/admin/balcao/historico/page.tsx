@@ -48,17 +48,10 @@ export default async function BalcaoHistoricoPage({
     );
 
   return (
-    <main>
+    <div>
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <h1>Histórico de vendas — Balcão</h1>
-
-          <Link
-            href="/admin/balcao"
-            className={styles.voltarLink}
-          >
-            ← Voltar pro balcão
-          </Link>
         </header>
 
         <form
@@ -121,6 +114,6 @@ export default async function BalcaoHistoricoPage({
           totalLiquido={totalLiquido}
         />
       </div>
-    </main>
+    </div>
   );
 }

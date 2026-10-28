@@ -107,7 +107,7 @@ export default async function ProdutosPage({
     }));
 
   return (
-    <main>
+    <div>
       <ProdutosAdmin
         produtos={produtos}
         categorias={categorias.map((categoria) => ({
@@ -131,6 +131,6 @@ export default async function ProdutosPage({
         consignantes={consignantes}
         total={resultado.total}
       />
-    </main>
+    </div>
   );
 }

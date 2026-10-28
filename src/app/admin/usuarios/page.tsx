@@ -34,12 +34,12 @@ export default async function UsuariosPage({
     );
 
   return (
-    <main>
+    <div>
       <UsuariosAdmin
         usuarios={usuarios}
         busca={busca}
         adminId={admin.id}
       />
-    </main>
+    </div>
   );
 }

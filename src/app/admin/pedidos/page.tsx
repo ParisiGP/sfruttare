@@ -1,7 +1,7 @@
 export default function PedidosPage() {
   return (
-    <main>
+    <div>
       <h1>Pedidos</h1>
-    </main>
+    </div>
   );
 }

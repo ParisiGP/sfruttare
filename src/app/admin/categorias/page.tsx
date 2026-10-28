@@ -15,7 +15,7 @@ export default async function CategoriasPage() {
     await categoriaService.listarCategorias();
 
   return (
-    <main>
+    <div>
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <div>
@@ -42,7 +42,7 @@ export default async function CategoriasPage() {
           categorias={categorias}
         />
       </div>
-    </main>
+    </div>
   );
 
   revalidatePath(

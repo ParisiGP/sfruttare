@@ -185,27 +185,6 @@ export function ProdutosAdmin({
                 Ordenar produtos
               </button>
 
-              <Link
-                href="/admin/produtos/importar"
-                className={styles.secondaryButton}
-              >
-                Importar produtos
-              </Link>
-
-              <Link
-                href="/admin/reservas"
-                className={styles.secondaryButton}
-              >
-                Ver reservas
-              </Link>
-
-              <Link
-                href="/admin/consignados"
-                className={styles.secondaryButton}
-              >
-                Consignados
-              </Link>
-
               <NovoProdutoModal
                 categorias={categorias}
                 className={styles.newButton}

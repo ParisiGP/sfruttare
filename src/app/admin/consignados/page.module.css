@@ -20,16 +20,6 @@
   font-weight: 800;
 }
 
-.voltarLink {
-  color: var(--color-primary);
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.voltarLink:hover {
-  text-decoration: underline;
-}
-
 .totais {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 260px));

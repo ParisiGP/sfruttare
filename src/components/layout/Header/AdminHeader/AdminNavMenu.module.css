@@ -1,0 +1,194 @@
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  min-width: 0;
+}
+
+.combo {
+  position: relative;
+}
+
+/* BOTÃO: o mesmo visual dos links da barra ("Ver Loja"), com a seta. */
+
+.botao {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  min-height: 44px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+  color: var(--color-text);
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition: color 180ms ease;
+}
+
+.botao::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 4px;
+
+  height: 2px;
+
+  background: var(--color-primary);
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  transition: transform 180ms ease;
+}
+
+.botao:hover,
+.botaoAberto,
+.botaoAtual {
+  color: var(--color-primary);
+}
+
+/* Links da barra não sobem no hover; sobrepõe o `button:hover` global. */
+.botao:not(:disabled):hover {
+  transform: none;
+}
+
+.botao:hover::after,
+.botaoAberto::after,
+.botaoAtual::after {
+  transform: scaleX(1);
+}
+
+.seta {
+  flex-shrink: 0;
+
+  transition: transform 180ms ease;
+}
+
+.botaoAberto .seta {
+  transform: rotate(180deg);
+}
+
+/* PAINEL */
+
+/*
+ * Sempre montado e escondido por `visibility`: assim a saída também
+ * anima e os links escondidos não entram na ordem de Tab.
+ */
+.painel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+
+  width: 248px;
+  max-height: calc(100vh - 100px);
+  max-height: calc(100dvh - 100px);
+
+  padding: 8px;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+
+  z-index: 140;
+
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 0s linear 160ms;
+}
+
+.painelAberto {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 0s;
+}
+
+.lista {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+/*
+ * `.painel .item` (duas classes) vence os estilos de `.desktopNav a` do
+ * BaseHeader: caixa alta, sublinhado no hover etc., que são dos links da
+ * barra e não dos itens do painel.
+ */
+.painel .item {
+  display: flex;
+  align-items: center;
+
+  min-height: 40px;
+  padding: 0 12px;
+
+  border-radius: var(--radius-sm);
+
+  color: var(--color-text);
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+
+  transition: background-color 150ms ease;
+}
+
+.painel .item::after {
+  content: none;
+}
+
+.painel .item:hover {
+  background: rgba(139, 107, 63, 0.08);
+  color: var(--color-text);
+}
+
+.painel .itemAtual,
+.painel .itemAtual:hover {
+  background: rgba(139, 107, 63, 0.1);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao,
+  .botao::after,
+  .painel,
+  .painelAberto,
+  .seta {
+    transition: none;
+  }
+}

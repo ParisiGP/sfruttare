@@ -12,13 +12,13 @@ export default async function ImportarProdutosPage() {
     await categoriaService.listarCategorias();
 
   return (
-    <main>
+    <div>
       <ProdutoImportacao
         categorias={categorias.map((categoria) => ({
           id: categoria.id,
           nome: categoria.nome,
         }))}
       />
-    </main>
+    </div>
   );
 }

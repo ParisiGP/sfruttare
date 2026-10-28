@@ -53,7 +53,7 @@ export default async function ReservasPage({
     );
 
   return (
-    <main>
+    <div>
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <h1>Reservas</h1>
@@ -163,6 +163,6 @@ export default async function ReservasPage({
 
         <ReservasLista grupos={grupos} />
       </div>
-    </main>
+    </div>
   );
 }

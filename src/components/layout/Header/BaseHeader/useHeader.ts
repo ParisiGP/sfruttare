@@ -6,7 +6,17 @@ import {
     useState,
 } from "react";
 
-export function useHeader() {
+type UseHeaderOptions = {
+    /**
+     * Mantém o header visível mesmo sem o menu lateral aberto, por
+     * exemplo enquanto um painel ancorado no próprio header está aberto.
+     */
+    keepVisible?: boolean;
+};
+
+export function useHeader({
+    keepVisible = false,
+}: UseHeaderOptions = {}) {
     const [visible, setVisible] =
         useState(true);
 
@@ -32,7 +42,7 @@ export function useHeader() {
 
         const handleScroll = () => {
             // nunca esconda com menu aberto
-            if (menuAberto) {
+            if (menuAberto || keepVisible) {
                 return;
             }
 
@@ -67,7 +77,7 @@ export function useHeader() {
                 handleScroll
             );
         };
-    }, [menuAberto]);
+    }, [menuAberto, keepVisible]);
 
     useEffect(() => {
         if (!menuAberto) {
@@ -110,10 +120,10 @@ export function useHeader() {
     // nunca fique escondido
     // enquanto o menu estiver aberto
     useEffect(() => {
-        if (menuAberto) {
+        if (menuAberto || keepVisible) {
             setVisible(true);
         }
-    }, [menuAberto]);
+    }, [menuAberto, keepVisible]);
 
     return {
         visible,

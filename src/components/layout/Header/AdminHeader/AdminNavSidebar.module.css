@@ -1,0 +1,57 @@
+.secao + .secao {
+  margin-top: 8px;
+  padding-top: 8px;
+
+  border-top: 1px solid var(--color-border);
+}
+
+.rotulo {
+  padding: 8px 0 4px;
+
+  color: var(--color-text-muted);
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lista {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+/*
+ * `.secao .link` (duas classes) vence o `.nav a` do BaseHeader (caixa
+ * alta, sublinhado no hover): aqui os itens seguem o estilo do painel
+ * do desktop.
+ */
+.secao .link {
+  min-height: 48px;
+  padding: 0 12px;
+
+  border-radius: var(--radius-sm);
+
+  font-size: 15px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.secao .link::after {
+  content: none;
+}
+
+.secao .link:hover {
+  background: rgba(139, 107, 63, 0.08);
+  color: var(--color-text);
+}
+
+.secao .linkAtual,
+.secao .linkAtual:hover {
+  background: rgba(139, 107, 63, 0.1);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 700;
+}

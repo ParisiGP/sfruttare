@@ -68,17 +68,10 @@ export default async function ConsignadosPage({
     !filtros.consignante && filtros.status === "A_REPASSAR";
 
   return (
-    <main>
+    <div>
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <h1>Consignados</h1>
-
-          <Link
-            href="/admin/produtos"
-            className={styles.voltarLink}
-          >
-            Ver produtos
-          </Link>
         </header>
 
         {/* Os totais respeitam o consignante, mas não o filtro de status. */}
@@ -165,6 +158,6 @@ export default async function ConsignadosPage({
           statusFiltro={filtros.status ?? "A_REPASSAR"}
         />
       </div>
-    </main>
+    </div>
   );
 }

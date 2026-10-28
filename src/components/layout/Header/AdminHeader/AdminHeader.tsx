@@ -1,50 +1,33 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Store } from "lucide-react";
 
 import styles from "./AdminHeader.module.css";
 
 import {
   BaseHeader,
 } from "../BaseHeader/BaseHeader";
-
-const navItems = [
-  {
-    id: "produtos",
-    href: "/admin/produtos",
-    label: "Produtos",
-  },
-  {
-    id: "balcao",
-    href: "/admin/balcao",
-    label: "Balcão",
-  },
-  {
-    id: "vitrine",
-    href: "/admin/vitrine",
-    label: "Vitrine",
-  },
-  {
-    id: "categorias",
-    href: "/admin/categorias",
-    label: "Categorias",
-  },
-  {
-    id: "usuarios",
-    href: "/admin/usuarios",
-    label: "Usuários",
-  },
-  {
-    id: "desempenho",
-    href: "/admin/desempenho",
-    label: "Desempenho",
-  },
-];
+import { AdminNavMenu } from "./AdminNavMenu";
+import { AdminNavSidebar } from "./AdminNavSidebar";
 
 export function AdminHeader() {
   const pathname =
     usePathname();
+
+  const [grupoAberto, setGrupoAberto] =
+    useState<string | null>(null);
+  const [pathnameDoNav, setPathnameDoNav] =
+    useState(pathname);
+
+  // O header está no layout e não remonta na navegação do Next: sem isso
+  // o painel continuaria aberto depois de trocar de rota.
+  if (pathname !== pathnameDoNav) {
+    setPathnameDoNav(pathname);
+    setGrupoAberto(null);
+  }
 
   if (pathname === "/admin/login") {
     return null;
@@ -52,7 +35,8 @@ export function AdminHeader() {
 
   return (
     <BaseHeader
-      navLabel="Menu de administracao"
+      navLabel="Menu de administração"
+      keepVisible={grupoAberto !== null}
       logo={
         <>
           <span
@@ -73,30 +57,34 @@ export function AdminHeader() {
         </>
       }
       navContent={
-        <>
-          {navItems.map(
-            (item) => (
-              <Link
-                key={item.id}
-                href={
-                  item.href
-                }
-                className={styles.navLink}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
-        </>
+        <AdminNavMenu
+          grupoAberto={grupoAberto}
+          onGrupoAbertoChange={setGrupoAberto}
+        />
       }
+      mobileNavContent={<AdminNavSidebar />}
       actions={
         <Link
           href="/"
           className={
             styles.storeLink
           }
+          aria-label="Ver loja"
         >
-          Ver Loja
+          <Store
+            className={styles.storeIcon}
+            size={20}
+            strokeWidth={1.6}
+            aria-hidden="true"
+          />
+
+          <span
+            className={
+              styles.storeText
+            }
+          >
+            Ver Loja
+          </span>
         </Link>
       }
       mobileTitle="Loja"

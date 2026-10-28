@@ -12,8 +12,8 @@ export default async function VitrinePage() {
     await vitrineAbaService.listarAbasAdmin();
 
   return (
-    <main>
+    <div>
       <VitrineAbaAdmin abas={abas} />
-    </main>
+    </div>
   );
 }
